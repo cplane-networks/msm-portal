@@ -1,0 +1,385 @@
+
+html {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 0.8;
+}
+#ng-view {
+    position: relative;
+    padding-top: 50px;
+}
+.modal-backdrop, .modal-backdrop.fade.in {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+
+/* Added to fix Bootstrap 3 issue with Angular UI Bootstrap modal dialog*/
+
+
+@media screen and (max-width: 640px) {
+    navbar-toggle { 
+        display: none;
+    }
+    #ng-view {
+        padding-top: 90px;
+    }
+    .navbar-brand {
+        font-size: 12pt;
+    }
+    .nav.navBarPadding {
+        margin-left: -10px;
+    }
+    .nav > li > a {
+        padding-right: 5px;
+        padding-left: 5px;
+    }
+}
+/* Customised Styling */
+.main-header{
+   background: rgb(242,242,242);
+   padding: 10px 20px;
+}
+.btn-default{
+    background-color: rgb(217,217,217);
+    color: rgb(127,127,127);
+    width:100px;
+}
+.navbar{
+    width:180px;
+    margin: 10px 0px 0 0;
+}
+.navbar .btn{
+    margin: 0;
+}
+.container {
+    width: 100%;
+    padding: 0;
+}
+
+/* LeftPanel Css */
+.left-panel{
+    border-right: 1px solid #ccc;
+    padding-top: 6px;
+    
+    
+}
+.left-panel ul{
+    width:81px;
+    margin-left: 5px;
+    
+}
+.left-panel ul li{
+    width:81px;
+}
+.sidebar-menu .btn-group-xs > .btn, .btn-xs {
+    width:80px;
+    margin-top: 70px;
+}
+.sidebar-menu li a{
+    padding: 15px 9px;
+    border: 1px solid #fff;
+    background-color: #fff;
+    border-radius: 4px;
+    width: 81px;
+}
+/* LeftPanel Css */
+.main-content h4{
+    color:rgb(127,127,127);
+}
+.main-box{
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.api-call-box{
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.main-box{
+    padding: 10px;
+}
+.api-call-box ul{
+    margin:20px 0 10px 0;
+}
+.nav > li > a{
+    background-color: #fff; 
+}
+.nav > li > a:hover{
+    background-color: #fff; 
+}
+
+.modal-content{
+    background: rgb(242, 242, 242);
+    
+}
+.modal-header{
+    border-bottom:none;
+    font-weight: bold;
+    color: rgb(127,127,127);
+    margin-bottom:5px;
+}
+.modal-body{
+    padding:0 15px;
+}
+.modal-body > .form-group > label{
+    color: rgb(127, 127, 127);
+    font-weight: 100;
+    margin: 3px 0;
+}
+.modal-body > .form-group > select {
+    width:205px;
+    height:28px;
+}
+.form-control{
+    height:28px;
+}
+.form-group {
+    height:28px;
+    margin-bottom: 20px;
+}
+.modal-footer{
+    border-top: none;
+}
+.btn-gray{
+    background-color: rgb(217,217,217);
+}
+.modal-lg {
+    width: 600px;
+}
+.form-control{
+    padding: 0 4px;
+}
+html {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+#ng-view {
+    position: relative;
+    padding-top: 50px;
+}
+
+#nav-login {
+    margin-left:30px;
+}
+
+
+
+/* Bootstrap overrides */
+
+/* Added to fix Bootstrap 3 issue with Angular UI Bootstrap modal dialog*/
+.modal { 
+  display: block;
+  overflow: hidden;
+  overflow-y: hidden;
+}
+
+
+/* wcOverlay directive CSS styles */
+.overlayContainer { display: none;}
+.overlayBackground { top:0px; left:0px; padding-left:100px;position:absolute; z-index:1000;height:100%;width:100%;background-color:#808080;opacity:0.3;}
+.overlayContent { position:absolute; border: 1px solid #000; background-color:#fff; font-weight: bold;height: 100px;width: 300px;z-index:1000;text-align:center;}
+
+
+@media screen and (max-width: 640px) {
+
+    navbar-toggle { 
+        display: none;
+    }
+
+    #ng-view {
+        padding-top: 90px;
+    }
+
+    .navbar-brand {
+        font-size: 12pt;
+    }
+
+    .nav.navBarPadding {
+        margin-left: -10px;
+    }
+
+    .nav > li > a {
+        padding-right: 5px;
+        padding-left: 5px;
+    }
+
+}
+
+/* Customised Styling */
+
+.main-header{
+   background: rgb(242,242,242);
+   padding: 10px 20px;
+}
+.btn-default{
+    background-color: rgb(217,217,217);
+    color: rgb(127,127,127);
+    width:100px;
+}
+.logo-lg svg{
+    width: 10%; height: auto;
+}
+.navbar{
+    width:180px;
+    margin: 10px 0px 0 0;
+}
+.navbar .btn{
+    margin: 0;
+}
+.container {
+    width: 100%;
+    padding: 0;
+}
+.col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, 
+.col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, 
+.col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, 
+.col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, 
+.col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, 
+.col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, 
+.col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, 
+.col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, 
+.col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, 
+.col-xs-7, .col-xs-8, .col-xs-9{
+    padding-left:10px;
+    padding-right:10px;
+}
+
+/* LeftPanel Css */
+.sidebar-menu .btn-group-xs > .btn, .btn-xs {
+    width:80px;
+    margin: 35px 0 10px;
+}
+
+/* LeftPanel Css */
+.main-box{
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.api-call-box{
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.main-box{
+    padding: 10px;
+}
+.api-call-box ul{
+    margin:20px 0 10px 0;
+}
+
+
+.modal-content{
+    background: rgb(242, 242, 242);
+    
+}
+.modal-header{
+    border-bottom:none;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgb(127,127,127);
+}
+.modal-body{
+    padding:0 15px;
+}
+.modal-body > .form-group > label{
+    color: rgb(127, 127, 127);
+    font-weight: 100;
+    margin: 3px 0;
+}
+#ser_lev{
+    width:216px;
+    height: 28px;
+    color: #555;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+label {
+    color: rgb(127, 127, 127);
+    font-weight: 100;
+    margin: 9px 0;
+}
+.form-control{
+    height:28px;
+}
+.form-group {
+    height:28px;
+    margin-bottom: 20px;
+}
+.modal-footer{
+    border-top: none;
+    margin:30px 15px 10px;
+}
+.btn-gray{
+    background-color: rgb(217,217,217);
+}
+.modal-lg {
+    width: 600px;
+}
+.sidebar-menu svg{
+    width:42px;
+    height: 42px;
+}
+.sidebar-menu span{
+    color:rgb(127,127,127);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+}
+
+#nav-text{
+    line-height: 0.8em;
+}
+.api-call-box{
+    height: 450px;
+}
+.hide{
+    display:none;
+}
+.btn_group .btn-sm{
+    width:100px;
+    color: rgb(127, 127, 127);
+    font-size: 14px;
+}
+.draw-canvas-box{
+    height:448px;
+}
+a:hover, a:focus{
+    color: rgb(127,127,127);
+    text-decoration: none;
+}
+.error-msg{
+    font-size: 11px;
+    color:rgb(237,28,36);
+}
+#cust{
+    margin: 0 0 3px 0;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
+/* open hovering css */
+.pop-design + .tooltip > .tooltip-inner {
+        background-color: rgb(242, 242, 242); 
+        color:rgb(127,127,127); 
+        border:1px solid #9c9c9c;
+        text-align: left;
+        font-size: 14px;
+        padding:10px 40px 10px 10px;
+        margin:40px 0px 0px 0px;
+}
+
+.pop-design + .tooltip > .tooltip-arrow {visibility:hidden; }
+.pop-design + .tooltip {text-decoration:none;}
+#tooltip-ex > a {
+    text-decoration:none;
+    color: rgb(127, 127, 127);
+}
+/* close hovering css */

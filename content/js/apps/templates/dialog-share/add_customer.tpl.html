@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+    <div class="modal-header">Add / Select Customer</div>
+    <div class="modal-body clearfix">
+        <form name="userForm" novalidate>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="cust">Customer Name</label>
+
+                <div class="col-sm-5">
+                    <input class="form-control" placeholder="Enter Name" type="text" ng-model="custName" name="custName" id="cust" list="customerName" required/>
+                    
+                    <span class="error-msg" ng-show="userForm.custName.$invalid">* Customer name is required</span>
+                    <datalist id="customerName">
+                        <option value="John"></option>
+                        <option value="Robert"></option>
+                    </datalist>
+                    
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Service Level</label>
+
+                <div class="col-sm-5">
+                  <select id="ser_lev" ng-init="serviceLevel" ng-model="serviceLevel" ng-options="x for x in custLevel">
+                  </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="maxCloud">Max Cloud Sites</label>
+
+                <div class="col-sm-5">
+                  <input placeholder="Enter value" type="number" ng-model="custClouds" name="maxCloudSites" min="2" max="2" id="maxCloud"  class="form-control" required/>
+                  <span class="error-msg" ng-show="userForm.maxCloudSites.$invalid && !userForm.maxCloudSites.$pristine">* Max Cloud Sites always is 2</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="maxVms">Max VMs/Site</label>
+
+                <div class="col-sm-5">
+                    <input placeholder="Enter Value" type="number" ng-model="custSites" name="maxVMsSites" min="1" max="5" id="maxVms" class="form-control" required/>
+                    <span class="error-msg" ng-show="userForm.maxVMsSites.$invalid && !userForm.maxVMsSites.$pristine">* VMs allowed min - 1, max - 5</span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="btn_group">
+            <button class="btn btn-sm btn-gray" ng-click="CloseClipCancelReportDiag()">Cancel</button>
+            <button type="btn" class="btn btn-sm btn-gray pull-left" ng-click="submitForm()" >Submit</button>
+        </div>
+    </div>
+    
+    <!--ng-disabled="userForm.$invalid"-->

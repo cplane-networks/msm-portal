@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+    <div class="modal-header">Add External Site
+        <button type="button" class="close" ng-click="CloseClipCancelReportDiag()">×</button>
+    </div>
+    <div class="modal-body clearfix">
+        <form name="userForm" novalidate>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="siteName">Site Name</label>
+
+                <div class="col-sm-5">
+                    <input class="form-control" placeholder="Enter Site Name" type="text" ng-model="cloud.site" id="siteName" name="stName" list="siteNameLst" required/>
+                    <datalist id="siteNameLst">
+                        <option value="AWS">
+                        <option value="Azure">
+                    </datalist>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">AS Number</label>
+
+                <div class="col-sm-5">
+                  <input placeholder="0" type="number" ng-model="cloud.asNum" name="asNum"  class="form-control" required />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="cIP">IP Range</label>
+
+                <div class="col-sm-5">
+                  <input placeholder="Enter IP" type="text" ng-model="cloud.ip" name="cloudIP" id="cIP"  class="form-control" required>
+                </div>
+            </div><div class="form-group">
+                <label class="col-sm-3 control-label" for="gIP">Gateway IP Address</label>
+
+                <div class="col-sm-5">
+                  <input placeholder="Enter Gateway IP" type="text" ng-model="cloud.gip" name="cloudGIP" id="gIP"  class="form-control" required>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="btn_group">
+            <button class="btn btn-gray" ng-click="CloseClipCancelReportDiag()">Cancel</button>
+            <button type="btn" class="btn btn-gray pull-left" ng-disabled="userForm.$invalid" ng-click="submitForm(userForm)">Submit</button>
+        </div>
+    </div>

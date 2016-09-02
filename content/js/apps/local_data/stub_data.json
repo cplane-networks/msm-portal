@@ -1,0 +1,7 @@
+{
+  "create_customer": {"privateKey": "abc"},
+  "list_customers" : {"customers": [{"name": "Demo"},
+                                    {"name": "Test_Demo"},
+                                    {"name": "Demo123"}]},
+  "delete_customer" : ""
+}

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <script>
+$(document).ready(function(){
+    $("#tooltip-ex a").tooltip({
+        placement : 'right'
+    });
+});
+</script>
+<style>
+.Bootstrap-demo{
+    margin:100px 30px 30px 30px;
+}
+</style>
+    <body>
+        <div class="wrapper">
+            <header class="main-header">
+                <!-- Logo -->
+                <a class="logo" width="140" height="40" >
+                    <span class="logo-lg"><ng-include src="'content/images/svg_image/CPLANE NETWORKS logo latha - 2 line.svg'" ></ng-include>
+                    </span>
+                </a>
+
+                <!-- Header Navbar: style can be found in header.less -->
+                <nav class="navbar navbar-static-top pull-right">
+                  <!-- Sidebar toggle button-->
+                  <button class="btn btn-block btn-default btn-xs pull-right" type="button">RESET ALL</button>
+                  <button class="btn btn-block btn-default btn-xs " type="button">RESET VMs</button>
+                </nav>
+            </header>
+            <div class="container" >  
+                <div class="left-panel col-md-1">
+                    <ul class="nav sidebar-menu">
+                        <li>
+                            <a href="" ng-click="addCustomer()"  class="text-center">
+                                <!--<ng-include src="'content/images/svg_image/Add Customer.svg'" />-->
+                                <span><ng-include src="'content/images/svg_image/Add Customer.svg'"></ng-include></span>
+                                <span id="nav-text">Customer</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href=""  class="text-center">
+                                <!--<ng-include src="'content/images/svg_image/Add Customer.svg'" />-->
+                                <span><ng-include src="'content/images/svg_image/Add Cloud Site.svg'"></ng-include></span>
+                                <span id="nav-text">Add Cloud Sites</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href=""  class="text-center">
+                                <!--<ng-include src="'content/images/svg_image/Add Customer.svg'" />-->
+                                <span><ng-include src="'content/images/svg_image/Add External Site.svg'"></ng-include></span>
+                                <span id="nav-text">Add External Site</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="" class="text-center">
+                                <!--<ng-include src="'content/images/svg_image/Add Customer.svg'" />-->
+                                <span><ng-include src="'content/images/svg_image/Add Connections.svg'"></ng-include></span>
+                                <span id="nav-text">Connect Sites</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="" class="text-center">
+                                <!--<ng-include src="'content/images/svg_image/Add Customer.svg'" />-->
+                                <span><ng-include src="'content/images/svg_image/Add VM.svg'"></ng-include></span>
+                                <span id="nav-text">Add VMs</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <button class="btn btn-block btn-default btn-xs" ng-click="openApiCalls()" type="button">SHOW APIs</button>
+                </div>
+
+
+                <div class="main-content col-md-11">
+                    <h4>Customer: <span id="tooltip-ex" ><a href="" data-placement="bottom" title="" data-html="true" data-original-title="Customer : {{customerName}} <br/> Service Level : {{serviceLevel}} <br/> Max Cloud Sites : {{clouds}} <br/> Max VMs/Sites : {{sites}}" 
+                                           data-toggle="tooltip"  class="pop-design"> 
+                                           {{customerName}}</a></span></h4>
+                    
+                    <div class="main-box clearfix">
+                        <div class="api-call-box col-md-3 pull-right" ng-click="closeApiCalls()" ng-hide="showApi">
+                            <a href="#" class="pull-right" ><img src="content/images/default/close_sign.png" width="23" height="23" ></a>
+                        </div>
+                        <div class="draw-canvas-box col-md-9">
+                            <!--<img src="content/images/default/dummy_graph.png" alt="" />-->
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>    
+        </div>    
+        
+    </body>
+</html>
