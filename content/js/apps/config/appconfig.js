@@ -7,6 +7,7 @@ define(['app'], function (app) {
         "port": "80",
         "templatePath": "content/js/apps/templates/",
         "defaultIconPath": "content/images/default/",
+        "SVGIconPath": "content/images/svg_image/",
         "environment": "development"
     })
 });

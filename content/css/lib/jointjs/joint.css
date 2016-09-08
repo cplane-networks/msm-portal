@@ -207,12 +207,14 @@ Do not allow adding new vertices: .connection-wrap { pointer-events: none; }
     stroke-linecap: round;
     stroke-linejoin: round;
     opacity: 0;
-    cursor: move;
+    /*cursor: move; Changed by Krish */
 }
+/* Changed by Krish
 .link.joint-theme-dark .connection-wrap:hover {
     opacity: .4;
     stroke-opacity: .4;
 }
+*/
 .link.joint-theme-dark .connection {
     stroke-linejoin: round;
 }
@@ -264,12 +266,14 @@ Do not allow adding new vertices: .connection-wrap { pointer-events: none; }
     stroke-linecap: round;
     stroke-linejoin: round;
     opacity: 0;
-    cursor: move;
+    /*cursor: move; Changed by Krish */
 }
+/* Changed by Krish
 .link.joint-theme-default .connection-wrap:hover {
     opacity: .4;
     stroke-opacity: .4;
 }
+*/
 .link.joint-theme-default .connection {
     stroke-linejoin: round;
 }
@@ -324,12 +328,14 @@ Do not allow adding new vertices: .connection-wrap { pointer-events: none; }
     stroke-linecap: round;
     stroke-linejoin: round;
     opacity: 0;
-    cursor: move;
+    /*cursor: move; Changed by Krish */
 }
+/* Changed by Krish
 .link.joint-theme-material .connection-wrap:hover {
     opacity: .4;
     stroke-opacity: .4;
 }
+*/
 .link.joint-theme-material .connection {
     stroke-linejoin: round;
 }
@@ -380,12 +386,14 @@ Do not allow adding new vertices: .connection-wrap { pointer-events: none; }
     stroke-linecap: round;
     stroke-linejoin: round;
     opacity: 0;
-    cursor: move;
+    /*cursor: move; Changed by Krish */
 }
+/* Changed by Krish
 .link.joint-theme-modern .connection-wrap:hover {
     opacity: .4;
     stroke-opacity: .4;
 }
+*/
 .link.joint-theme-modern .connection {
     stroke-linejoin: round;
 }

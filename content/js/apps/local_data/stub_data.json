@@ -3,5 +3,11 @@
   "list_customers" : {"customers": [{"name": "Demo"},
                                     {"name": "Test_Demo"},
                                     {"name": "Demo123"}]},
-  "delete_customer" : ""
+  "delete_customer" : "",
+  "init_customer_vsite" : "",
+  "init_external_vsite" : "",
+  "list_customer_vsite" : {"vSites": [{"name": "PaloAlto",
+                                       "status" : "active"},
+                                       {"name": "Frankfurt",
+                                       "status" : "partial"}]}
 }

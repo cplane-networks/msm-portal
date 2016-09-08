@@ -13,6 +13,7 @@ require(
             'services/initService',
             'services/storageService',
             'services/msmService',
+            'services/graphService',
             //Controller
             //'controllers/modelViewController',
             'controllers/baseController',

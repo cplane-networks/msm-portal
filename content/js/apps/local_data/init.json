@@ -1,14 +1,38 @@
-{"customer" : {"service_levels": [
+{   "customer" : {"service_levels": [
                     "Gold",
                     "Silver",
                     "Bronze"
                   ],
-               "max_cloud_sites": 2,
-               "max_vms_per_site": 5},
-  "openstack" : {"site_1_name": "Palo Alto",
-                 "site_2_name": "Frankfurt",
-                 "site_3_name": "Tokyo",
-                 "default_subnet_site_1": "10.100.1.0/24",
-                 "default_subnet_site_2": "10.100.2.0/24",
-                 "default_subnet_site_3": "10.100.3.0/24"}
+                "max_cloud_sites": 2,
+                "max_vms_per_site": 5},
+    "openstack" : [
+        {
+            "site_name": "Palo Alto",
+            "default_subnet_site": "10.100.1.0/24"
+        },
+        {
+            "site_name": "Frankfurt",
+            "default_subnet_site": "10.100.2.0/24"
+        }],  
+    "cpe" : [  
+        {
+            "cpeName":"PA-ORG-01",
+            "cpeSegmentationType":"vlan", 
+            "cpeSegmentationId":"410", 
+            "cpeIpAddr":"10.13.0.2", 
+            "cpeMask":"255.255.255.252", 
+            "cpeASN":"65410", 
+            "peerIP":"10.13.0.1", 
+            "peerASN":"65001"
+        },
+        {
+            "cpeName":"FF-ORG-01",
+            "cpeSegmentationType":"vlan", 
+            "cpeSegmentationId":"410", 
+            "cpeIpAddr":"10.13.0.2", 
+            "cpeMask":"255.255.255.252", 
+            "cpeASN":"65410", 
+            "peerIP":"10.13.0.1", 
+            "peerASN":"65001"
+        }]
 }

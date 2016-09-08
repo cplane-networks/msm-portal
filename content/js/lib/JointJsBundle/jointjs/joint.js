@@ -7160,9 +7160,11 @@ joint.dia.Link = joint.dia.Cell.extend({
         '<path class="marker-target" fill="black" stroke="black" d="M 0 0 0 0"/>',
         '<path class="connection-wrap" d="M 0 0 0 0"/>',
         '<g class="labels"/>',
-        '<g class="marker-vertices"/>',
-        '<g class="marker-arrowheads"/>',
-        '<g class="link-tools"/>'
+        /* Changed by Krish */
+        //'<g class="marker-vertices"/>',
+        //'<g class="marker-arrowheads"/>',
+        //'<g class="link-tools"/>'
+        /* Changed by Krish */
     ].join(''),
 
     labelMarkup: [
@@ -8658,7 +8660,9 @@ joint.dia.LinkView = joint.dia.CellView.extend({
                             this.notify(targetParentEvent, evt, x, y);
                         }
                     }
-                } else {
+                } 
+                /* Changed by Krish
+                else {
                     if (this.can('vertexAdd')) {
 
                         // Store the index at which the new vertex has just been placed.
@@ -8667,6 +8671,7 @@ joint.dia.LinkView = joint.dia.CellView.extend({
                         this._action = 'vertex-move';
                     }
                 }
+                Changed by Krish */
         }
     },
 

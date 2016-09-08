@@ -2,9 +2,9 @@
 
 define(['app'], function (app) {
 
-    var injectParams = ['localStorageService', '$rootScope'];
+    var injectParams = ['localStorageService', '$rootScope', 'GraphService'];
 
-    var storageServiceFactory = function (localStorageService, $rootScope) {
+    var storageServiceFactory = function (localStorageService, $rootScope, GraphService) {
         
         var storageFactory = {};
         var storageType = "";
@@ -15,16 +15,10 @@ define(['app'], function (app) {
             var exist = -1;
             var site_details = storage.get(storageKey);
             $.each(site_details, function(index, siteObj){
-                $.each(obj, function(key, value){
-                    if (angular.equals(siteObj[key], value)){
-                        exist = index;
-                    }
-                    else {
-                        exist = -1;
-                    }
-                })
-                if (exist > -1)
+                if (angular.equals(siteObj, obj)){
+                    exist = index;
                     return false;
+                }
             });
             return exist;
         }
@@ -41,7 +35,11 @@ define(['app'], function (app) {
                 storageType = 'LocalStore';
             }
         };
-
+        
+        storageFactory.Get = function(storage_name){
+            storageFactory.Init();
+            return storage.get(storage_name);
+        }
         // Clean up method
         storageFactory.RemoveAll = function () {
             storageFactory.Init();
@@ -69,6 +67,18 @@ define(['app'], function (app) {
         };
         
         storageFactory.AddSite = function (data) {
+            /* data = {'site_name': <string>,
+                       'defaultSubnet': <string>,
+                       'type': 'openstack_site',
+                       'status' : 'inactive',
+                       'cpe': [{"cpeSegmentationType" : <string>,
+                                "cpeSegmentationId" : <string>,
+                                "cpeIpAddr" : <string>,
+                                "cpeMask" : <string>,
+                                "cpeASN" : <string>,
+                                "peerIP" : <string>,
+                                "peerASN" : <string>}]}
+            */
             storageFactory.Init();
             var site_details = storage.get("node_details");
             if (site_details == null || (site_details && site_details instanceof Array && !site_details.length)){
@@ -80,27 +90,27 @@ define(['app'], function (app) {
                     storage.set("node_details", site_details);
                 }
             }
+            
             $rootScope.$broadcast("OnStorageAddSite", data.site_name);
         };
         
         storageFactory.GetSite = function (site_name) {
             storageFactory.Init();
             var site_details = storage.get("node_details");
-            
             return $.map(site_details, function(val) {
-                if( val.site.toLowerCase() == site_name.toLowerCase() ) return val;
+                if( val.site_name.toLowerCase() == site_name.toLowerCase() ) return { site_data : val, site_level : site_details.indexOf(val) };
             })[0];
         };
         
         storageFactory.RemoveSite = function (site_name) {
             storageFactory.Init();
-            var site_details = storage.get("node_details");
-            var site_data = storageFactory.GetSite(site_name);
-            var index = check_exist("node_details", site_data);
+            var node_details = storage.get("node_details");
+            var site_details = storageFactory.GetSite(site_name);
+            var index = check_exist("node_details", site_details.site_data);
             
             if (index != -1){
-                site_details.splice(index, 1);
-                storage.set("node_details", site_details);
+                node_details.splice(index, 1);
+                storage.set("node_details", node_details);
             }
             
             $rootScope.$broadcast("OnStorageRemoveCustomer");
@@ -123,7 +133,6 @@ define(['app'], function (app) {
             storageFactory.Init();
             var details = storage.get(storage_name);
             var index = check_exist(storage_name, existing_data);
-            
             return details[index][key];
         }
         
@@ -141,20 +150,23 @@ define(['app'], function (app) {
         }
         
         storageFactory.AddOrUpdateVM = function(site_name, data){
-            var site_data = storageFactory.GetSite(site_name);
-            storageFactory.AddOrUpdateSubKey("node_details", site_data, "VM", data);
+            storageFactory.Init();
+            var site_details = storageFactory.GetSite(site_name);
+            storageFactory.AddOrUpdateSubKey("node_details", site_details.site_data, "VM", data);
             $rootScope.$broadcast("OnStorageAddVM");
         }
         
         storageFactory.GetVM = function(site_name){
-            var site_data = storageFactory.GetSite(site_name);
-            storageFactory.GetSubKey("node_details", site_data, "VM");
+            storageFactory.Init();
+            var site_details = storageFactory.GetSite(site_name);
+            storageFactory.GetSubKey("node_details", site_details.site_data, "VM");
             return true;
         }
         
         storageFactory.RemoveVM = function(site_name){
-            var site_data = storageFactory.GetSite(site_name);
-            storageFactory.RemoveSubKey("node_details", site_data, "VM");    
+            storageFactory.Init();
+            var site_details = storageFactory.GetSite(site_name);
+            storageFactory.RemoveSubKey("node_details", site_details.site_data, "VM");    
             $rootScope.$broadcast("OnStorageRemoveVM");
         }
         
@@ -165,6 +177,7 @@ define(['app'], function (app) {
         }
         
         storageFactory.GetConnections = function(site_name){
+            storageFactory.Init();
             return storage.get("connections");
         }
         
@@ -172,6 +185,31 @@ define(['app'], function (app) {
             storageFactory.Init();
             storage.remove("connections");
             $rootScope.$broadcast("OnStorageRemoveConnections");
+        }
+        
+        storageFactory.GetNode = function(site_name, node_type){
+            // site_name = <string>, node_type = <string>
+            storageFactory.Init();
+            var site_details = storageFactory.GetSite(site_name);
+            var node_data = storageFactory.GetSubKey("node_details", site_details.site_data, node_type);
+            var graph_elements = GraphService.graph.getElements();
+            for (var i = 0; i < graph_elements.length; i++){
+                var node_element_data = graph_elements[i].toJSON();
+                if (node_data.id === node_element_data.id){
+                    return graph_elements[i];
+                }
+            }
+        }
+        
+        storageFactory.RemoveNode = function(name){
+            var nodes = storage.get("nodes");
+            var node_data = storageFactory.GetNode(name);
+            var index = check_exist("nodes", node_data);
+            
+            if (index != -1){
+                nodes.splice(index, 1);
+                storage.set("nodes", nodes);
+            }
         }
         
         return storageFactory;

@@ -1,33 +1,58 @@
 <!DOCTYPE html>
 
-    <div class="modal-header">Add External Site
-        <button type="button" class="close" ng-click="CloseClipCancelReportDiag()">×</button>
-    </div>
+    <div class="modal-header">Add Cloud (OpenStack) Sites</div>
     <div class="modal-body clearfix">
-        <form name="userForm" novalidate>
-
+        <form class="addOsSitesForm" name="userForm" novalidate>
             <div class="form-group">
-                <label class="col-sm-3 control-label" for="siteName">Site Name</label>
-
+                <label class="col-sm-3 control-label" for="siteName">Site 1</label>
                 <div class="col-sm-5">
-                    <input class="form-control" placeholder="Enter Site Name" type="text" ng-model="cloud.site" id="siteName" name="stName" list="siteNameLst" required/>
-                    <datalist id="siteNameLst">
-                        <option value="AWS">
-                        <option value="Azure">
-                    </datalist>
+                    <select id="ser_lev" ng-init="siteField1" ng-model="siteField1" ng-options="x for x in OsSitesNames">
+                    </select>
 
                 </div>
             </div>
-
             <div class="form-group">
-                <label class="col-sm-3 control-label">AS Number</label>
-
+                <label class="col-sm-3 control-label">Default Subnet</label>
                 <div class="col-sm-5">
-                  <input placeholder="0" type="number" ng-model="cloud.asNum" name="asNum"  class="form-control" required />
+                    <select id="ser_lev" ng-init="subnetField1" ng-model="subnetField1" ng-options="x for x in subnetValList">
+                    </select>
+                </div>    
+               
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Gateway</label>
+                <div class="col-sm-5">
+                    <select id="ser_lev" ng-init="gatewayField1" ng-model="gatewayField1" ng-options="x for x in gatewayValList">
+                    </select>
+                </div>    
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="siteName">Site 2</label>
+                <div class="col-sm-5">
+                    <select id="ser_lev" ng-init="siteField2" ng-model="siteField2" ng-options="x for x in OsSitesNames">
+                    </select>
+
                 </div>
             </div>
-
             <div class="form-group">
+                <label class="col-sm-3 control-label">Default Subnet</label>
+                <div class="col-sm-5">
+                    <select id="ser_lev" ng-init="subnetField2" ng-model="subnetField2" ng-options="x for x in subnetValList">
+                    </select>
+                </div>    
+               
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Gateway</label>
+                <div class="col-sm-5">
+                    <select id="ser_lev" ng-init="gatewayField2" ng-model="gatewayField2" ng-options="x for x in gatewayValList">
+                    </select>
+                </div>    
+            </div>
+            
+
+<!--            <div class="form-group">
                 <label class="col-sm-3 control-label" for="cIP">IP Range</label>
 
                 <div class="col-sm-5">
@@ -39,13 +64,13 @@
                 <div class="col-sm-5">
                   <input placeholder="Enter Gateway IP" type="text" ng-model="cloud.gip" name="cloudGIP" id="gIP"  class="form-control" required>
                 </div>
-            </div>
+            </div>-->
 
         </form>
     </div>
     <div class="modal-footer">
         <div class="btn_group">
-            <button class="btn btn-gray" ng-click="CloseClipCancelReportDiag()">Cancel</button>
-            <button type="btn" class="btn btn-gray pull-left" ng-disabled="userForm.$invalid" ng-click="submitForm(userForm)">Submit</button>
+            <button class="btn btn-sm btn-gray" ng-click="CloseClipCancelReportDiag()">Cancel</button>
+            <button type="btn" class="btn btn-sm btn-gray pull-left" ng-click="submitOsForm()" >Submit</button>
         </div>
     </div>

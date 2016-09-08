@@ -1,4 +1,4 @@
-
+form-group
 html {
     overflow-y: scroll;
     overflow-x: hidden;
@@ -49,7 +49,8 @@ body{
 }
 .navbar{
     width:180px;
-    margin: 10px 0px 0 0;
+    margin: 8px 0px 0 0;
+    min-height:auto;
 }
 .navbar .btn{
     margin: 0;
@@ -69,7 +70,6 @@ body{
 .left-panel ul{
     width:81px;
     margin-left: 5px;
-    
 }
 .left-panel ul li{
     width:81px;
@@ -84,6 +84,19 @@ body{
     background-color: #fff;
     border-radius: 4px;
     width: 81px;
+}
+a:focus {
+  outline: none;
+  outline: none;
+  outline-offset: -2px;
+  background: #ffffff;
+}
+.nav > li > a:focus {
+  text-decoration: none;
+  background-color: #fff;
+}
+.nav > li > a:hover{
+   background-color: rgb(242,242,242);   
 }
 /* LeftPanel Css */
 .main-content h4{
@@ -103,12 +116,7 @@ body{
 .api-call-box ul{
     margin:20px 0 10px 0;
 }
-.nav > li > a{
-    background-color: #fff; 
-}
-.nav > li > a:hover{
-    background-color: #fff; 
-}
+
 
 .modal-content{
     background: rgb(242, 242, 242);
@@ -132,13 +140,6 @@ body{
     width:205px;
     height:28px;
 }
-.form-control{
-    height:28px;
-}
-.form-group {
-    height:28px;
-    margin-bottom: 20px;
-}
 .modal-footer{
     border-top: none;
 }
@@ -148,9 +149,7 @@ body{
 .modal-lg {
     width: 600px;
 }
-.form-control{
-    padding: 0 4px;
-}
+
 html {
     overflow-y: scroll;
     overflow-x: hidden;
@@ -220,15 +219,11 @@ html {
     width:100px;
 }
 .logo-lg svg{
-    width: 10%; height: auto;
+    width: 40%; 
+    height: auto;
+    display:block;
 }
-.navbar{
-    width:180px;
-    margin: 10px 0px 0 0;
-}
-.navbar .btn{
-    margin: 0;
-}
+
 .container {
     width: 100%;
     padding: 0;
@@ -245,6 +240,15 @@ html {
 .col-xs-7, .col-xs-8, .col-xs-9{
     padding-left:10px;
     padding-right:10px;
+}
+#logo-box{
+    width:25%;
+}
+#header-text{
+    margin: 8px 15px 0 0;
+}
+#header-text{
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 /* LeftPanel Css */
@@ -290,23 +294,30 @@ html {
 }
 #ser_lev{
     width:216px;
-    height: 28px;
+    height: 24px;
     color: #555;
     border: 1px solid #ccc;
     border-radius: 4px;
+    
 }
 label {
     color: rgb(127, 127, 127);
     font-weight: 100;
-    margin: 9px 0;
+    margin: 7px 0;
 }
 .form-control{
-    height:28px;
+    height:24px;
+    padding: 0 4px;
 }
 .form-group {
-    height:28px;
-    margin-bottom: 20px;
+    height:24px;
+    margin-bottom: 19px;
 }
+.addOsSitesForm .form-group {
+    height:15px;
+    margin-bottom: 18px;
+}
+
 .modal-footer{
     border-top: none;
     margin:30px 15px 10px;
@@ -339,7 +350,7 @@ label {
 .btn_group .btn-sm{
     width:100px;
     color: rgb(127, 127, 127);
-    font-size: 14px;
+    font-size: 12px;
 }
 .draw-canvas-box{
     height:448px;
@@ -352,7 +363,7 @@ a:hover, a:focus{
     font-size: 11px;
     color:rgb(237,28,36);
 }
-#cust{
+.cust{
     margin: 0 0 3px 0;
 }
 input[type=number]::-webkit-inner-spin-button, 
@@ -383,3 +394,7 @@ input[type=number] {
     color: rgb(127, 127, 127);
 }
 /* close hovering css */
+
+#add-circle path{
+    fill:rgb(217, 217, 217);
+}

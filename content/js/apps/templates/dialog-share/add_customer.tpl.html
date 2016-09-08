@@ -2,15 +2,18 @@
 
     <div class="modal-header">Add / Select Customer</div>
     <div class="modal-body clearfix">
-        <form name="userForm" novalidate>
+        <form class="addCustForm" name="userForm" novalidate>
 
+            
+            
+            
+            
             <div class="form-group">
                 <label class="col-sm-3 control-label" for="cust">Customer Name</label>
 
                 <div class="col-sm-5">
-                    <input class="form-control" placeholder="Enter Name" type="text" ng-model="custName" name="custName" id="cust" list="customerName" required/>
-                    
-                    <span class="error-msg" ng-show="userForm.custName.$invalid">* Customer name is required</span>
+                    <input class="form-control cust" placeholder="Enter Name" type="text" ng-model="custName" name="custName" id="cust" list="customerName" ng-value="custPopup" required/>
+                    <span class="error-msg" ng-show="userForm.custName.$invalid">Customer name is required</span>
                     <datalist id="customerName">
                         <option value="John"></option>
                         <option value="Robert"></option>
@@ -32,8 +35,8 @@
                 <label class="col-sm-3 control-label" for="maxCloud">Max Cloud Sites</label>
 
                 <div class="col-sm-5">
-                  <input placeholder="Enter value" type="number" ng-model="custClouds" name="maxCloudSites" min="2" max="2" id="maxCloud"  class="form-control" required/>
-                  <span class="error-msg" ng-show="userForm.maxCloudSites.$invalid && !userForm.maxCloudSites.$pristine">* Max Cloud Sites always is 2</span>
+                  <input placeholder="Enter value" type="number" ng-model="custClouds" name="maxCloudSites" min="2" max="2" id="maxCloud"  class="form-control cust" required/>
+                  <span class="error-msg" ng-show="userForm.maxCloudSites.$invalid && !userForm.maxCloudSites.$pristine">Maximum: 2</span>
                 </div>
             </div>
 
@@ -41,8 +44,8 @@
                 <label class="col-sm-3 control-label" for="maxVms">Max VMs/Site</label>
 
                 <div class="col-sm-5">
-                    <input placeholder="Enter Value" type="number" ng-model="custSites" name="maxVMsSites" min="1" max="5" id="maxVms" class="form-control" required/>
-                    <span class="error-msg" ng-show="userForm.maxVMsSites.$invalid && !userForm.maxVMsSites.$pristine">* VMs allowed min - 1, max - 5</span>
+                    <input placeholder="Enter Value" type="number" ng-model="custSites" name="maxVMsSites" min="1" max="5" id="maxVms" class="form-control cust" required/>
+                    <span class="error-msg" ng-show="userForm.maxVMsSites.$invalid && !userForm.maxVMsSites.$pristine">Minimum: 1, Maximum: 5</span>
                 </div>
             </div>
         </form>

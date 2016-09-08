@@ -14,39 +14,44 @@ $(document).ready(function(){
 </style>
     <body>
         <div class="wrapper">
-            <header class="main-header">
-                <!-- Logo -->
-                <a class="logo" width="140" height="40" >
-                    <span class="logo-lg"><ng-include src="'content/images/svg_image/CPLANE NETWORKS logo latha - 2 line.svg'" ></ng-include>
-                    </span>
-                </a>
-
+            <header class="main-header clearfix">
                 <!-- Header Navbar: style can be found in header.less -->
                 <nav class="navbar navbar-static-top pull-right">
                   <!-- Sidebar toggle button-->
                   <button class="btn btn-block btn-default btn-xs pull-right" type="button">RESET ALL</button>
                   <button class="btn btn-block btn-default btn-xs " type="button">RESET VMs</button>
                 </nav>
+                <!-- Logo -->
+                <div id="logo-box">
+                    <span id="header-text" class="pull-right">Multi-Site Manager</span>
+                    <a class="logo" width="140" height="40" >
+                        <span class="logo-lg"><ng-include  src="'content/images/svg_image/CPLANE NETWORKS logo latha - 2 line.svg'" ></ng-include>
+                        </span>
+                    </a>
+                    
+                <div>
+
+                
             </header>
             <div class="container" >  
                 <div class="left-panel col-md-1">
                     <ul class="nav sidebar-menu">
                         <li>
-                            <a href="" ng-click="addCustomer()"  class="text-center">
+                            <a href="" ng-click="addCustomer()" class="text-center">
                                 <!--<ng-include src="'content/images/svg_image/Add Customer.svg'" />-->
                                 <span><ng-include src="'content/images/svg_image/Add Customer.svg'"></ng-include></span>
                                 <span id="nav-text">Customer</span>
                             </a>
                         </li>
                         <li>
-                            <a href=""  class="text-center">
+                            <a href="" ng-click="OpenCloudSiteView()"  class="text-center">
                                 <!--<ng-include src="'content/images/svg_image/Add Customer.svg'" />-->
                                 <span><ng-include src="'content/images/svg_image/Add Cloud Site.svg'"></ng-include></span>
                                 <span id="nav-text">Add Cloud Sites</span>
                             </a>
                         </li>
                         <li>
-                            <a href=""  class="text-center">
+                            <a href="" ng-click="openExternalSite()" class="text-center">
                                 <!--<ng-include src="'content/images/svg_image/Add Customer.svg'" />-->
                                 <span><ng-include src="'content/images/svg_image/Add External Site.svg'"></ng-include></span>
                                 <span id="nav-text">Add External Site</span>
@@ -72,7 +77,7 @@ $(document).ready(function(){
 
 
                 <div class="main-content col-md-11">
-                    <h4>Customer: <span id="tooltip-ex" ><a href="" data-placement="bottom" title="" data-html="true" data-original-title="Customer : {{customerName}} <br/> Service Level : {{serviceLevel}} <br/> Max Cloud Sites : {{clouds}} <br/> Max VMs/Sites : {{sites}}" 
+                    <h4>Customer: <span id="tooltip-ex" ><a href="" data-placement="bottom" title="" data-html="true" data-original-title="Customer : {{customerName}} <br/> Service Level : {{serviceLevel}} <br/> Max Cloud Sites : {{clouds}} <br/> Max VMs/Site : {{sites}}" 
                                            data-toggle="tooltip"  class="pop-design"> 
                                            {{customerName}}</a></span></h4>
                     

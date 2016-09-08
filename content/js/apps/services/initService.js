@@ -8,10 +8,11 @@ define(['app'], function (app) {
 
         var initFactory = {};
 
-        initFactory.GetLocalData = function (parent_scope, key) {
+        initFactory.GetLocalData = function (parent_scope) {
             return $http.get(AppConfig.localUrl + 'init.json').success(
+                    
                     function (results) {
-                        OnLocalData(parent_scope, results[key], null);
+                        OnLocalData(parent_scope, results, null);
                     }).error(
                     function (error, status) {
                         if (error != null)
