@@ -40,6 +40,7 @@ define(['app'], function (app) {
             storageFactory.Init();
             return storage.get(storage_name);
         }
+        
         // Clean up method
         storageFactory.RemoveAll = function () {
             storageFactory.Init();
@@ -57,7 +58,13 @@ define(['app'], function (app) {
         
         storageFactory.GetCustomer = function () {
             storageFactory.Init();
-            return storage.get("customer");
+            try{
+                return storage.get("customer");
+            }
+            catch(e){
+                console.log(e)
+                return false;
+            }
         };
         
         storageFactory.RemoveCustomer = function () {
@@ -96,10 +103,16 @@ define(['app'], function (app) {
         
         storageFactory.GetSite = function (site_name) {
             storageFactory.Init();
-            var site_details = storage.get("node_details");
-            return $.map(site_details, function(val) {
-                if( val.site_name.toLowerCase() == site_name.toLowerCase() ) return { site_data : val, site_level : site_details.indexOf(val) };
-            })[0];
+            try{
+                var site_details = storage.get("node_details");
+                return $.map(site_details, function(val) {
+                    if( val.site_name.toLowerCase() == site_name.toLowerCase() ) return { site_data : val, site_level : site_details.indexOf(val) };
+                })[0];
+            }    
+            catch(e){
+                console.log(e)
+                return false;    
+            }    
         };
         
         storageFactory.RemoveSite = function (site_name) {
@@ -113,14 +126,13 @@ define(['app'], function (app) {
                 storage.set("node_details", node_details);
             }
             
-            $rootScope.$broadcast("OnStorageRemoveCustomer");
+            $rootScope.$broadcast("OnStorageRemoveSite");
         };
         
         storageFactory.AddOrUpdateSubKey = function(storage_name, existing_data, key, value){
             storageFactory.Init();
             var details = storage.get(storage_name);
             var index = check_exist(storage_name, existing_data);
-            
             if (index != -1){
                 details[index][key] = value;
                 storage.set(storage_name, details);
@@ -152,43 +164,97 @@ define(['app'], function (app) {
         storageFactory.AddOrUpdateVM = function(site_name, data){
             storageFactory.Init();
             var site_details = storageFactory.GetSite(site_name);
-            storageFactory.AddOrUpdateSubKey("node_details", site_details.site_data, "VM", data);
-            $rootScope.$broadcast("OnStorageAddVM");
+            var vm_data = [];
+            
+            if("VM" in site_details.site_data){
+                vm_data = angular.copy(site_details.site_data.VM);
+            }
+            
+            vm_data.push(data);
+            storageFactory.AddOrUpdateSubKey("node_details", site_details.site_data, "VM", vm_data);
+            $rootScope.$broadcast("OnStorageAddVM", site_name, data.srId);
         }
         
-        storageFactory.GetVM = function(site_name){
+        storageFactory.GetVM = function(site_name, vm_srId, vm_name){
             storageFactory.Init();
-            var site_details = storageFactory.GetSite(site_name);
-            storageFactory.GetSubKey("node_details", site_details.site_data, "VM");
-            return true;
+            try{
+                var site_details = storageFactory.GetSite(site_name);
+                var vm_details = storageFactory.GetSubKey("node_details", site_details.site_data, "VM");
+                return $.map(vm_details, function(val) {
+                    if (vm_srId){
+                        if( val.srId == vm_srId ) return { vm_data : val, vm_level : vm_details.indexOf(val) };
+                    }
+                    else{    
+                        if( val.name.toLowerCase() == vm_name.toLowerCase() ) return { vm_data : val, vm_level : vm_details.indexOf(val) };
+                    }    
+                })[0];
+            }    
+            catch(e){
+                console.log(e)
+                return false;    
+            }    
         }
         
-        storageFactory.RemoveVM = function(site_name){
+        storageFactory.RemoveVM = function(site_name, vm_srId){
             storageFactory.Init();
             var site_details = storageFactory.GetSite(site_name);
-            storageFactory.RemoveSubKey("node_details", site_details.site_data, "VM");    
-            $rootScope.$broadcast("OnStorageRemoveVM");
+            var vm_data = storageFactory.GetSubKey("node_details", site_details.site_data, "VM");    
+            var vm_details = storageFactory.GetVM(site_name, vm_srId).vm_data;
+            var exist = -1;
+            $.each(vm_data, function(index, vmObj){
+                if (angular.equals(vmObj, vm_details)){
+                    exist = index;
+                    return false;
+                }
+            });
+            vm_data.splice(exist, 1);
+            storageFactory.AddOrUpdateSubKey("node_details", site_details.site_data, "VM", vm_data);
+            $rootScope.$broadcast("OnStorageRemoveVM", site_name, vm_srId);
         }
         
         storageFactory.AddOrUpdateConnections = function(data){
             storageFactory.Init();
-            storage.set("connections", data);
-            $rootScope.$broadcast("OnStorageAddConnections");
+            var connection_details = storage.get("connections");
+            if(!connection_details){
+                connection_details = [];
+            }    
+            
+            if(data.constructor !== Array){
+                data = [data];
+            }
+            
+            connection_details = connection_details.concat(data);
+            storage.set("connections", connection_details);
+            $rootScope.$broadcast("OnStorageAddConnections", data);
         }
         
-        storageFactory.GetConnections = function(site_name){
+        storageFactory.GetConnections = function(data){
             storageFactory.Init();
-            return storage.get("connections");
+            if (!data){
+                return storage.get("connections");
+            }
+            else{
+                try{
+                    var connection_details = storage.get("connections");
+                    return $.map(connection_details, function(val) {
+                        if( angular.equals(val, data) ) return { connection_data : val, connection_level : connection_details.indexOf(val) };
+                    })[0];
+                }    
+                catch(e){
+                    console.log(e)
+                    return false;    
+                }    
+            }    
         }
         
-        storageFactory.RemoveConnections = function(site_name){
+        storageFactory.RemoveConnections = function(){
             storageFactory.Init();
             storage.remove("connections");
             $rootScope.$broadcast("OnStorageRemoveConnections");
         }
         
         storageFactory.GetNode = function(site_name, node_type){
-            // site_name = <string>, node_type = <string>
+            // site_name = <string>, node_type = <string> e,g 'site_node'
             storageFactory.Init();
             var site_details = storageFactory.GetSite(site_name);
             var node_data = storageFactory.GetSubKey("node_details", site_details.site_data, node_type);
@@ -201,15 +267,21 @@ define(['app'], function (app) {
             }
         }
         
-        storageFactory.RemoveNode = function(name){
-            var nodes = storage.get("nodes");
-            var node_data = storageFactory.GetNode(name);
-            var index = check_exist("nodes", node_data);
+        storageFactory.RemoveNode = function(site_name){
+            storageFactory.Init();
+            var node_details = storage.get("node_details");
+            var site_details = storageFactory.GetSite(site_name).site_data;
+            var exist = -1;
+            $.each(node_details, function(index, siteObj){
+                if (angular.equals(siteObj, site_details)){
+                    exist = index;
+                    return false;
+                }
+            });
             
-            if (index != -1){
-                nodes.splice(index, 1);
-                storage.set("nodes", nodes);
-            }
+            node_details.splice(exist, 1);
+            storage.set("node_details", node_details);
+            $rootScope.$broadcast("OnStorageRemoveNode", site_name);
         }
         
         return storageFactory;

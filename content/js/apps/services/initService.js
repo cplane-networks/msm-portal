@@ -23,7 +23,7 @@ define(['app'], function (app) {
         };
 
         function OnLocalData(parent_scope, response, error) {
-            parent_scope.$broadcast('OnGetLocalData', response, error);
+            $rootScope.$broadcast('OnGetLocalData', response, error);
         };
 
         return initFactory;

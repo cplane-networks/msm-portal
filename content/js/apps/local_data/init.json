@@ -1,38 +1,162 @@
-{   "customer" : {"service_levels": [
-                    "Gold",
-                    "Silver",
-                    "Bronze"
-                  ],
-                "max_cloud_sites": 2,
-                "max_vms_per_site": 5},
-    "openstack" : [
-        {
-            "site_name": "Palo Alto",
-            "default_subnet_site": "10.100.1.0/24"
-        },
-        {
-            "site_name": "Frankfurt",
-            "default_subnet_site": "10.100.2.0/24"
-        }],  
-    "cpe" : [  
-        {
-            "cpeName":"PA-ORG-01",
-            "cpeSegmentationType":"vlan", 
-            "cpeSegmentationId":"410", 
-            "cpeIpAddr":"10.13.0.2", 
-            "cpeMask":"255.255.255.252", 
-            "cpeASN":"65410", 
-            "peerIP":"10.13.0.1", 
-            "peerASN":"65001"
-        },
-        {
-            "cpeName":"FF-ORG-01",
-            "cpeSegmentationType":"vlan", 
-            "cpeSegmentationId":"410", 
-            "cpeIpAddr":"10.13.0.2", 
-            "cpeMask":"255.255.255.252", 
-            "cpeASN":"65410", 
-            "peerIP":"10.13.0.1", 
-            "peerASN":"65001"
-        }]
+{   "customer" : {"service_levels": [ "Gold",
+                                      "Silver",
+                                      "Bronze"],
+                  "max_cloud_sites": 2,
+                  "max_vms_per_site": 5},
+    "openstack" : [{"site_name": "PaloAlto",
+                    "default_subnet_site":[ "10.200.1.0/24",  
+                                            "10.200.2.0/24",  
+                                            "10.200.3.0/24",  
+                                            "10.200.4.0/24",  
+                                            "10.200.5.0/24",  
+                                            "10.200.6.0/24",  
+                                            "10.200.7.0/24",  
+                                            "10.200.8.0/24",  
+                                            "10.200.9.0/24",  
+                                            "10.200.10.0/24"],
+                    "cpeName":["PA-OGR-01", 
+                               "PA-OGR-02", 
+                               "PA-OGR-03", 
+                               "PA-OGR-04", 
+                               "PA-OGR-05", 
+                               "PA-OGR-06", 
+                               "PA-OGR-07", 
+                               "PA-OGR-08", 
+                               "PA-OGR-09", 
+                               "PA-OGR-10",                    
+                               "PA-OGR-11",                    
+                               "PA-OGR-12",                    
+                               "PA-OGR-13"]                    
+                   },
+                   {"site_name": "Frankfurt",
+                    "default_subnet_site": ["10.100.1.0/24",  
+                                            "10.100.2.0/24",  
+                                            "10.100.3.0/24",  
+                                            "10.100.4.0/24",  
+                                            "10.100.5.0/24",  
+                                            "10.100.6.0/24",  
+                                            "10.100.7.0/24",  
+                                            "10.100.8.0/24",  
+                                            "10.100.9.0/24",  
+                                            "10.100.10.0/24"],
+                    "cpeName":["FF-OGR-01", 
+                               "FF-OGR-02", 
+                               "FF-OGR-03",
+                               "FF-OGR-04",
+                               "FF-OGR-05",
+                               "FF-OGR-06",
+                               "FF-OGR-07",
+                               "FF-OGR-08", 
+                               "FF-OGR-09", 
+                               "FF-OGR-10",                    
+                               "FF-OGR-11",                    
+                               "FF-OGR-12",                    
+                               "FF-OGR-13"]                    
+                    }],
+    "maxexternalsite": "3",   
+    "cpe" : {"PaloAlto" : [{
+                                "cpeName":"PA-OGR-01",
+                                "cpeSegmentationType":"vlan", "cpeSegmentationId":"210", "cpeIpAddr":"10.11.0.2", "cpeMask":"255.255.255.252", "cpeASN":"65210", "peerIP":"10.11.0.1", "peerASN":"65001"
+                           },
+                           {
+                                "cpeName":"PA-OGR-02",
+                                "cpeSegmentationType":"vlan", "cpeSegmentationId":"211", "cpeIpAddr":"10.11.0.6", "cpeMask":"255.255.255.252", "cpeASN":"65211", "peerIP":"10.11.0.5", "peerASN":"65001"
+                           },
+                           {
+                                "cpeName":"PA-OGR-03",
+                                "cpeSegmentationType":"vlan", "cpeSegmentationId":"212", "cpeIpAddr":"10.11.0.10", "cpeMask":"255.255.255.252", "cpeASN":"65212", "peerIP":"10.11.0.9", "peerASN":"65001"
+                           },
+                           {
+                                "cpeName":"PA-OGR-04",
+                                "cpeSegmentationType":"vlan", "cpeSegmentationId":"213", "cpeIpAddr":"10.11.0.14", "cpeMask":"255.255.255.252", "cpeASN":"65213", "peerIP":"10.11.0.13", "peerASN":"65001"
+                           },
+                           {
+                                "cpeName":"PA-OGR-05",
+                                "cpeSegmentationType":"vlan", "cpeSegmentationId":"214", "cpeIpAddr":"10.11.0.18", "cpeMask":"255.255.255.252", "cpeASN":"65214", "peerIP":"10.11.0.17", "peerASN":"65001"
+                           },
+                           {
+                                "cpeName":"PA-OGR-06",
+                                "cpeSegmentationType":"vlan", "cpeSegmentationId":"215", "cpeIpAddr":"10.11.0.22", "cpeMask":"255.255.255.252", "cpeASN":"65215", "peerIP":"10.11.0.21", "peerASN":"65001"
+                           },
+                           {
+                                "cpeName":"PA-OGR-07",
+                                "cpeSegmentationType":"vlan", "cpeSegmentationId":"216", "cpeIpAddr":"10.11.0.26", "cpeMask":"255.255.255.252", "cpeASN":"65216", "peerIP":"10.11.0.25", "peerASN":"65001"
+                           },
+                           {
+                                "cpeName":"PA-OGR-08",
+                               "cpeSegmentationType":"vlan", "cpeSegmentationId":"217", "cpeIpAddr":"10.11.0.30", "cpeMask":"255.255.255.252", "cpeASN":"65217", "peerIP":"10.11.0.29", "peerASN":"65001"
+                           },
+                           {
+                                "cpeName":"PA-OGR-09",
+                                "cpeSegmentationType":"vlan", "cpeSegmentationId":"212", "cpeIpAddr":"10.11.0.10", "cpeMask":"255.255.255.252", "cpeASN":"65212", "peerIP":"10.11.0.9", "peerASN":"65001"
+                           },
+                           {
+                                "cpeName":"PA-OGR-10",
+                                "cpeSegmentationType":"vlan", "cpeSegmentationId":"213", "cpeIpAddr":"10.11.0.14", "cpeMask":"255.255.255.252", "cpeASN":"65213", "peerIP":"10.11.0.13", "peerASN":"65001"
+                           },
+                           {
+                                "cpeName":"PA-OGR-11",
+                                "cpeSegmentationType":"vlan", "cpeSegmentationId":"218", "cpeIpAddr":"10.11.0.34", "cpeMask":"255.255.255.252", "cpeASN":"65218", "peerIP":"10.11.0.33", "peerASN":"65001"
+                           },
+                           {
+                                "cpeName":"PA-OGR-12",
+                                "cpeSegmentationType":"vlan", "cpeSegmentationId":"219", "cpeIpAddr":"10.11.0.38", "cpeMask":"255.255.255.252", "cpeASN":"65219", "peerIP":"10.11.0.37", "peerASN":"65001"
+                           },
+                           {
+                                "cpeName":"PA-OGR-13",
+                                "cpeSegmentationType":"vlan", "cpeSegmentationId":"220", "cpeIpAddr":"10.11.0.42", "cpeMask":"255.255.255.252", "cpeASN":"65219", "peerIP":"10.11.0.41", "peerASN":"65001"
+                           }],
+            "Frankfurt" :  [{
+                                "cpeName":"FF-OGR-01",
+                                "cpeSegmentationType":"vlan", "cpeSegmentationId":"410", "cpeIpAddr":"10.13.0.2", "cpeMask":"255.255.255.252", "cpeASN":"65410", "peerIP":"10.13.0.1", "peerASN":"65001"
+                            },
+                            {
+                                "cpeName":"FF-OGR-02",
+                                "cpeSegmentationType":"vlan", "cpeSegmentationId":"411", "cpeIpAddr":"10.13.0.6", "cpeMask":"255.255.255.252", "cpeASN":"65411", "peerIP":"10.13.0.5", "peerASN":"65001"
+                            },
+                            {
+                                "cpeName":"FF-OGR-03",
+                               "cpeSegmentationType":"vlan", "cpeSegmentationId":"412", "cpeIpAddr":"10.13.0.10", "cpeMask":"255.255.255.252", "cpeASN":"65412", "peerIP":"10.13.0.9", "peerASN":"65001"
+                            },
+                            {
+                                "cpeName":"FF-OGR-04",
+                               "cpeSegmentationType":"vlan", "cpeSegmentationId":"413", "cpeIpAddr":"10.13.0.14", "cpeMask":"255.255.255.252", "cpeASN":"65413", "peerIP":"10.13.0.13", "peerASN":"65001"
+                            },
+                            {
+                                "cpeName":"FF-OGR-05",
+                                "cpeSegmentationType":"vlan", "cpeSegmentationId":"414", "cpeIpAddr":"10.13.0.18", "cpeMask":"255.255.255.252", "cpeASN":"65414", "peerIP":"10.13.0.17", "peerASN":"65001"
+                            },
+                            {
+                                "cpeName":"FF-OGR-06",
+                                "cpeSegmentationType":"vlan", "cpeSegmentationId":"415", "cpeIpAddr":"10.13.0.22", "cpeMask":"255.255.255.252", "cpeASN":"65415", "peerIP":"10.13.0.21", "peerASN":"65001"
+                            },
+                            {
+                                "cpeName":"FF-OGR-07",
+                                "cpeSegmentationType":"vlan", "cpeSegmentationId":"416", "cpeIpAddr":"10.13.0.26", "cpeMask":"255.255.255.252", "cpeASN":"65416", "peerIP":"10.13.0.25", "peerASN":"65001"
+                            },
+                            {
+                                "cpeName":"FF-OGR-08",
+                                "cpeSegmentationType":"vlan", "cpeSegmentationId":"417", "cpeIpAddr":"10.13.0.30", "cpeMask":"255.255.255.252", "cpeASN":"65417", "peerIP":"10.13.0.29", "peerASN":"65001"
+                            },
+                            {
+                                "cpeName":"FF-OGR-09",
+                                "cpeSegmentationType":"vlan", "cpeSegmentationId":"412", "cpeIpAddr":"10.13.0.10", "cpeMask":"255.255.255.252", "cpeASN":"65412", "peerIP":"10.13.0.9", "peerASN":"65001"
+                            },
+                            {
+                                "cpeName":"FF-OGR-10",
+                               "cpeSegmentationType":"vlan", "cpeSegmentationId":"413", "cpeIpAddr":"10.13.0.14", "cpeMask":"255.255.255.252", "cpeASN":"65413", "peerIP":"10.13.0.13", "peerASN":"65001"
+                            },
+                            {
+                                "cpeName":"FF-OGR-11",
+                                "cpeSegmentationType":"vlan", "cpeSegmentationId":"418", "cpeIpAddr":"10.13.0.34", "cpeMask":"255.255.255.252", "cpeASN":"65418", "peerIP":"10.13.0.33", "peerASN":"65001"
+                            },
+                            {
+                                "cpeName":"FF-OGR-12",
+                                "cpeSegmentationType":"vlan", "cpeSegmentationId":"419", "cpeIpAddr":"10.13.0.38", "cpeMask":"255.255.255.252", "cpeASN":"65419", "peerIP":"10.13.0.37", "peerASN":"65001"
+                            },
+                            {
+                                "cpeName":"FF-OGR-13",
+                                "cpeSegmentationType":"vlan", "cpeSegmentationId":"420", "cpeIpAddr":"10.13.0.42", "cpeMask":"255.255.255.252", "cpeASN":"65419", "peerIP":"10.13.0.41", "peerASN":"65001"
+                            }]
+            }                
 }

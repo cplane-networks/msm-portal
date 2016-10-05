@@ -2,70 +2,57 @@
 
     <div class="modal-header">Add Cloud (OpenStack) Sites</div>
     <div class="modal-body clearfix">
-        <form class="addOsSitesForm" name="userForm" novalidate>
+        <form class="addOsSitesForm" name="cloudForm" novalidate>
             <div class="form-group">
                 <label class="col-sm-3 control-label" for="siteName">Site 1</label>
                 <div class="col-sm-5">
-                    <select id="ser_lev" ng-init="siteField1" ng-model="siteField1" ng-options="x for x in OsSitesNames">
+                    <select id="ser_lev" ng-init="siteField1" ng-model="siteField1" name="siteField1" ng-options="x for x in OsSitesNames" ng-change="update()" required>
                     </select>
-
+                    <!--<span class="error-msg" ng-show="cloudForm.siteField1.$invalid">Select an option</span>-->
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">Default Subnet</label>
                 <div class="col-sm-5">
-                    <select id="ser_lev" ng-init="subnetField1" ng-model="subnetField1" ng-options="x for x in subnetValList">
+                    <select id="ser_lev" ng-init="subnetField1" ng-model="subnetField1" name="subnetField1" ng-options="x for x in subnetValList1" required>
                     </select>
+                    <!--<span class="error-msg" ng-show="cloudForm.subnetField1.$invalid">Select an option</span>-->
                 </div>    
-               
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">Gateway</label>
                 <div class="col-sm-5">
-                    <select id="ser_lev" ng-init="gatewayField1" ng-model="gatewayField1" ng-options="x for x in gatewayValList">
+                    <select id="ser_lev" ng-init="gatewayField1" ng-model="gatewayField1" name="gatewayField1" ng-options="x for x in gatewayValList1" required> 
                     </select>
+                    <!--<span class="error-msg" ng-show="cloudForm.gatewayField1.$invalid">Select an option</span>-->
                 </div>    
             </div>
             
             <div class="form-group">
                 <label class="col-sm-3 control-label" for="siteName">Site 2</label>
                 <div class="col-sm-5">
-                    <select id="ser_lev" ng-init="siteField2" ng-model="siteField2" ng-options="x for x in OsSitesNames">
+                    <select id="ser_lev" ng-init="siteField2" required>
+                        <option ng-model="siteField2">{{siteField2}}</option>
                     </select>
-
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">Default Subnet</label>
                 <div class="col-sm-5">
-                    <select id="ser_lev" ng-init="subnetField2" ng-model="subnetField2" ng-options="x for x in subnetValList">
+                    <select id="ser_lev" ng-init="subnetField2" ng-model="subnetField2" name="subnetField2" ng-options="x for x in subnetValList2" required>
                     </select>
+                    <!--<span class="error-msg" ng-show="cloudForm.subnetField2.$invalid">Select an option</span>-->
                 </div>    
-               
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">Gateway</label>
                 <div class="col-sm-5">
-                    <select id="ser_lev" ng-init="gatewayField2" ng-model="gatewayField2" ng-options="x for x in gatewayValList">
+                    <select id="ser_lev" ng-init="gatewayField2" ng-model="gatewayField2" name="gatewayField2" ng-options="x for x in gatewayValList2" required>
                     </select>
+                    <!--<span class="error-msg" ng-show="cloudForm.gatewayField2.$invalid">Select an option</span>-->
                 </div>    
             </div>
             
-
-<!--            <div class="form-group">
-                <label class="col-sm-3 control-label" for="cIP">IP Range</label>
-
-                <div class="col-sm-5">
-                  <input placeholder="Enter IP" type="text" ng-model="cloud.ip" name="cloudIP" id="cIP"  class="form-control" required>
-                </div>
-            </div><div class="form-group">
-                <label class="col-sm-3 control-label" for="gIP">Gateway IP Address</label>
-
-                <div class="col-sm-5">
-                  <input placeholder="Enter Gateway IP" type="text" ng-model="cloud.gip" name="cloudGIP" id="gIP"  class="form-control" required>
-                </div>
-            </div>-->
-
         </form>
     </div>
     <div class="modal-footer">

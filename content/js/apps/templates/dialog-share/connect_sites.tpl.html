@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+    <div class="modal-header">Connect Sites</div>
+    <div class="modal-body clearfix">
+        <div class="prevConnectionsList" ng-repeat="site in connectionsData">
+            <div class="form-group col-sm-3">
+                <div class="">
+                    <label class="control-label" >Site Name</label>
+                    <input ng-model="connectionsData[site.index-1].CloudSiteField1" name="siteLbl{{site.index}}" value="{{connectionsData[site.index-1].CloudSiteField1}}" disabled >
+                   
+                </div>
+            </div>
+            <div class="form-group col-sm-3">
+                <div class="">
+                    <label class="control-label" >Subnet</label>
+                    <input ng-model="connectionsData[site.index-1].CloudSubnetField1" name="subnetLbl{{site.index}}" value="{{connectionsData[site.index-1].CloudSubnetField1}}" disabled >
+                    
+                </div>
+            </div>
+            <div class="form-group col-sm-3">
+                <div class="">
+                    <label class="control-label" >Connect to</label>
+                    <input ng-model="connectionsData[site.index-1].exSiteName1" name="conLbl{{site.index}}" value="{{connectionsData[site.index-1].exSiteName1}}" disabled />
+                </div>
+            </div>
+            <div class="form-group col-sm-3">
+                <div class="">
+                    <label class="control-label" >IP Range</label>
+                    <input  ng-model="connectionsData[site.index-1].exSiteIpRange1" name="ipsLbl{{site.index}}" value="{{connectionsData[site.index-1].exSiteIpRange1}}" disabled />
+                </div>
+            </div>
+        </div>
+        
+        
+        <form id="connectSiteForm" class="connectSiteForm clearfix" name="connectSiteForm" novalidate>
+            <div ng-repeat="site in sites">
+                <div class="form-group col-sm-3">
+                    <div class="">
+                        <label class="control-label" for="cust">Site Name</label>
+                        <select ng-model="sites[site.index-1].CloudSiteField1" name="siteField{{site.index}}" ng-options="x for x in exSitesNamesList" ng-change="changeCloud({{site.index-1}})" required>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-sm-3">
+                    <div class="">
+                        <label class="control-label" for="cust">Subnet</label>
+                        <select ng-model="sites[site.index-1].CloudSubnetField1" name="subnetField{{site.index}}" required>
+                            <option>{{sites[site.index-1].CloudSubnetField1}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-sm-3">
+                    <div class="">
+                        <label class="control-label" for="cust">Connect to</label>
+                        <select ng-model="sites[site.index-1].exSiteName1" name="exSiteName{{site.index}}" ng-change="exSiteNameSelect({{site.index-1}})" ng-options="x for x in externalSiteNameList" required>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-sm-3">
+                    <div class="">
+                        <label class="control-label" for="cust">IP Range</label>
+                        <select ng-model="sites[site.index-1].exSiteIpRange1" name="exSiteIpRange{{site.index}}" ng-change="exSiteIpSelect({{site.index-1}})" ng-options="x for x in sites[site.index-1].externalSiteIpRangeList" required>
+                        </select>
+                        <span class="error-msg" name="dupErrMsg{{site.index}}" ng-show="sites[site.index-1].isDuplicate">Duplicate Connection.</span>
+                    </div>
+                </div>
+                <div class="deleteConnectRow col-sm-1" title="Remove row" ng-click="deleteConnectionRow(site.index)">
+                    <b>-</b>    
+                </div>
+            </div>
+        </form>
+        <a href="" class="add-connection">
+            <span ng-click="addConnection();"><img class="pull-left" src="content/images/svg_image/add-button-inside-black-circle.svg" />Add Another Site Connection</span>
+        </a>
+        <div ng-hide="true" ng-model="siteLength">{{sites.length}}</div>
+    </div>
+    <div class="modal-footer">
+        <div class="btn_group">
+            <button class="btn btn-sm btn-gray" ng-click="CloseClipCancelReportDiag()">Cancel</button>
+            <button type="btn" class="btn btn-sm btn-gray pull-left" ng-click="submitConnectSiteForm();" >Submit</button>
+        </div>
+    </div>

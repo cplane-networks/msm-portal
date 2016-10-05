@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+    <div class="modal-header">Add VMs</div>
+    <div class="modal-body clearfix">
+        <div class="addVmsFormLabel clearfix">
+            <div class="col-sm-2 siteNameForVms">
+                <label class="control-label" for="cust" ng-hide="true">Subnet</label>
+            </div>
+            <div class="col-sm-3">
+                <label class="control-label" for="cust">Subnet</label>
+            </div>
+            <div class="col-sm-1">
+                <label class="control-label " for="cust">Number</label>
+            </div>
+            <div class="form-group col-sm-3">
+                <label class="control-label" for="cust">Image</label>
+            </div>
+            <div class="form-group col-sm-2">
+                <label class="control-label " for="cust">Flavor</label>
+            </div>
+        </div>
+        <form class="addVmsForm clearfix" name="addVMsForm" novalidate>
+            <div class="clearfix" ng-repeat="(site, vmData) in VMs">
+                <div>
+                    <span class="siteNameForVms pull-left">{{site}}</span>
+                    <div ng-if="vm.srId == ''" class="clearfix" ng-repeat="vm in vmData">
+                        <!--<input ng-if="(vmData.length - vm.index) > 0 | vm.index > 1" class="siteNameForVms pull-left" value="{{vm.index}}"></input>-->
+                        <span ng-if="(vm.index - vmsVal[site]) > 1" style="visibility:hidden" class="siteNameForVms pull-left">{{site}}</span>
+                        <div class="form-group col-sm-3">
+                            <select class="subnetLabel" name="subnet{{vm.index}}" ng-model="VMs[site][vm.index-1].subnet" ng-options="subnet for subnet in vm.subnetList" ng-change="vmNumUpdate(vm.index-1,site)" required>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-1">
+                            <input class="numLabel" name="number{{vm.index}}" ng-model="VMs[site][vm.index-1].number" ng-change="vmNumUpdate(vm.index-1,site)" value="vm.number" />
+                        </div>
+                        <div class="form-group col-sm-3">
+                            <select class="imageLabel" name="imageRef{{vm.index}}" ng-model="VMs[site][vm.index-1].imageRef" ng-options="image for image in vm.imageRefList" ng-change="vmNumUpdate(vm.index-1,site)" required>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-3">
+                            <select class="flavorLabel" name="flavorRef{{vm.index}}" ng-model="VMs[site][vm.index-1].flavorRef" ng-options="flavor for flavor in vm.flavorRefList" ng-change="vmNumUpdate(vm.index-1,site)" required>
+                            </select>
+                        </div>
+                        <div class="deleteRow" title="Remove row" ng-click="deleteVMrow(site, vm.index)">
+                            <b>-</b>
+                        </div>
+                        <div class="pull-left">
+                            <span class="error-msg vm-error-msg pull-left" ng-show="VMs[site][vm.index-1].excessVm" >Maximum number of VMs exceeded</span>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="addVmsLinkBox">
+                    <a href="" class="addVms">
+                        <span ng-click="addVms(site);"><img class="pull-left" src="content/images/svg_image/add-button-inside-black-circle.svg" />Add More VMs</span>
+                    </a>
+                    <span class="vmCountLink" ng-model="vmLeft[site]">({{vmLeft[site]}} VM Left)</span>
+                </div>
+            </div>
+        </form>
+        <div class="promptText"><p>Unused rows must be deleted before Submit. Click the <img src="content/images/default/delete.png"> next to a row to delete it.</p></div>
+    </div>
+    
+    <div class="modal-footer">
+        <div class="btn_group">
+            <button class="btn btn-sm btn-gray" ng-click="CloseClipCancelReportDiag()">Cancel</button>
+            <button type="btn" class="btn btn-sm btn-gray pull-left" ng-click="submitAddVMsForm();" >Submit</button>
+        </div>
+    </div>

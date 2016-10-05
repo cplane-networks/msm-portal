@@ -28,6 +28,11 @@ define(['app'], function (app) {
                         url: "/add_external_site",
                         templateUrl: AppConfig.templatePath + "add_external_site.tpl.html",
                         controller: 'customController'
+                    })
+                    .state('add_vms', {
+                        url: "/add_vms",
+                        templateUrl: AppConfig.templatePath + "add_vms.tpl.html",
+                        controller: 'customController'
                     }); 
                
             // if none of the above states are matched, use this as the fallback

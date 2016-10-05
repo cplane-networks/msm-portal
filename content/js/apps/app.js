@@ -14,6 +14,7 @@ define([], function () {
         'dialogs.main', //
         'ngIdle', // Idle timer
         'ngSanitize', // ngSanitize
+        'ngMaterial', // ngDialog
         //'blockUI' //blockUI
     ]);    
 

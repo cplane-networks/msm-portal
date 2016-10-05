@@ -12,11 +12,10 @@
                 <label class="col-sm-3 control-label" for="cust">Customer Name</label>
 
                 <div class="col-sm-5">
-                    <input class="form-control cust" placeholder="Enter Name" type="text" ng-model="custName" name="custName" id="cust" list="customerName" ng-value="custPopup" required/>
-                    <span class="error-msg" ng-show="userForm.custName.$invalid">Customer name is required</span>
+                    <input class="form-control cust" placeholder="Enter Name" type="text" ng-model="custName" ng-pattern="customerName" name="custName" id="cust" list="customerName" ng-value="custPopup" required/>
+                    <span class="error-msg" ng-show="userForm.custName.$error.pattern">Customer name is required</span>
                     <datalist id="customerName">
-                        <option value="John"></option>
-                        <option value="Robert"></option>
+                        <option ng-repeat="customer in ExistingCustomer" value="{{customer}}"></option>
                     </datalist>
                     
                 </div>
@@ -44,7 +43,7 @@
                 <label class="col-sm-3 control-label" for="maxVms">Max VMs/Site</label>
 
                 <div class="col-sm-5">
-                    <input placeholder="Enter Value" type="number" ng-model="custSites" name="maxVMsSites" min="1" max="5" id="maxVms" class="form-control cust" required/>
+                    <input placeholder="Enter Value" type="number" ng-model="custSites" name="maxVMsSites" min="1" max="5" id="maxVms" ng-change="maxVmsNoChange()" class="form-control cust" required/>
                     <span class="error-msg" ng-show="userForm.maxVMsSites.$invalid && !userForm.maxVMsSites.$pristine">Minimum: 1, Maximum: 5</span>
                 </div>
             </div>

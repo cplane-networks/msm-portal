@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+    <div class="modal-header">Add External Site</div>
+    <div class="modal-body clearfix">
+        <form id="externalSiteForm" class="addExSitesForm" name="externalSiteForm" novalidate>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="cust">Site Name</label>
+                <div class="col-sm-5">
+                    <input class="form-control cust" placeholder="Enter Site Name" type="text" ng-pattern="ExSiteNamePattern" ng-model="exSiteName" name="exSiteName" id="exSiteNameOne" ng-change="ExSiteNameUpdate()" required/>
+                    <span class="error-msg" ng-show="externalSiteForm.exSiteName.$error.pattern">Invalid Site Name</span>
+                    <span class="error-msg" ng-show="siteNameExist">Duplicate Site Name!</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="AsNumber">AS Number</label>
+                <div class="col-sm-5">
+                  <input placeholder="Enter AS Number" type="text" ng-pattern="ExAsNumPattern" ng-model="AsNumber" name="AsNumber" class="form-control cust" ng-change="ExASNumUpdate()" required/>
+                  <span class="error-msg" ng-show="externalSiteForm.AsNumber.$error.pattern">Invalid AS Number</span>
+                  <span class="error-msg" ng-show="AsNumExist">Duplicate AS Number.</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="IpRange">IP Range</label>
+                <div class="col-sm-5">
+                    <input placeholder="0.0.0.0/0" type="text" ng-model="IpRange1" name="IpRangeOne" ng-pattern="ExIpRange" class="form-control cust" ng-change="ExIpRangeUpdate()" required/>
+                    <span class="error-msg" ng-show="externalSiteForm.IpRangeOne.$error.pattern">Invalid IP Range</span>
+                    <span class="error-msg" ng-show="Ip1Exist">Duplicate IP Range.</span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="maxVms">Gateway IP Address</label>
+
+                <div class="col-sm-5">
+                    <input placeholder="0.0.0.0" type="text" ng-model="gatewayAdd1" name="gatewayOne" ng-pattern="ExGateway" class="form-control cust" ng-change="ExGatewayUpdate()" required/>
+                    <span class="error-msg" ng-show="externalSiteForm.gatewayOne.$error.pattern">Invalid Gateway address</span>
+                    <span class="error-msg" ng-show="gateway1Exist">Duplicate Gateway Address.</span>
+                </div>
+            </div>
+            <hr/>
+            <div id="AddIpRange" ng-hide="ShowAddIp">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="IpRange">IP Range</label>
+                    <div class="col-sm-5">
+                        <input placeholder="0.0.0.0/0" type="text" ng-model="IpRange2" name="IpRangeTwo" ng-pattern="ExIpRange" ng-change="ExIpRangeUpdate()" class="form-control cust" />
+                        <span class="error-msg" ng-show="externalSiteForm.IpRangeTwo.$error.pattern">Invalid IP Range</span>
+                        <span class="error-msg" ng-show="(IpRange1 == IpRange2) || Ip2Exist">Duplicate IP Range</span>
+                        <!--<span class="error-msg" ng-show="Ip2Exist">Duplicate IP Range.</span>-->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="IpRange">Gateway IP Address</label>
+                    <div class="col-sm-5">
+                        <input placeholder="0.0.0.0" type="text" ng-model="gatewayAdd2" name="gatewayTwo" ng-pattern="ExGateway" ng-change="ExGatewayUpdate()" class="form-control cust"/>
+                        <span class="error-msg" ng-show="externalSiteForm.gatewayTwo.$error.pattern">Invalid Gateway address</span>
+                        <span class="error-msg" ng-show="(gatewayAdd1 == gatewayAdd2) || gateway2Exist">Duplicate Gateway address</span>
+                        <!--<span class="error-msg" ng-show="gateway2Exist">Duplicate Gateway Address.</span>-->
+                    </div>
+                </div>
+                <hr/>
+            </div>
+            
+        </form>
+        <a href="" class="add-field">
+            <span ng-click="addExtSite();"><img class="pull-left" src="content/images/svg_image/add-button-inside-black-circle.svg" />Add Another IP Range</span>
+        </a>
+    </div>
+    <div class="modal-footer">
+        <div class="btn_group">
+            <button class="btn btn-sm btn-gray" ng-click="CloseClipCancelReportDiag()">Cancel</button>
+            <button type="btn" class="btn btn-sm btn-gray pull-left" ng-click="submitExternalSiteForm();" >Submit</button>
+        </div>
+    </div>
+    
+    <!--ng-disabled="userForm.$invalid"-->

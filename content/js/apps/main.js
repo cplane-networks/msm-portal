@@ -14,10 +14,10 @@ require(
             'services/storageService',
             'services/msmService',
             'services/graphService',
+            'services/queueService',
             //Controller
-            //'controllers/modelViewController',
-            'controllers/baseController',
             'controllers/customController',
+            'controllers/baseController',
             //'directives/addUser',
         ],
         function (app) {
