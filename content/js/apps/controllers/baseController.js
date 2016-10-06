@@ -172,7 +172,14 @@ define(['app'], function (app) {
                             }
                         });
                         
-                        if (external_sites.length == 0 && angular.isDefined($scope.checkExternalSites)) {
+                        var VMs = [];
+                        angular.forEach(node_details, function(site, index){
+                            if (site.type == 'openstack_site' && site.VM){
+                                VMs = VMs.concat(site.VM);
+                            }
+                        });
+                        
+                        if (VMs.length == 0 && external_sites.length == 0 && angular.isDefined($scope.checkExternalSites)) {
                             deleteOpenStackSites(customer_name, $rootScope.customer_details.vSite);
                             $interval.cancel($scope.checkExternalSites);
                         }
