@@ -41,7 +41,8 @@
                             </select>
                         </div>
                         <div class="deleteRow" title="Remove row" ng-click="deleteVMrow(site, vm.index)">
-                            <b>-</b>
+                            <!--<b>-</b>-->
+                            <span><img src="content/images/svg_image/X sign.svg" /></span>
                         </div>
                         <div class="pull-left">
                             <span class="error-msg vm-error-msg pull-left" ng-show="VMs[site][vm.index-1].excessVm" >Maximum number of VMs exceeded</span>
@@ -51,13 +52,13 @@
                 </div>
                 <div class="addVmsLinkBox">
                     <a href="" class="addVms">
-                        <span ng-click="addVms(site);"><img class="pull-left" src="content/images/svg_image/add-button-inside-black-circle.svg" />Add More VMs</span>
+                        <span ng-click="addVms(site);"><img class="pull-left" src="content/images/svg_image/plus sign.svg" />Add More VMs</span>
                     </a>
                     <span class="vmCountLink" ng-model="vmLeft[site]">({{vmLeft[site]}} VM Left)</span>
                 </div>
             </div>
         </form>
-        <div class="promptText"><p>Unused rows must be deleted before Submit. Click the <img src="content/images/default/delete.png"> next to a row to delete it.</p></div>
+        <div class="promptText"><p>Unused rows must be deleted before Submit. Click the <img src="content/images/svg_image/X sign.svg"> next to a row to delete it.</p></div>
     </div>
     
     <div class="modal-footer">

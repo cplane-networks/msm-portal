@@ -64,12 +64,13 @@
                     </div>
                 </div>
                 <div class="deleteConnectRow col-sm-1" title="Remove row" ng-click="deleteConnectionRow(site.index)">
-                    <b>-</b>    
+                    <!--<b>-</b>-->   
+                    <img src="content/images/svg_image/X sign.svg" />
                 </div>
             </div>
         </form>
         <a href="" class="add-connection">
-            <span ng-click="addConnection();"><img class="pull-left" src="content/images/svg_image/add-button-inside-black-circle.svg" />Add Another Site Connection</span>
+            <span ng-click="addConnection();"><img class="pull-left" src="content/images/svg_image/plus sign.svg" />Add Another Site Connection</span>
         </a>
         <div ng-hide="true" ng-model="siteLength">{{sites.length}}</div>
     </div>

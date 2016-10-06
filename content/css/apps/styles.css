@@ -435,12 +435,12 @@ hr{
 .add-connection img{
     display: block;
     height: auto;
-    margin: -7px 8px 0 0;
-    width: 4%;
+    margin: -4px 6px 0 0;
+    width: 16px;
 }
 
 .connectSiteForm{
-        margin: 0 0 20px 0
+    margin: 0 0 20px 0
     }
 .connectSiteForm select{
     width:132px;
@@ -465,13 +465,17 @@ hr{
     color: rgb(127, 127, 127);
 }
 .deleteConnectRow{
-    font-weight:bold;
-    font-size:18pt;
-    color:#e73827;
+    _font-weight:bold;
+    _font-size:18pt;
+    _color:#e73827;
     cursor:pointer;
-    margin-top: 24px;
-    width: 10px ! important;
+    margin-top: 26px;
+    width: 16px;
 }    
+.deleteConnectRow img{
+    width:16px;
+    margin: 0 0 0 -4px;
+}
 /* Connect Sites CSS*/
 
 
@@ -498,7 +502,7 @@ hr{
 .addVmsForm .col-sm-3{
     width:21%;
     padding:0px;
-    margin:0 11px 8px 0;
+    margin:0 10px 8px 0;
 }
 .addVmsFormLabel .col-sm-3{
     width:21%;
@@ -511,7 +515,7 @@ hr{
     margin:0 11px 8px 0;
 }
 .addVmsFormLabel .col-sm-2{
-    width:18%;
+    width:17%;
     padding:0px;
     margin:0 3px 0px 0;
 }
@@ -534,8 +538,8 @@ hr{
 .addVms img{
     display: block;
     height: auto;
-    margin: -5px 8px 0 0;
-    width: 4%;
+    margin: -3px 8px 0 0;
+    width: 16px;
 }
 .addVms span {
     background: rgb(242, 242, 242) none repeat scroll 0 0;
@@ -546,7 +550,7 @@ hr{
 }
 .siteNameForVms{
     font-size: 16px;
-    margin-left: 25px;
+    margin-left: 20px;
     width: 80px;
     color: rgb(127,127,127);
 }
@@ -691,4 +695,14 @@ div.vnc-error:p:nth-child(3){
 }
 .promptText p{
     margin:0;
+}
+.deleteRow img{
+    width:16px;
+    margin: -3px 0 0 0;
+}
+.promptText img{
+    width:16px;
+}
+.promptText p img{
+    
 }

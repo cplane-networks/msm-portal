@@ -6,6 +6,8 @@ define(['app'], function (app){
         var _dialog_path  = "content/js/apps/templates/";
         
         $scope.customerName = /^[a-zA-Z0-9]*$/; 
+        $scope.customerName = /^[a-zA-Z0-9-_]+$/;
+        
         $scope.ExSiteNamePattern = /^[a-zA-Z0-9]*$/;
         $scope.ExAsNumPattern = /^[0-9]{1,6}$/;
         $scope.ExIpRange = /^([0-9]{1,3})[.]([0-9]{1,3})[.]([0-9]{1,3})[.]([0-9]{1,3})\/([0-9]{1,3})$/;
@@ -37,6 +39,7 @@ define(['app'], function (app){
         $scope.openstack_details = [];
         $scope.external_sites_details = [];
         $scope.VMs = {};
+        
         
         function disableMouseEvents(){
             $("body").css("pointer-events", "none");
@@ -178,12 +181,14 @@ define(['app'], function (app){
             var customer  = result.customer;    // get data from json
             $scope.custLevel = customer.service_levels; 
             $scope.serviceLevel = $scope.custLevel[0];
+            
             if(customer.max_cloud_sites !== 2){
                 $scope.custClouds = 2;
             }
             else{
                 $scope.custClouds = customer.max_cloud_sites;
             }
+            
             if(customer.max_vms_per_site > 5 ){
                 $scope.custSites = 5;
             }

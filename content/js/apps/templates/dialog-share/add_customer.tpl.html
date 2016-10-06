@@ -13,7 +13,7 @@
 
                 <div class="col-sm-5">
                     <input class="form-control cust" placeholder="Enter Name" type="text" ng-model="custName" ng-pattern="customerName" name="custName" id="cust" list="customerName" ng-value="custPopup" required/>
-                    <span class="error-msg" ng-show="userForm.custName.$error.pattern">Customer name is required</span>
+                    <span class="error-msg" ng-show="userForm.custName.$error.pattern">Invalid Customer Name.</span>
                     <datalist id="customerName">
                         <option ng-repeat="customer in ExistingCustomer" value="{{customer}}"></option>
                     </datalist>

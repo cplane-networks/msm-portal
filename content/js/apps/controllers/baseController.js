@@ -57,9 +57,7 @@ define(['app'], function (app) {
 		$rootScope.ExistingCustomer = [];
 		$rootScope.CPE = {};
         $rootScope.vmsVal = {};
-		
-
-        
+                
         $rootScope.resetVMs = function(){
             $rootScope.action = "resetVM";
             $scope.closeApiCalls();
@@ -1202,10 +1200,17 @@ define(['app'], function (app) {
             });
             
         }
-                    
+         
+        $scope.isVMOpen = false
         $scope.openAddVms = function(){
+            //console.log("11947");
+            if($scope.isVMOpen)
+            {
+                return;
+            }
             if($rootScope.currentState > 1)
             {
+                $scope.isVMOpen = true;
                 $rootScope.action = "";
                 getImagesAndFlavors();
                 createdVMs();
@@ -1220,9 +1225,14 @@ define(['app'], function (app) {
                     
                     if (Object.keys($rootScope.images).length == openstack_sites.length && Object.keys($rootScope.flavors).length == openstack_sites.length) {
                         var dlg = dialogs.create(_dialog_path + "add_vms.tpl.html", 'customController', {data: "data", anotherVar: 'value'}, {backdrop: 'static'}, 'ctrl');
-                            dlg.result.then(function (cloudObj){
+                           
+                        dlg.result.then(function (cloudObj){
+                                //console.log("BController-1212: "+cloudObj);
+                            $scope.isVMOpen = false; // on submit
                                // cloudObj.site ;
-                            }, function () {
+                            }, function (msg) {
+                                //console.log("BController-msg-1216: "+msg);
+                                $scope.isVMOpen = false; // on cancel
                                 $scope.validSiteName = true;
                                 if (angular.equals($scope.name, ''))
                                     $scope.name = 'You did not enter in your name!';
