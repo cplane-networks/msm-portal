@@ -172,7 +172,7 @@ define(['app'], function (app) {
             
             vm_data.push(data);
             storageFactory.AddOrUpdateSubKey("node_details", site_details.site_data, "VM", vm_data);
-            $rootScope.$broadcast("OnStorageAddVM", site_name, data.srId);
+            $rootScope.$broadcast("OnStorageAddVM", site_name, data);
         }
         
         storageFactory.GetVM = function(site_name, vm_srId, vm_name){
@@ -195,11 +195,11 @@ define(['app'], function (app) {
             }    
         }
         
-        storageFactory.RemoveVM = function(site_name, vm_srId){
+        storageFactory.RemoveVM = function(site_name, vm_srId, vm_name){
             storageFactory.Init();
             var site_details = storageFactory.GetSite(site_name);
             var vm_data = storageFactory.GetSubKey("node_details", site_details.site_data, "VM");    
-            var vm_details = storageFactory.GetVM(site_name, vm_srId).vm_data;
+            var vm_details = storageFactory.GetVM(site_name, vm_srId, vm_name).vm_data;
             var exist = -1;
             $.each(vm_data, function(index, vmObj){
                 if (angular.equals(vmObj, vm_details)){

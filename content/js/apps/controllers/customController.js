@@ -37,7 +37,6 @@ define(['app'], function (app){
         $scope.openstack_details = [];
         $scope.external_sites_details = [];
         $scope.VMs = {};
-        //$uibModalInstance.
         
         function disableMouseEvents(){
             $("body").css("pointer-events", "none");
@@ -179,15 +178,13 @@ define(['app'], function (app){
             var customer  = result.customer;    // get data from json
             $scope.custLevel = customer.service_levels; 
             $scope.serviceLevel = $scope.custLevel[0];
-            
             if(customer.max_cloud_sites !== 2){
                 $scope.custClouds = 2;
             }
             else{
                 $scope.custClouds = customer.max_cloud_sites;
             }
-            
-            if(customer.ss > 5 ){
+            if(customer.max_vms_per_site > 5 ){
                 $scope.custSites = 5;
             }
             else if(customer.max_vms_per_site <= 0){
@@ -197,14 +194,9 @@ define(['app'], function (app){
                 $scope.custSites = customer.max_vms_per_site;
             }
             
-//            if($scope.custSites == "" || $scope.custSites== undefined){
-//                $scope.custSites == customer.max_vms_per_site;
-//            }
-
-            $scope.maxVmsNoChange = function(){
+			$scope.maxVmsNoChange = function(){
                 $scope.custSites = $scope.custSites;
             }
-            
             // Add OpenStack Template - Input value generation
             $scope.OsSitesNames = [];
             var openstack_data  = result.openstack;  // get data from json
@@ -791,7 +783,7 @@ define(['app'], function (app){
                 }   
             });
             
-            console.log("excessVm", excessVm);
+            //console.log("excessVm", excessVm);
             
             if ($scope.addVMsForm.$valid && excessVm == false) {
                 var customer_name = StorageService.Get("customer").customer_name;
@@ -837,6 +829,15 @@ define(['app'], function (app){
                         if (!value.srId){
                             disableMouseEvents();
                             $rootScope.notification = "Creating VMs..."
+                            if (value.name.includes('PA_VM')){
+                                MSMService.CreateVM($scope, customer_name, "PaloAlto", angular.copy(value));
+                                $rootScope.vm = angular.copy(value);
+                            }
+                            else{
+                                MSMService.CreateVM($scope, customer_name, "Frankfurt", angular.copy(value));
+                                $rootScope.vm = angular.copy(value);
+                            }
+                            /*
                             $timeout(function() {
                                 if (value.name.includes('PA_VM')){
                                     MSMService.CreateVM($scope, customer_name, "PaloAlto", angular.copy(value));
@@ -846,7 +847,9 @@ define(['app'], function (app){
                                     MSMService.CreateVM($scope, customer_name, "Frankfurt", angular.copy(value));
                                     $rootScope.vm = angular.copy(value);
                                 }
-                            }, AppConfig.environment === 'development' ? index * 2000 : index == 0 ? index * 15000 : 15000);
+                            }, AppConfig.environment === 'development' ? 2000 : 3000);
+                            */
+                            //}, AppConfig.environment === 'development' ? index * 2000 : index == 0 ? index * 15000 : 15000);
                         }    
                     });
                     

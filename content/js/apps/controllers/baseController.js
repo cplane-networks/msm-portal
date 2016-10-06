@@ -150,14 +150,6 @@ define(['app'], function (app) {
                     
                     MSMService.GetCustomer($scope, customer_name)
                     
-                    $rootScope.$on("OnGetCustomerEvent", function (event, response, error_msg){
-                        if ($rootScope.action == "resetALL"){
-                            $rootScope.customer_details = response;
-                            var VMs = getVMs($rootScope.customer_details.vSite);
-                            deleteVMs(customer_name, VMs);
-                        }    
-                    });   
-                    
                     $scope.checkVMs = $interval(function() {
                         var node_details = StorageService.Get("node_details");
                         var VMs = [];
@@ -181,6 +173,7 @@ define(['app'], function (app) {
                                 external_sites.push(site);
                             }
                         });
+                        
                         if (external_sites.length == 0 && angular.isDefined($scope.checkExternalSites)) {
                             deleteOpenStackSites(customer_name, $rootScope.customer_details.vSite);
                             $interval.cancel($scope.checkExternalSites);
@@ -394,11 +387,17 @@ define(['app'], function (app) {
         }
         
         function deleteOpenStackSites(customer_name, vSite_details){
-            angular.forEach(vSite_details, function(vSite, index){
-                $timeout(function() { 
-                    MSMService.DeleteCustomerVsite($scope, customer_name, vSite.vSiteId);
-                }, index * 3000);
-            });
+            if (vSite_details.length == 0){
+                var customer_name = StorageService.Get("customer").customer_name;
+                MSMService.DeleteCustomer($scope, customer_name);
+            }
+            else{
+                angular.forEach(vSite_details, function(vSite, index){
+                    $timeout(function() { 
+                        MSMService.DeleteCustomerVsite($scope, customer_name, vSite.vSiteId);
+                    }, index * 3000);
+                });
+            }    
         }
         
         var pollOpenStackSite = function pollOpenStackSite(param){
@@ -638,6 +637,20 @@ define(['app'], function (app) {
                         disableMouseEvents();
                     }
                 }
+                else if(result.vSite.status.indexOf("error") != -1){
+                    var site_node = StorageService.GetNode(site_name, 'site_node');
+                    var site_details = StorageService.GetSite(site_name);
+                    StorageService.AddOrUpdateSubKey("node_details", site_details.site_data, "status", "error");
+                    $rootScope.activeSites.push(site_node);
+                    if ($rootScope.activeSites.length == 2){
+                        enableMouseEvents();
+                        $rootScope.notification = "";
+                        connectOpenStackSites();
+                    }
+                    else {
+                        disableMouseEvents();
+                    }
+                }
                 else{
                     disableMouseEvents();
                     var site_details = StorageService.GetSite(site_name);
@@ -676,9 +689,23 @@ define(['app'], function (app) {
                     }
                 }
                 else{
-                    disableMouseEvents();
                     var site_details = StorageService.GetSite(site_name);
-                    QueueService.add(pollOpenStackOGR, {'timeout':AppConfig.environment === 'development' ? (site_details.site_level * 500) + 1000 : 30000, 'groupingId': site_name+'_ogr', 'params':{'site_name' : site_name}});
+                    if(site_details.site_data.status.indexOf("error") != -1){
+                        var site_ogr_node = StorageService.GetNode(site_name, 'site_ogr_node');
+                        $rootScope.activeSites.push(site_ogr_node);
+                        if ($rootScope.activeSites.length == 2){
+                            enableMouseEvents();
+                            $rootScope.notification = "";
+                            connectOpenStackSites();
+                        }
+                        else {
+                            disableMouseEvents();
+                        }
+                    }
+                    else{
+                        disableMouseEvents();
+                        QueueService.add(pollOpenStackOGR, {'timeout':AppConfig.environment === 'development' ? (site_details.site_level * 500) + 1000 : 30000, 'groupingId': site_name+'_ogr', 'params':{'site_name' : site_name}});
+                    }    
                 }
             }
             catch(e){
@@ -823,7 +850,7 @@ define(['app'], function (app) {
             StorageService.AddOrUpdateVM(site_name, response);
         });
         
-        $rootScope.$on("OnStorageAddVM", function (event, site_name, vm_srId) {
+        $rootScope.$on("OnStorageAddVM", function (event, site_name, data) {
             var VMs = []
             angular.forEach($rootScope.customer_data.vSite, function(site, index){
                 VMs = VMs.concat(site.subnets[0].vms);
@@ -843,8 +870,8 @@ define(['app'], function (app) {
                $rootScope.notification = "";
             }
                 
+            var vm_details = StorageService.GetVM(site_name, data.srId, data.name);
             var site_subnet_node = StorageService.GetNode(site_name, "site_subnet_node")
-            var vm_details = StorageService.GetVM(site_name, vm_srId);
             var vm_name = vm_details.vm_data.name;
             var vm_position = {x:0, y:0}
             var node_position = site_subnet_node.attributes.position;
@@ -863,7 +890,7 @@ define(['app'], function (app) {
             var link1 = GraphService.AddLink(site_subnet_node, vm_node);
             
             //Added polling mechanism for state of VM
-            QueueService.add(pollVM, {'timeout':AppConfig.environment === 'development' ? 500 : 1000, 'groupingId': vm_srId, 'params':{'site_name' : site_name, 'uuid' : vm_details.vm_data.uuid, 'vm_name' : vm_name, 'vm_srId' : vm_srId}});
+            QueueService.add(pollVM, {'timeout':AppConfig.environment === 'development' ? 500 : 1000, 'groupingId': data.srId, 'params':{'site_name' : site_name, 'uuid' : vm_details.vm_data.uuid, 'vm_name' : vm_name, 'vm_srId' : data.srId}});
         });
         
         $rootScope.$on("OnGetVMEvent", function (event, result, error_msg) {
@@ -875,7 +902,7 @@ define(['app'], function (app) {
                     var vm_details = StorageService.GetVM(site_name, vm_srId, vm_name);
                 }
                 else{
-                    var vm_details = StorageService.GetVM(site_name, vm_srId, vm_srId ? '' : vm_name);
+                    var vm_details = StorageService.GetVM(site_name, vm_srId, vm_name);
                 }
                 
                 if (result.state == 'on'){
@@ -895,10 +922,10 @@ define(['app'], function (app) {
                     //$rootScope.notification = "";
                 }
                 else if('message' in result && result.message.toLowerCase() == "failed to get vm. please check parameters" && vm_details){
-                    var vm_details = StorageService.GetVM(site_name, vm_srId);
+                    var vm_details = StorageService.GetVM(site_name, vm_srId, vm_name);
                     var vm_node = vm_details.vm_data.vm_node;
                     GraphService.graph.getCell(vm_node.id).remove();
-                    StorageService.RemoveVM(site_name, vm_srId);
+                    StorageService.RemoveVM(site_name, vm_srId, vm_name);
                 }
                 else{
                     var site_details = StorageService.GetSite(site_name);
@@ -916,7 +943,7 @@ define(['app'], function (app) {
                 var vm_name = result.name;
                 var vm_srId = result.srId;
                 var site_details = StorageService.GetSite(site_name);
-                var vm_details = StorageService.GetVM(site_name, vm_srId);
+                var vm_details = StorageService.GetVM(site_name, vm_srId, vm_name);
                 
                 //Added polling mechanism for state of VM
                 QueueService.add(pollVM, {'timeout':AppConfig.environment === 'development' ? 500 : 2000, 'groupingId': vm_srId, 'params':{'site_name' : site_name, 'uuid' : vm_details.vm_data.uuid, 'vm_name' : vm_name, 'vm_srId' : vm_srId}}); 
@@ -928,7 +955,7 @@ define(['app'], function (app) {
                 var site_name = result.site_name;
                 var vm_name = result.name;
                 var vm_srId = result.srId;
-                var vm_details = StorageService.GetVM(site_name, vm_srId);
+                var vm_details = StorageService.GetVM(site_name, vm_srId, vm_name);
                 
                 var vm_node = GraphService.graph.getCell(vm_details.vm_data.vm_node.id);
                 vm_node.attr('rect/fill', 'red');  
@@ -943,7 +970,7 @@ define(['app'], function (app) {
                 var vm_name = result.name;
                 var vm_srId = result.srId;
                 var site_details = StorageService.GetSite(site_name);
-                var vm_details = StorageService.GetVM(site_name, vm_srId);
+                var vm_details = StorageService.GetVM(site_name, vm_srId, vm_name);
                 
                 var vm_node = GraphService.graph.getCell(vm_details.vm_data.vm_node.id);
                 vm_node.attr('rect/fill', 'red');  
@@ -959,17 +986,17 @@ define(['app'], function (app) {
             var vm_name = result.name;
             var vm_srId = result.srId;
             var site_details = StorageService.GetSite(site_name);
-            var vm_details = StorageService.GetVM(site_name, vm_srId);
+            var vm_details = StorageService.GetVM(site_name, vm_srId, vm_name);
             
             var vm_node = GraphService.graph.getCell(vm_details.vm_data.vm_node.id);
             vm_node.attr('rect/fill', 'red');  
             vm_node.attr('rect/stroke', 'red'); 
             
             if (AppConfig.environment === "development"){
-                var vm_details = StorageService.GetVM(site_name, vm_srId);
+                var vm_details = StorageService.GetVM(site_name, vm_srId, vm_name);
                 var vm_node = vm_details.vm_data.vm_node;
                 GraphService.graph.getCell(vm_node.id).remove();
-                StorageService.RemoveVM(site_name, vm_srId);
+                StorageService.RemoveVM(site_name, vm_srId, vm_name);
             }
             else {
                 //Added polling mechanism for state of VM
@@ -989,7 +1016,7 @@ define(['app'], function (app) {
                             var vm_details = StorageService.GetVM(site.site_name, vm.srId, vm.name);
                         }
                         else{
-                            var vm_details = StorageService.GetVM(site.site_name, vm.srId, vm.srId ? '' : vm.name);
+                            var vm_details = StorageService.GetVM(site.site_name, vm.srId, vm.name);
                         }
                         
                         var vm_position = {x:0, y:0}
@@ -1058,7 +1085,7 @@ define(['app'], function (app) {
            MSMService.ListVsiteOGR($scope, 'PaloAlto');
            MSMService.ListVsiteOGR($scope, 'Frankfurt');
            GetExistingCustomer();
-           var dlg = dialogs.create(_dialog_path + "add_customer.tpl.html", 'customController', {data: "data", anotherVar: 'value', customer:'true'}, {}, 'ctrl');
+           var dlg = dialogs.create(_dialog_path + "add_customer.tpl.html", 'customController', {data: "data", anotherVar: 'value', customer:'true'}, {backdrop: 'static'}, 'ctrl');
             dlg.result.then(function (custObj){
                 // Data from add customer form//
             }, function () {
@@ -1071,7 +1098,7 @@ define(['app'], function (app) {
             if($rootScope.currentState == 1)
             {
                 $rootScope.action = "";
-                var dlg = dialogs.create(_dialog_path + "add_cloud.tpl.html", 'customController', {data: "data", anotherVar: 'value'}, {}, 'ctrl');
+                var dlg = dialogs.create(_dialog_path + "add_cloud.tpl.html", 'customController', {data: "data", anotherVar: 'value'}, {backdrop: 'static'}, 'ctrl');
                 dlg.result.then(function (cloudObj){
                    // cloudObj.site ;
                 }, function () {
@@ -1136,7 +1163,7 @@ define(['app'], function (app) {
                 getExternalSite();
                 if($rootScope.externalSiteNameList < $rootScope.maxExSites)
                 {
-                    var dlg = dialogs.create(_dialog_path + "add_external_site.tpl.html", 'customController', {data: "data", anotherVar: 'value'}, {}, 'ctrl');
+                    var dlg = dialogs.create(_dialog_path + "add_external_site.tpl.html", 'customController', {data: "data", anotherVar: 'value'}, {backdrop: 'static'}, 'ctrl');
                     dlg.result.then(function (cloudObj){
                        // cloudObj.site ;
                     }, function () {
@@ -1152,7 +1179,7 @@ define(['app'], function (app) {
             getExternalSite();
             if ($rootScope.externalSiteNameList && $rootScope.OsSiteNameList){
                 $rootScope.action = "";
-                var dlg = dialogs.create(_dialog_path + "connect_sites.tpl.html", 'customController', {data: "data", anotherVar: 'value'}, {}, 'ctrl');
+                var dlg = dialogs.create(_dialog_path + "connect_sites.tpl.html", 'customController', {data: "data", anotherVar: 'value'}, {backdrop: 'static'}, 'ctrl');
                 dlg.result.then(function (cloudObj){
                    // cloudObj.site ;
                 }, function () {
@@ -1192,7 +1219,7 @@ define(['app'], function (app) {
                     });
                     
                     if (Object.keys($rootScope.images).length == openstack_sites.length && Object.keys($rootScope.flavors).length == openstack_sites.length) {
-                        var dlg = dialogs.create(_dialog_path + "add_vms.tpl.html", 'customController', {data: "data", anotherVar: 'value'}, {}, 'ctrl');
+                        var dlg = dialogs.create(_dialog_path + "add_vms.tpl.html", 'customController', {data: "data", anotherVar: 'value'}, {backdrop: 'static'}, 'ctrl');
                             dlg.result.then(function (cloudObj){
                                // cloudObj.site ;
                             }, function () {
