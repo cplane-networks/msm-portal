@@ -89,7 +89,7 @@ $(document).ready(function(){
                                         <img ng-show="call.isCollapsed == false" src="content/images/pngs/minus.jpg" width="12" height="12" ng-click="call.isCollapsed = !call.isCollapsed"></img><span style="vertical-align: -1px;">&#160;{{call.method}}&#160;{{call.api}}</span>
                                     </div>
                                     <div uib-collapse="call.isCollapsed">
-                                        <div ng-show="!call.isCollapsed" class="panel-body" style="font-size:10pt;line-height:1.5">{{call.result}}</div>
+                                        <div ng-show="!call.isCollapsed" class="panel-body" style="font-size:10pt;line-height:1.5;word-break:break-all">{{call.result}}</div>
                                     </div>
                                 </div>
                             </div>    
