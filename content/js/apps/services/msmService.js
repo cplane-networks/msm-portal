@@ -1149,12 +1149,15 @@ define(['app'], function (app) {
                     function (results) {
                         results["site_name"] = site_name;
                         results["name"] = vm_name;
-                        $rootScope.apiCalls.push({'method': 'POST', 'api': 'msm/v1.0/' + 'customer/' + customer_name + '/getVM/' + vm_uuid + '/vSite/' + site_name, 'result': results, isCollapsed: true});
+                        if (AppConfig.vm_polling !== "on"){
+                            $rootScope.apiCalls.push({'method': 'POST', 'api': 'msm/v1.0/' + 'customer/' + customer_name + '/getVM/' + vm_uuid + '/vSite/' + site_name, 'result': results, isCollapsed: true});
+                        }
                         //console.log(results);
                         getVMEvent(parent_scope, results, null);
                     }).error(
                     function (error, status) {
                         if (error != null){
+                            $rootScope.apiCalls.push({'method': 'POST', 'api': 'msm/v1.0/' + 'customer/' + customer_name + '/getVM/' + vm_uuid + '/vSite/' + site_name, 'result': error, isCollapsed: true});
                             error["site_name"] = site_name;
                             error["name"] = vm_name;
                             error["srId"] = vm_srId;
@@ -1175,12 +1178,15 @@ define(['app'], function (app) {
                     function (results) {
                         results["site_name"] = site_name;
                         results["name"] = vm_name;
-                        $rootScope.apiCalls.push({'method': 'POST', 'api': 'msm/v1.0/' + 'customer/' + customer_name + '/getVM/' + vm_uuid + '/vSite/' + site_name, 'result': results, isCollapsed: true});
+                        if (AppConfig.vm_polling !== "on"){
+                            $rootScope.apiCalls.push({'method': 'POST', 'api': 'msm/v1.0/' + 'customer/' + customer_name + '/getVM/' + vm_uuid + '/vSite/' + site_name, 'result': results, isCollapsed: true});
+                        }
                         //console.log(results);
                         getVMEvent(parent_scope, results, null);
                     }).error(
                     function (error, status) {
                         if (error != null){
+                            $rootScope.apiCalls.push({'method': 'POST', 'api': 'msm/v1.0/' + 'customer/' + customer_name + '/getVM/' + vm_uuid + '/vSite/' + site_name, 'result': error, isCollapsed: true});
                             error["site_name"] = site_name;
                             error["name"] = vm_name;
                             error["srId"] = vm_srId;
