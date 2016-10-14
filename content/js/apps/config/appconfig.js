@@ -8,6 +8,7 @@ define(['app'], function (app) {
         "templatePath": "content/js/apps/templates/",
         "defaultIconPath": "content/images/default/",
         "SVGIconPath": "content/images/svg_image/",
-        "environment": "production" /*"production", "redirection", "development"*/
+		"environment": "production", /*"production", "redirection", "development"*/
+		"vm_polling": "on", /*"on", "off"*/
     })
 });

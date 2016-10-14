@@ -1225,8 +1225,10 @@ define(['app'], function (app) {
                         startVMEvent(parent_scope, results, null);
                     }).error(
                     function (error, status) {
-                        if (error != null)
-                            startVMEvent(parent_scope, null, status + " : " + error.Message);
+                        if (error != null){
+                            var results = {"site_name" : site_name, "name" : vm_name, "srId" : vm_srId};
+                            startVMEvent(parent_scope, results, error.message);
+                        }
                         else
                             startVMEvent(parent_scope, null, null);
                     });
@@ -1245,8 +1247,10 @@ define(['app'], function (app) {
                         startVMEvent(parent_scope, results, null);
                     }).error(
                     function (error, status) {
-                        if (error != null)
-                            startVMEvent(parent_scope, null, status + " : " + error.Message);
+                        if (error != null){
+                            var results = {"site_name" : site_name, "name" : vm_name, "srId" : vm_srId};
+                            startVMEvent(parent_scope, results, error.message);
+                        }    
                         else
                             startVMEvent(parent_scope, null, null);
                     });
@@ -1263,7 +1267,7 @@ define(['app'], function (app) {
                     }).error(
                     function (error, status) {
                         if (error != null)
-                            startVMEvent(parent_scope, null, status + " : " + error.Message);
+                            startVMEvent(parent_scope, null, error.message);
                         else
                             startVMEvent(parent_scope, null, null);
                     });
@@ -1288,8 +1292,11 @@ define(['app'], function (app) {
                         stopVMEvent(parent_scope, results, null);
                     }).error(
                     function (error, status) {
-                        if (error != null)
-                            stopVMEvent(parent_scope, null, status + " : " + error.Message);
+                        console.log(error, status)
+                        if (error != null){
+                            var results = {"site_name" : site_name, "name" : vm_name, "srId" : vm_srId};    
+                            stopVMEvent(parent_scope, results, error.message);
+                        }    
                         else
                             stopVMEvent(parent_scope, null, null);
                     });
@@ -1308,8 +1315,10 @@ define(['app'], function (app) {
                         stopVMEvent(parent_scope, results, null);
                     }).error(
                     function (error, status) {
-                        if (error != null)
-                            stopVMEvent(parent_scope, null, status + " : " + error.Message);
+                        if (error != null){
+                            var results = {"site_name" : site_name, "name" : vm_name, "srId" : vm_srId};    
+                            stopVMEvent(parent_scope, results, error.message);
+                        }    
                         else
                             stopVMEvent(parent_scope, null, null);
                     });
@@ -1326,7 +1335,7 @@ define(['app'], function (app) {
                     }).error(
                     function (error, status) {
                         if (error != null)
-                            stopVMEvent(parent_scope, null, status + " : " + error.Message);
+                            stopVMEvent(parent_scope, null, status + " : " + error.message);
                         else
                             stopVMEvent(parent_scope, null, null);
                     });
@@ -1351,8 +1360,10 @@ define(['app'], function (app) {
                         rebootVMEvent(parent_scope, results, null);
                     }).error(
                     function (error, status) {
-                        if (error != null)
-                            rebootVMEvent(parent_scope, null, status + " : " + error.Message);
+                        if (error != null){
+                            var results = {"site_name" : site_name, "name" : vm_name, "srId" : vm_srId};    
+                            rebootVMEvent(parent_scope, results, error.message);
+                        }    
                         else
                             rebootVMEvent(parent_scope, null, null);
                     });
@@ -1371,8 +1382,10 @@ define(['app'], function (app) {
                         rebootVMEvent(parent_scope, results, null);
                     }).error(
                     function (error, status) {
-                        if (error != null)
-                            rebootVMEvent(parent_scope, null, status + " : " + error.Message);
+                        if (error != null){
+                            var results = {"site_name" : site_name, "name" : vm_name, "srId" : vm_srId};    
+                            rebootVMEvent(parent_scope, results, error.message);
+                        }    
                         else
                             rebootVMEvent(parent_scope, null, null);
                     });
@@ -1389,7 +1402,7 @@ define(['app'], function (app) {
                     }).error(
                     function (error, status) {
                         if (error != null)
-                            rebootVMEvent(parent_scope, null, status + " : " + error.Message);
+                            rebootVMEvent(parent_scope, null, status + " : " + error.message);
                         else
                             rebootVMEvent(parent_scope, null, null);
                     });
@@ -1418,7 +1431,7 @@ define(['app'], function (app) {
                             error["site_name"] = site_name;
                             error["name"] = vm_name;
                             error["srId"] = vm_srId;
-                            deleteVMEvent(parent_scope, error, status + " : " + error.Message);
+                            deleteVMEvent(parent_scope, error, status + " : " + error.message);
                         }    
                         else{
                             deleteVMEvent(parent_scope, null, null);
@@ -1443,7 +1456,7 @@ define(['app'], function (app) {
                             error["site_name"] = site_name;
                             error["name"] = vm_name;
                             error["srId"] = vm_srId;
-                            deleteVMEvent(parent_scope, error, status + " : " + error.Message);
+                            deleteVMEvent(parent_scope, error, status + " : " + error.message);
                         }    
                         else{
                             deleteVMEvent(parent_scope, null, null);
@@ -1459,7 +1472,7 @@ define(['app'], function (app) {
                     }).error(
                     function (error, status) {
                         if (error != null)
-                            deleteVMEvent(parent_scope, null, status + " : " + error.Message);
+                            deleteVMEvent(parent_scope, null, status + " : " + error.message);
                         else
                             deleteVMEvent(parent_scope, null, null);
                     });
@@ -1485,8 +1498,10 @@ define(['app'], function (app) {
                         getVMConsoleEvent(parent_scope, results, null);
                     }).error(
                     function (error, status) {
-                        if (error != null)
-                            getVMConsoleEvent(parent_scope, null, status + " : " + error.Message);
+                        if (error != null){
+                            var results = {"site_name" : site_name, "name" : vm_name, "srId" : vm_srId};
+                            getVMConsoleEvent(parent_scope, results, error.message);
+                        }    
                         else
                             getVMConsoleEvent(parent_scope, null, null);
                     });
@@ -1506,8 +1521,10 @@ define(['app'], function (app) {
                         getVMConsoleEvent(parent_scope, results, null);
                     }).error(
                     function (error, status) {
-                        if (error != null)
-                            getVMConsoleEvent(parent_scope, null, status + " : " + error.Message);
+                        if (error != null){
+                            var results = {"site_name" : site_name, "name" : vm_name, "srId" : vm_srId};
+                            getVMConsoleEvent(parent_scope, results, error.message);
+                        }    
                         else
                             getVMConsoleEvent(parent_scope, null, null);
                     });
@@ -1521,7 +1538,7 @@ define(['app'], function (app) {
                     }).error(
                     function (error, status) {
                         if (error != null)
-                            getVMConsoleEvent(parent_scope, null, status + " : " + error.Message);
+                            getVMConsoleEvent(parent_scope, null, status + " : " + error.message);
                         else
                             getVMConsoleEvent(parent_scope, null, null);
                     });

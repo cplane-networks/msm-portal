@@ -4,12 +4,8 @@ define([], function () {
 
     var app = angular.module('app', [
         'angular-logger',
-        //'angular-md5',
         'LocalStorageModule',
-        //'angulartics',
-        //'angulartics.google.analytics',
         'ui.router', // Routing 
-        //'oc.lazyLoad', // ocLazyLoad 
         'ui.bootstrap', // Ui Bootstrap
         'dialogs.main', //
         'ngIdle', // Idle timer

@@ -915,7 +915,20 @@ define(['app'], function (app) {
                     vm_node.attr('rect/fill', 'green');  
                     vm_node.attr('rect/stroke', 'green');  
                     GraphService.paper.findViewByModel(vm_node).options.interactive = true;
-                    //$rootScope.notification = "";
+                    if (AppConfig.vm_polling.toLowerCase() === "on" && AppConfig.environment !== 'development'){
+                        var site_details = StorageService.GetSite(site_name);
+                        QueueService.add(pollVM, {'timeout': 5000, 'groupingId': vm_srId, 'params':{'site_name' : site_name, 'uuid' : vm_details.vm_data.uuid, 'vm_name' : vm_name, 'vm_srId' : vm_srId}});
+                    }
+                }
+                else if (result.state == 'off'){
+                    var vm_node = GraphService.graph.getCell(vm_details.vm_data.vm_node.id);
+                    vm_node.attr('rect/fill', 'red');  
+                    vm_node.attr('rect/stroke', 'red');
+                    GraphService.paper.findViewByModel(vm_node).options.interactive = true;
+                    if (AppConfig.vm_polling.toLowerCase() === "on" && AppConfig.environment !== 'development'){
+                        var site_details = StorageService.GetSite(site_name);
+                        QueueService.add(pollVM, {'timeout': 5000, 'groupingId': vm_srId, 'params':{'site_name' : site_name, 'uuid' : vm_details.vm_data.uuid, 'vm_name' : vm_name, 'vm_srId' : vm_srId}});
+                    }
                 }
                 else if (result.state == 'error'){
                     var label = "!ERROR" +"\nVM - " + vm_details.vm_data.fixedIP
@@ -924,7 +937,10 @@ define(['app'], function (app) {
                     vm_node.attr('rect/stroke', '#B20000'); 
                     vm_node.attr('text/text', label); 
                     GraphService.paper.findViewByModel(vm_node).options.interactive = true;
-                    //$rootScope.notification = "";
+                    if (AppConfig.vm_polling.toLowerCase() === "on" && AppConfig.environment !== 'development'){
+                        var site_details = StorageService.GetSite(site_name);
+                        QueueService.add(pollVM, {'timeout': 5000, 'groupingId': vm_srId, 'params':{'site_name' : site_name, 'uuid' : vm_details.vm_data.uuid, 'vm_name' : vm_name, 'vm_srId' : vm_srId}});
+                    }
                 }
                 else if('message' in result && result.message.toLowerCase() == "failed to get vm. please check parameters" && vm_details){
                     var vm_details = StorageService.GetVM(site_name, vm_srId, vm_name);
@@ -947,11 +963,26 @@ define(['app'], function (app) {
                 var site_name = result.site_name;
                 var vm_name = result.name;
                 var vm_srId = result.srId;
-                var site_details = StorageService.GetSite(site_name);
-                var vm_details = StorageService.GetVM(site_name, vm_srId, vm_name);
                 
-                //Added polling mechanism for state of VM
-                QueueService.add(pollVM, {'timeout':AppConfig.environment === 'development' ? 500 : 2000, 'groupingId': vm_srId, 'params':{'site_name' : site_name, 'uuid' : vm_details.vm_data.uuid, 'vm_name' : vm_name, 'vm_srId' : vm_srId}}); 
+                if (error_msg != null){
+                    $mdDialog.show(
+                        $mdDialog.alert()
+                        .parent(angular.element(document.body))
+                        .clickOutsideToClose(false)
+                        .title('Error!')
+                        .textContent('An external state change has occurred in OpenStack. Please reload the customer instance.')
+                        .ariaLabel('Error Dialog')
+                        .ok('ok')
+                    );    
+                    var vm_details = StorageService.GetVM(site_name, vm_srId, vm_name);
+                    var vm_node = GraphService.graph.getCell(vm_details.vm_data.vm_node.id);
+                    GraphService.paper.findViewByModel(vm_node).options.interactive = true;
+                }
+                else{
+                    var vm_details = StorageService.GetVM(site_name, vm_srId, vm_name);
+                    //Added polling mechanism for state of VM
+                    QueueService.add(pollVM, {'timeout':AppConfig.environment === 'development' ? 500 : 2000, 'groupingId': vm_srId, 'params':{'site_name' : site_name, 'uuid' : vm_details.vm_data.uuid, 'vm_name' : vm_name, 'vm_srId' : vm_srId}}); 
+                }    
             }    
         });
         
@@ -960,12 +991,28 @@ define(['app'], function (app) {
                 var site_name = result.site_name;
                 var vm_name = result.name;
                 var vm_srId = result.srId;
-                var vm_details = StorageService.GetVM(site_name, vm_srId, vm_name);
                 
-                var vm_node = GraphService.graph.getCell(vm_details.vm_data.vm_node.id);
-                vm_node.attr('rect/fill', 'red');  
-                vm_node.attr('rect/stroke', 'red');
-                GraphService.paper.findViewByModel(vm_node).options.interactive = true;
+                if (error_msg != null){
+                    $mdDialog.show(
+                        $mdDialog.alert()
+                        .parent(angular.element(document.body))
+                        .clickOutsideToClose(false)
+                        .title('Error!')
+                        .textContent('An external state change has occurred in OpenStack. Please reload the customer instance.')
+                        .ariaLabel('Error Dialog')
+                        .ok('ok')
+                    );    
+                    var vm_details = StorageService.GetVM(site_name, vm_srId, vm_name);
+                    var vm_node = GraphService.graph.getCell(vm_details.vm_data.vm_node.id);
+                    GraphService.paper.findViewByModel(vm_node).options.interactive = true;
+                }
+                else{
+                    var vm_details = StorageService.GetVM(site_name, vm_srId, vm_name);
+                    var vm_node = GraphService.graph.getCell(vm_details.vm_data.vm_node.id);
+                    vm_node.attr('rect/fill', 'red');  
+                    vm_node.attr('rect/stroke', 'red');
+                    GraphService.paper.findViewByModel(vm_node).options.interactive = true;
+                }    
             }    
         });
         
@@ -974,15 +1021,29 @@ define(['app'], function (app) {
                 var site_name = result.site_name;
                 var vm_name = result.name;
                 var vm_srId = result.srId;
-                var site_details = StorageService.GetSite(site_name);
-                var vm_details = StorageService.GetVM(site_name, vm_srId, vm_name);
                 
-                var vm_node = GraphService.graph.getCell(vm_details.vm_data.vm_node.id);
-                vm_node.attr('rect/fill', 'red');  
-                vm_node.attr('rect/stroke', 'red'); 
-                
-                //Added polling mechanism for state of VM
-                QueueService.add(pollVM, {'timeout':AppConfig.environment === 'development' ? 500 : 2000, 'groupingId': vm_srId, 'params':{'site_name' : site_name, 'uuid' : vm_details.vm_data.uuid, 'vm_name' : vm_name, 'vm_srId' : vm_srId}});
+                if (error_msg != null){
+                    $mdDialog.show(
+                        $mdDialog.alert()
+                        .parent(angular.element(document.body))
+                        .clickOutsideToClose(false)
+                        .title('Error!')
+                        .textContent('An external state change has occurred in OpenStack. Please reload the customer instance.')
+                        .ariaLabel('Error Dialog')
+                        .ok('ok')
+                    );    
+                    var vm_details = StorageService.GetVM(site_name, vm_srId, vm_name);
+                    var vm_node = GraphService.graph.getCell(vm_details.vm_data.vm_node.id);
+                    GraphService.paper.findViewByModel(vm_node).options.interactive = true;
+                }
+                else{
+                    var vm_details = StorageService.GetVM(site_name, vm_srId, vm_name);
+                    var vm_node = GraphService.graph.getCell(vm_details.vm_data.vm_node.id);
+                    vm_node.attr('rect/fill', 'red');  
+                    vm_node.attr('rect/stroke', 'red'); 
+                    //Added polling mechanism for state of VM
+                    QueueService.add(pollVM, {'timeout':AppConfig.environment === 'development' ? 500 : 2000, 'groupingId': vm_srId, 'params':{'site_name' : site_name, 'uuid' : vm_details.vm_data.uuid, 'vm_name' : vm_name, 'vm_srId' : vm_srId}});
+                }    
             }    
         });
         
@@ -990,7 +1051,6 @@ define(['app'], function (app) {
             var site_name = result.site_name;
             var vm_name = result.name;
             var vm_srId = result.srId;
-            var site_details = StorageService.GetSite(site_name);
             var vm_details = StorageService.GetVM(site_name, vm_srId, vm_name);
             
             var vm_node = GraphService.graph.getCell(vm_details.vm_data.vm_node.id);
@@ -1007,6 +1067,62 @@ define(['app'], function (app) {
                 //Added polling mechanism for state of VM
                 QueueService.add(pollVM, {'timeout':AppConfig.environment === 'development' ? 500 : 2000, 'groupingId': vm_srId, 'params':{'site_name' : site_name, 'uuid' : vm_details.vm_data.uuid, 'vm_name' : vm_name, 'vm_srId' : vm_srId}});
             }  
+        });
+        
+        $rootScope.$on("OnGetVMConsoleEvent", function (event, result, error_msg) {
+            var site_name = result.site_name;
+            var vm_name = result.name;
+            var vm_srId = result.srId;
+            
+            if (error_msg != null){
+                $mdDialog.show(
+                    $mdDialog.alert()
+                    .parent(angular.element(document.body))
+                    .clickOutsideToClose(false)
+                    .title('Error!')
+                    .textContent('An external state change has occurred in OpenStack. Please reload the customer instance.')
+                    .ariaLabel('Error Dialog')
+                    .ok('ok')
+                );    
+                var vm_details = StorageService.GetVM(site_name, vm_srId, vm_name);
+                var vm_node = GraphService.graph.getCell(vm_details.vm_data.vm_node.id);
+                GraphService.paper.findViewByModel(vm_node).options.interactive = true;
+            }
+            else{
+                var vm_uuid = result.uuid;
+                var state = result.state;
+                $scope.vncConsole = $sce.trustAsResourceUrl(result.vnc_console);
+                $scope.vncTitle = site_name + " - " + vm_name + "(" + vm_uuid + ")";
+                $scope.vncState = state;
+                
+                $mdDialog.show({
+                    scope:$scope,
+                    preserveScope:true,
+                    controller: DialogController,
+                    templateUrl: _dialog_path + "vnc_console.tpl.html",
+                    parent: angular.element(document.body),
+                    clickOutsideToClose:false,
+                    // fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+                })
+                // .then(function(answer) {
+                    // alert('You said the information was "' + answer + '".');
+                // }, function() {
+                    // alert('You cancelled the dialog.');
+                // });
+                function DialogController($scope, $rootScope, $mdDialog) {
+                    $scope.hide = function() {
+                      $mdDialog.hide();
+                    };
+
+                    $scope.closeDialog = function() {
+                      $mdDialog.cancel();
+                    };
+
+                    // $scope.answer = function(answer) {
+                      // $mdDialog.hide(answer);
+                    // };
+                }
+            }    
         });
         
         $rootScope.$on("OnStorageRemoveVM", function (event, site_name, vm_srId) {
@@ -1041,44 +1157,6 @@ define(['app'], function (app) {
             });
         });
         
-        $rootScope.$on("OnGetVMConsoleEvent", function (event, result, error_msg) {
-            var state = result.state;
-            var site_name = result.site_name;
-            var vm_name = result.name;
-            var vm_uuid = result.uuid;
-            $scope.vncConsole = $sce.trustAsResourceUrl(result.vnc_console);
-            $scope.vncTitle = site_name + " - " + vm_name + "(" + vm_uuid + ")";
-            $scope.vncState = state;
-            
-            $mdDialog.show({
-                scope:$scope,
-                preserveScope:true,
-                controller: DialogController,
-                templateUrl: _dialog_path + "vnc_console.tpl.html",
-                parent: angular.element(document.body),
-                clickOutsideToClose:false,
-                // fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
-            })
-            // .then(function(answer) {
-                // alert('You said the information was "' + answer + '".');
-            // }, function() {
-                // alert('You cancelled the dialog.');
-            // });
-            function DialogController($scope, $rootScope, $mdDialog) {
-                $scope.hide = function() {
-                  $mdDialog.hide();
-                };
-
-                $scope.closeDialog = function() {
-                  $mdDialog.cancel();
-                };
-
-                // $scope.answer = function(answer) {
-                  // $mdDialog.hide(answer);
-                // };
-            }
-            
-        });
         
         $scope.toggleSlideMenu = function() {
             $scope.checked = !$scope.checked
