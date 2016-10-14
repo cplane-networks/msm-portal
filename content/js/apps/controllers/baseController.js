@@ -10,14 +10,14 @@ define(['app'], function (app) {
         $rootScope.currentState = 0;
         
         $(window).resize(function() {
-            $scope.main_box_height = ($(window).height()-120) + "px";
+            $scope.main_box_height = ($(window).height()-139) + "px";
             $timeout(function() {
                 GraphService.paper.setDimensions($('.draw-canvas-box').width(), $('.draw-canvas-box').height());
             }, 1);
         });
         
         $scope.$on('$viewContentLoaded', function(event){
-            $scope.main_box_height = ($(window).height()-120) + "px";
+            $scope.main_box_height = ($(window).height()-139) + "px";
             $timeout(function() {
                 GraphService.paper.setDimensions($('.draw-canvas-box').width(), $('.draw-canvas-box').height());
             }, 1);
