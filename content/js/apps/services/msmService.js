@@ -1157,7 +1157,7 @@ define(['app'], function (app) {
                     }).error(
                     function (error, status) {
                         if (error != null){
-                            $rootScope.apiCalls.push({'method': 'POST', 'api': 'msm/v1.0/' + 'customer/' + customer_name + '/getVM/' + vm_uuid + '/vSite/' + site_name, 'result': error, isCollapsed: true});
+                            $rootScope.apiCalls.push({'method': 'POST', 'api': 'msm/v1.0/' + 'customer/' + customer_name + '/getVM/' + vm_uuid + '/vSite/' + site_name, 'result': angular.copy(error), isCollapsed: true});
                             error["site_name"] = site_name;
                             error["name"] = vm_name;
                             error["srId"] = vm_srId;
@@ -1186,7 +1186,7 @@ define(['app'], function (app) {
                     }).error(
                     function (error, status) {
                         if (error != null){
-                            $rootScope.apiCalls.push({'method': 'POST', 'api': 'msm/v1.0/' + 'customer/' + customer_name + '/getVM/' + vm_uuid + '/vSite/' + site_name, 'result': error, isCollapsed: true});
+                            $rootScope.apiCalls.push({'method': 'POST', 'api': 'msm/v1.0/' + 'customer/' + customer_name + '/getVM/' + vm_uuid + '/vSite/' + site_name, 'result': angular.copy(error), isCollapsed: true});
                             error["site_name"] = site_name;
                             error["name"] = vm_name;
                             error["srId"] = vm_srId;
