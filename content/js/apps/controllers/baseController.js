@@ -142,6 +142,7 @@ define(['app'], function (app) {
                     $rootScope.vm = "";
                     $rootScope.cloudsCreated = [];
                     $rootScope.maxConnections = '';
+                    $rootScope.currentState = 0;
                 }
                 else{
                     disableMouseEvents();
@@ -782,7 +783,7 @@ define(['app'], function (app) {
                     $rootScope.vm = "";
                     $rootScope.cloudsCreated = [];
                     $rootScope.maxConnections = '';
-                    
+                    $rootScope.currentState = 0;
                 }
             }    
         });
