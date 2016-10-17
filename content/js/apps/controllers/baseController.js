@@ -395,7 +395,7 @@ define(['app'], function (app) {
         function deleteOpenStackSites(customer_name, vSite_details){
             if (vSite_details.length == 0){
                 var customer_name = StorageService.Get("customer").customer_name;
-                MSMService.DeleteCustomer($scope, customer_name);
+                deleteCustomer(customer_name);
             }
             else{
                 angular.forEach(vSite_details, function(vSite, index){
@@ -741,51 +741,49 @@ define(['app'], function (app) {
                 
                 if (openstack_sites.length == 0){
                     var customer_name = StorageService.Get("customer").customer_name;
-                    MSMService.DeleteCustomer($scope, customer_name);
+                    deleteCustomer(customer_name)
                 }
             }    
         });
         
         $rootScope.$on("OnDeleteCustomerEvent", function (event, result, error_msg) {
-            if ($rootScope.action == ""){
-                if('message' in result && result.message.toLowerCase() == "customer site exist"){
+            if('message' in result && result.message.toLowerCase() == "customer site exist"){
                     QueueService.add(deleteCustomer, {'timeout':AppConfig.environment === 'development' ? (site_details.site_level * 500) : 5000, 'groupingId': result.customer_name, 'params':result.customer_name});
-                }
-                else{
-                    GraphService.graph.clear();
-                    StorageService.RemoveAll();
-                    enableMouseEvents();
-                    $scope.clearApiCalls();
-                    $scope.openApiCalls();
-                    
-                    $scope.customerName = '';
-                    $scope.serviceLevel = '';
-                    $scope.clouds = '';
-                    $scope.sites = '';
-                    $scope.custSites = 0;
-                    
-                    $rootScope.notification = "";
-                    $rootScope.apiCalls = [];
-                    $rootScope.activeSites = [];
-                    $rootScope.customer_details = "";
-                    $rootScope.images = {};
-                    $rootScope.flavors = {};
-                    $rootScope.action = "";
-                    $rootScope.ExistingCustomer = [];
-                    $rootScope.CPE = {};
-                    $rootScope.maxExSites = '';
-                    $rootScope.Iplength = '';
-                    $rootScope.openstack_site = "";
-                    $rootScope.external_site = "";
-                    $rootScope.saved_external_site = "";
-                    $rootScope.connection = "";
-                    $rootScope.vmsVal = {};
-                    $rootScope.vm = "";
-                    $rootScope.cloudsCreated = [];
-                    $rootScope.maxConnections = '';
-                    $rootScope.currentState = 0;
-                }
-            }    
+            }
+            else{
+                GraphService.graph.clear();
+                StorageService.RemoveAll();
+                enableMouseEvents();
+                $scope.clearApiCalls();
+                $scope.openApiCalls();
+                
+                $scope.customerName = '';
+                $scope.serviceLevel = '';
+                $scope.clouds = '';
+                $scope.sites = '';
+                $scope.custSites = 0;
+                
+                $rootScope.notification = "";
+                $rootScope.apiCalls = [];
+                $rootScope.activeSites = [];
+                $rootScope.customer_details = "";
+                $rootScope.images = {};
+                $rootScope.flavors = {};
+                $rootScope.action = "";
+                $rootScope.ExistingCustomer = [];
+                $rootScope.CPE = {};
+                $rootScope.maxExSites = '';
+                $rootScope.Iplength = '';
+                $rootScope.openstack_site = "";
+                $rootScope.external_site = "";
+                $rootScope.saved_external_site = "";
+                $rootScope.connection = "";
+                $rootScope.vmsVal = {};
+                $rootScope.vm = "";
+                $rootScope.cloudsCreated = [];
+                $rootScope.maxConnections = '';
+                
+            } 
         });
         
         $rootScope.$on('OnAssociateRouteEvent', function (event, result, error_msg) {

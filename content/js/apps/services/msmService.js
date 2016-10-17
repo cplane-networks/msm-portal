@@ -282,7 +282,7 @@ define(['app'], function (app) {
                     function (error, status) {
                         if (error != null){
                             error['customer_name'] = customer_name;
-                            deleteCustomerEvent(parent_scope, error, status + " : " + error.Message);
+                            deleteCustomerEvent(parent_scope, error, error.message);
                         }    
                         else{
                             deleteCustomerEvent(parent_scope, null, null);
