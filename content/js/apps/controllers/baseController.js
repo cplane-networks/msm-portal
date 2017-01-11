@@ -884,7 +884,9 @@ define(['app'], function (app) {
             vm_position.x += 180;
             vm_position.y += (40 * vm_details.vm_level);
             
-            var vm_node = GraphService.AddVM(site_name, vm_name, vm_details.vm_data.uuid, vm_details.vm_data.srId, "VM - " + vm_details.vm_data.fixedIP + "\n" + vm_details.vm_data.imageRef + " - " + vm_details.vm_data.flavorRef, vm_position);
+            //var vm_node = GraphService.AddVM(site_name, vm_name, vm_details.vm_data.uuid, vm_details.vm_data.srId, "VM - " + vm_details.vm_data.fixedIP + "\n" + vm_details.vm_data.imageRef + " - " + vm_details.vm_data.flavorRef, vm_position);
+            
+            var vm_node = GraphService.AddVM(site_name, vm_name, vm_details.vm_data.uuid, vm_details.vm_data.srId, vm_details.vm_data.name + "\n" + vm_details.vm_data.fixedIP, vm_position);
             
             var site_details = StorageService.GetSite(site_name);
             var vm_data = angular.copy(site_details.site_data.VM);

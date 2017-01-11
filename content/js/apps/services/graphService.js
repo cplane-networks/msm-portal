@@ -26,6 +26,18 @@ define(['app'], function (app) {
             var cplane_type = cellView.attributes.cplane_type
             
             var site_details = $injector.get('StorageService')['GetSite'](site_name).site_data;
+            
+            if (cplane_type === 'vm') {
+                var vm_details = $injector.get('StorageService')['GetVM'](site_name, cellView.attributes.vm_srId, cellView.attributes.vm_name).vm_data;
+		
+                if (vm_details.floatIP === '') {
+                    vm_details.floatIP = 'None';
+                }
+                //var content = '<span>Site: '+cellView.attributes.site_name+'<br/>VM: '+cellView.attributes.vm_name+'<br/>UUID: '+cellView.attributes.vm_uuid+'<br/>IP Address: '+vm_details.fixedIP+'<br/>Image: '+vm_details.imageRef+'<br/>Flavor: '+vm_details.flavorRef+'<br/>Floating IP: '+vm_details.floatIP+'<br/>srId: '+cellView.attributes.vm_srId+'</span>';   
+				var content = '<span>VM: '+cellView.attributes.vm_name+'<br/>UUID: '+cellView.attributes.vm_uuid+'<br/>IP Address: '+vm_details.fixedIP+'<br/>Image: '+vm_details.imageRef+'<br/>Flavor: '+vm_details.flavorRef+'<br/>Floating IP: '+vm_details.floatIP+'<br/>Floating IP Quota: None</span>';
+				return content;    
+            } 
+            
             if (cplane_type === 'openstack_ogr'){
                 return '<span>cpeName : '+site_details.cpe[0].cpeName + '<br/> cpeSegmentation-Id : '+site_details.cpe[0].cpeSegmentationId+'<br/> cpeIpAddr : '+site_details.cpe[0].cpeIpAddr+'<br/> cpeMask : '+site_details.cpe[0].cpeMask+'<br/> cpeASN : '+site_details.cpe[0].cpeASN+'<br/> peerIP : '+site_details.cpe[0].peerIP+'<br/> peerASN : '+site_details.cpe[0].peerASN+'</span>'
             }
@@ -43,7 +55,7 @@ define(['app'], function (app) {
         var element_tooltip = new joint.ui.Tooltip({
                 className: 'tooltip',
                 rootTarget: '.draw-canvas-box',
-                target: '.Openstack_ogr,.External_site',
+                target: '.Openstack_ogr,.External_site,.VM',
                 content: function(cell) {
                     var id = $(cell).attr("model-id")
                     return graphFactory.tooltip_content(id);
@@ -175,7 +187,8 @@ define(['app'], function (app) {
                 type: 'basic.Openstack_subnet',
                 size: { width: 100, height: 40 },
                 attrs: { ellipse: { stroke: 'red', 'stroke-width': 1.5 }, 
-                         text: { fill: 'black', 'font-size': 12} },
+                         //text: { fill: 'black', 'font-size': 12} },
+                         text: { fill: 'black', 'font-size': 12, 'ref-y': .55, ref: 'ellipse', 'y-alignment': 'middle'} },
                 cplane_type : 'openstack_subnet',
                 site_name : ''
             }, joint.shapes.basic.Ellipse.prototype.defaults)
@@ -228,7 +241,8 @@ define(['app'], function (app) {
                 type: 'basic.Connect_site',
                 size: { width: 110, height: 22 },
                 attrs: { ellipse: { stroke: '#1C75BC', 'stroke-width': 1 }, 
-                         text: { fill: 'black', 'font-size': 12} },
+                         //text: { fill: 'black', 'font-size': 12} },
+                         text: { fill: 'black', 'font-size': 12, 'ref-y': .58, ref: 'ellipse', 'y-alignment': 'middle'} },
                 cplane_type : 'connect_site'
             }, joint.shapes.basic.Ellipse.prototype.defaults)
         });
@@ -238,7 +252,8 @@ define(['app'], function (app) {
                 type: 'basic.VM',
                 size: { width: 150, height: 30 },
                 attrs: { rect: { fill: 'red', rx: 5, ry: 5, 'stroke-width': 2, stroke: 'red' }, 
-                         text: { fill: 'white', 'font-size': 12} },
+                         //text: { fill: 'white', 'font-size': 12} },
+                         text: { fill: 'white', 'font-size': 12, lineHeight: '1.35em','ref-y': .55, ref: 'rect', 'y-alignment': 'middle'} },
                 cplane_type : 'vm',
                 site_name: '',
                 vm_name: '',
