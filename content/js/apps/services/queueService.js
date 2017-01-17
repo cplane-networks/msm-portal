@@ -71,7 +71,12 @@ define(['app'], function (app) {
             queueConfig[queueId] = angular.extend(queueConfig[queueId] || {}, config);
         }
         
-
+        queueFactory.removeAll = function()
+        {
+            console.log("all queue items removed.")
+            queue = [];
+        }
+        
         return queueFactory;
     };
 

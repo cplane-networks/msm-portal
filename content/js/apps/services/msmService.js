@@ -1298,7 +1298,7 @@ define(['app'], function (app) {
                         stopVMEvent(parent_scope, results, null);
                     }).error(
                     function (error, status) {
-                        console.log(error, status)
+                        //console.log(error, status)
                         if (error != null){
                             var results = {"site_name" : site_name, "name" : vm_name, "srId" : vm_srId};    
                             stopVMEvent(parent_scope, results, error.message);

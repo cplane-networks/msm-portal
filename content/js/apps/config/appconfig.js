@@ -9,6 +9,6 @@ define(['app'], function (app) {
         "defaultIconPath": "content/images/default/",
         "SVGIconPath": "content/images/svg_image/",
 		"environment": "production", /*"production", "redirection", "development"*/
-		"vm_polling": "on", /*"on", "off"*/
+		"vm_polling": "off", /*"on", "off"*/
     })
 });

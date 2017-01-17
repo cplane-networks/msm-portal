@@ -1,0 +1,109 @@
+md-slider .md-thumb::after {
+    border-radius: 12px !important;
+    width: 30px !important;
+    background-color: #ffffff !important;
+    border-color: #777777 !important;
+    border-width: 1px !important;
+}
+
+md-slider.md-default-theme .md-track.md-track-fill, md-slider .md-track.md-track-fill {
+    background-color: #E33D44 !important;
+}
+
+
+div#slider {
+  float : left
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: left;
+      -ms-flex-pack: left;
+          justify-content: left;
+}
+
+.headerDivider {
+    height:25px;
+    position:relative;
+    margin:0 2px 0 8px;
+    display: inline-block;
+    width: 0px;
+    border-right: 1px solid #fafafa;
+    border-left: 1px solid #b4b4b4;
+     
+}
+
+md-slider-container > *:last-child:not(md-slider) {
+    margin-left: 4px !important;
+}
+
+md-slider-container > *:first-child:not(md-slider) {
+    margin-right: 0px !important;
+}
+
+md-slider-container > img {
+    height:20px !important;
+    width:20px !important ;
+}
+
+md-slider-container {
+    border: 1px solid #C8C8C8;
+    padding: 0px 4px 0px 0px;
+    border-radius:5px;
+}
+
+md-slider {
+    margin-top: -46px !important;
+    height:0 !important;
+    margin-left: 6px !important;
+    margin-right: 16px !important;
+}
+
+md-switch.md-default-theme .md-bar, md-switch .md-bar {
+    background-color: #FAFAFA !important;
+    border: 1px solid #BCBCBC;
+}
+
+md-switch.md-default-theme .md-thumb, md-switch .md-thumb {
+    background-color: #E23D3D !important;
+    top : -1px !important;
+}
+
+md-switch.md-default-theme.md-checked .md-bar, md-switch.md-checked .md-bar {
+    background-color: #FAFAFA !important;
+    border: 1px solid #BCBCBC;
+}
+
+md-switch.md-default-theme.md-checked .md-thumb, md-switch.md-checked .md-thumb {
+    background-color: #56E23D !important;
+    top : -1px !important;
+}
+
+md-switch {
+    margin-bottom: 0px !important;
+    margin-top: -4px !important;
+    width: 160px;
+}
+
+md-slider:not([md-discrete]):not([disabled]) .md-slider-wrapper .md-thumb:hover {
+    -webkit-transform: scale(.7) !important;
+    transform: scale(.7) !important;
+    cursor: move !important;
+}
+
+md-slider:not([md-discrete]):not([disabled]).md-active .md-slider-wrapper .md-thumb {
+    -webkit-transform: scale(.7) !important;
+    transform: scale(.7) !important;
+}
+
+md-slider .md-focus-ring {
+    display : None !important;    
+}
+
+md-slider[disabled] .md-thumb {
+    -webkit-transform: scale(.7) !important;
+    -webkit-transform: scale(.7) !important;
+}  
+
+md-switch.md-default-theme.md-checked .md-ink-ripple, md-switch.md-checked .md-ink-ripple {
+    color: None ! important;
+}

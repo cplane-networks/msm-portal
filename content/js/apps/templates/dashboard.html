@@ -11,6 +11,9 @@
         .Bootstrap-demo{
             margin:100px 30px 30px 30px;
         }
+        .connecting {
+           cursor: move !important;
+        }
     </style>
     <body>
         <div class="wrapper">
@@ -18,8 +21,13 @@
                 <!-- Header Navbar: style can be found in header.less -->
                 <nav class="navbar navbar-static-top pull-right">
                   <!-- Sidebar toggle button-->
+                  <md-switch class="pull-left" ng-model="polling" aria-label="VM Polling" ng-change="vm_polling()">
+                    VM Polling: {{ polling }}
+                  </md-switch>
                   <button class="btn btn-block btn-default btn-xs pull-right" ng-click="resetALL()" type="button">RESET ALL</button>
                   <button class="btn btn-block btn-default btn-xs " ng-click="resetVMs()" type="button">RESET VMs</button>
+                  
+                  
                 </nav>
                 <!-- Logo -->
                 <div id="logo-box">
@@ -69,9 +77,24 @@
 
 
                 <div class="main-content col-md-11"  >
-                    <h4>Customer: <span id="tooltip-ex" ><a href="" data-placement="bottom" title="" data-html="true" data-original-title="Customer : {{customerName}} <br/> Service Level : {{serviceLevel}} <br/> Max Cloud Sites : {{clouds}} <br/> Max VMs/Site : {{sites}}" 
+                    <h4>
+                        <!--<div id="tooltip-ex" style="width:30%;">-->
+                        <div id="tooltip-ex" style="width:30%;float:left">Customer: <a href="" data-placement="bottom" title="" data-html="true" data-original-title="Customer : {{customerName}} <br/> Service Level : {{serviceLevel}} <br/> Max Cloud Sites : {{clouds}} <br/> Max VMs/Site : {{sites}}" 
                                            data-toggle="tooltip"  class="pop-design"> 
-                                           {{customerName}}</a></span></h4>
+                                           {{customerName}}</a>
+                                  </div>
+                                  
+                                  <div id="slider">
+                                    <md-slider-container>
+                                        <img class="pull-right" style="cursor:pointer;" title="Zoom Out" ng-click="zoom('-1')" src="content/images/svg_image/zoom-out.svg" alt="Zoom Out" width="20" height="20" />
+                                        <md-slider flex min="10" step="1" max="150" ng-model="zoomValue" aria-label="zoom" id="zoom-slider" ng-change="zoom()"></md-slider>
+                                        <img class="pull-right" style="cursor:pointer;" title="Zoom In" ng-click="zoom('1')" src="content/images/svg_image/zoom-in.svg" alt="Zoom In" width="20" height="20" />
+                                        <div class="headerDivider"></div>
+                                        <output style="font-size:10pt;margin-top:-6px;width:33px;text-align:center;">{{zoomValue}}%</output> &#160;
+                                    </md-slider-container>
+                                  </div>
+                                  
+                   </h4>
 					<nav id="notification" ng-if="notification" class="navbar navbar-static-top" style="float:right; width:26.5%; margin:-30px -11px 0px 0px">
                         <img class="pull-left" src="content/images/pngs/spinner.gif" alt="Spinner" width="24" height="24" />
                         <span style="color:green; font-size:10pt; font-weight:bold; padding-top:10px; vertical-align:middle; margin-left:10px;">{{notification}}</span>
@@ -94,7 +117,7 @@
                                 </div>
                             </div>    
                         </div>
-                        <div class="draw-canvas-box col-md-9" style="height: 100%;">
+                        <div class="draw-canvas-box col-md-9" style="height: 100%; ">
                         </div>
                     </div>
                 </div>    

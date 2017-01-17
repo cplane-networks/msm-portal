@@ -57,7 +57,62 @@ define(['app'], function (app) {
 		$rootScope.ExistingCustomer = [];
 		$rootScope.CPE = {};
         $rootScope.vmsVal = {};
-                
+        
+        //polling
+        $rootScope.polling = AppConfig.vm_polling.toLowerCase() === "on" ? true : false;
+        $rootScope.vm_polling = function(){
+            $rootScope.polling = $scope.polling;
+            if ($scope.polling && AppConfig.environment !== 'development'){
+                //console.log($scope.polling);
+                var node_details = StorageService.Get("node_details");
+                if (node_details){
+                    angular.forEach(node_details, function(site, index){
+                        if (site.type == 'openstack_site'){
+                            var site_name = site.site_name;
+                            var site_details = StorageService.GetSite(site_name);
+                            if(site.VM){
+                                angular.forEach(site.VM, function(vm, vm_index){
+                                    QueueService.add(pollVM, {'timeout': 500, 'groupingId': vm.srId, 'params':{'site_name' : site_name, 'uuid' : vm.uuid, 'vm_name' : vm.name, 'vm_srId' : vm.srId}});
+                                });
+                            }    
+                        }
+                    });
+                }
+            }
+            else {
+                QueueService.removeAll();
+            }
+        }
+        
+        // Scale
+        $rootScope.zoomValue = 100;
+        $rootScope.zoom = function(delta){
+            var vbox = V(GraphService.paper.viewport).bbox(true, GraphService.paper.svg);
+            var offsetX = vbox.x + vbox.width / 2;
+            var offsetY = vbox.y + vbox.height / 2;
+            var newScale = null;
+            
+            if (delta == undefined){
+                newScale = $scope.zoomValue / 100;
+            }
+            else {
+                var currentScale = V(GraphService.paper.viewport).scale().sx;
+                newScale = currentScale + parseInt(delta, 10) / 100;
+                $scope.zoomValue = Math.floor(currentScale*100 + parseInt(delta, 10));
+            }    
+            $rootScope.zoomValue = $scope.zoomValue;
+            GraphService.scaleGraph(offsetX, offsetY, newScale);
+        }
+        
+        $rootScope.$on("mouseZoomEvent", function (event, zoomValue){
+            $rootScope.zoomValue = zoomValue;
+        });
+        
+        $interval(function() {
+            $scope.zoomValue = $rootScope.zoomValue;
+        }, 50);
+        //Scale
+        
         $rootScope.resetVMs = function(){
             $rootScope.action = "resetVM";
             $scope.closeApiCalls();
@@ -916,7 +971,8 @@ define(['app'], function (app) {
                     vm_node.attr('rect/fill', 'green');  
                     vm_node.attr('rect/stroke', 'green');  
                     GraphService.paper.findViewByModel(vm_node).options.interactive = true;
-                    if (AppConfig.vm_polling.toLowerCase() === "on" && AppConfig.environment !== 'development'){
+                    //console.log($rootScope.polling);
+                    if ($rootScope.polling && AppConfig.environment !== 'development'){
                         var site_details = StorageService.GetSite(site_name);
                         QueueService.add(pollVM, {'timeout': 5000, 'groupingId': vm_srId, 'params':{'site_name' : site_name, 'uuid' : vm_details.vm_data.uuid, 'vm_name' : vm_name, 'vm_srId' : vm_srId}});
                     }
@@ -926,7 +982,8 @@ define(['app'], function (app) {
                     vm_node.attr('rect/fill', 'red');  
                     vm_node.attr('rect/stroke', 'red');
                     GraphService.paper.findViewByModel(vm_node).options.interactive = true;
-                    if (AppConfig.vm_polling.toLowerCase() === "on" && AppConfig.environment !== 'development'){
+                    //console.log($rootScope.polling);
+                    if ($rootScope.polling && AppConfig.environment !== 'development'){
                         var site_details = StorageService.GetSite(site_name);
                         QueueService.add(pollVM, {'timeout': 5000, 'groupingId': vm_srId, 'params':{'site_name' : site_name, 'uuid' : vm_details.vm_data.uuid, 'vm_name' : vm_name, 'vm_srId' : vm_srId}});
                     }
@@ -938,7 +995,8 @@ define(['app'], function (app) {
                     vm_node.attr('rect/stroke', '#B20000'); 
                     vm_node.attr('text/text', label); 
                     GraphService.paper.findViewByModel(vm_node).options.interactive = true;
-                    if (AppConfig.vm_polling.toLowerCase() === "on" && AppConfig.environment !== 'development'){
+                    //console.log($rootScope.polling);
+                    if ($rootScope.polling && AppConfig.environment !== 'development'){
                         var site_details = StorageService.GetSite(site_name);
                         QueueService.add(pollVM, {'timeout': 5000, 'groupingId': vm_srId, 'params':{'site_name' : site_name, 'uuid' : vm_details.vm_data.uuid, 'vm_name' : vm_name, 'vm_srId' : vm_srId}});
                     }
@@ -1289,7 +1347,6 @@ define(['app'], function (app) {
          
         $scope.isVMOpen = false
         $scope.openAddVms = function(){
-            //console.log("11947");
             if($scope.isVMOpen)
             {
                 return;
@@ -1313,11 +1370,8 @@ define(['app'], function (app) {
                         var dlg = dialogs.create(_dialog_path + "add_vms.tpl.html", 'customController', {data: "data", anotherVar: 'value'}, {backdrop: 'static'}, 'ctrl');
                            
                         dlg.result.then(function (cloudObj){
-                                //console.log("BController-1212: "+cloudObj);
-                            $scope.isVMOpen = false; // on submit
-                               // cloudObj.site ;
+                                $scope.isVMOpen = false; // on submit
                             }, function (msg) {
-                                //console.log("BController-msg-1216: "+msg);
                                 $scope.isVMOpen = false; // on cancel
                                 $scope.validSiteName = true;
                                 if (angular.equals($scope.name, ''))

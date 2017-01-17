@@ -878,9 +878,6 @@ define(['app'], function (app){
                 $uibModalInstance.close();
                 
             }
-            else{
-//                alert("Blank entries found. Please enter required data or delete the blank line using the ‘-‘ button.");
-            }
         }    
         
         $scope.CloseClipCancelReportDiag = function(){

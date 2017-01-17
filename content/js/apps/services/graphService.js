@@ -94,15 +94,15 @@ define(['app'], function (app) {
         }
 
         graphFactory.$contextMenu = $('' +
-                              '<div class="context-menu">' +
-                              '   <ul>' +      
-                              '       <li id = "start">Start</li>' +
-                              '       <li id = "stop">Stop</li>' +
-                              '       <li id = "reboot">Reboot</li>' +
-                              '       <li id = "delete">Delete</li>' +
-                              '       <li id = "cancel">Console</li>' +
-                              '   </ul>' +
-                              '</div>');
+                                      '<div class="context-menu">' +
+                                      '   <ul>' +      
+                                      '       <li id = "start">Start</li>' +
+                                      '       <li id = "stop">Stop</li>' +
+                                      '       <li id = "reboot">Reboot</li>' +
+                                      '       <li id = "delete">Delete</li>' +
+                                      '       <li id = "cancel">Console</li>' +
+                                      '   </ul>' +
+                                      '</div>');
         
         $('.paper').append(graphFactory.$contextMenu);
         graphFactory.$contextMenu.jqxMenu({
@@ -154,6 +154,99 @@ define(['app'], function (app) {
             rightClickedCell = null;
         });
         
+        //Scale Graph
+        graphFactory.zoomValue = 100;
+        graphFactory.paper.$el.on('mousewheel DOMMouseScroll', function (e) {
+
+            e.preventDefault();
+            e = e.originalEvent;
+            var offsetX = (e.offsetX || e.clientX - $(this).offset().left);
+            var offsetY = (e.offsetY || e.clientY - $(this).offset().top);
+            var p = clientToLocalPoint({
+                x: offsetX,
+                y: offsetY
+            });
+            var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+            var currentScale = V(graphFactory.paper.viewport).scale().sx;
+            var newScale = currentScale + delta / 100;
+            
+            graphFactory.zoomValue = Math.floor((currentScale * 100) + delta);
+            graphFactory.scaleGraph(offsetX, offsetX, newScale);
+            $rootScope.$broadcast('mouseZoomEvent', graphFactory.zoomValue);
+        });
+        
+        graphFactory.scaleGraph = function(offsetX, offsetY, newScale){
+            if (newScale > 0.1 && newScale < 1.5) {
+                graphFactory.paper.setOrigin(20, 20);
+                graphFactory.paper.scale(newScale, newScale, offsetX, offsetY);
+            }
+        }
+
+        // Transform client coordinates to the paper local coordinates.
+        // Useful when you have a mouse event object and you'd like to get coordinates
+        // inside the paper that correspond to `evt.clientX` and `evt.clientY` point.
+        // Exmaple: var paperPoint = paper.clientToLocalPoint({ x: evt.clientX, y: evt.clientY });
+        function clientToLocalPoint(p) {
+
+            var svgPoint = graphFactory.paper.svg.createSVGPoint();
+            svgPoint.x = p.x;
+            svgPoint.y = p.y;
+
+            // This is a hack for Firefox! If there wasn't a fake (non-visible) rectangle covering the
+            // whole SVG area, `$(paper.svg).offset()` used below won't work.
+            var fakeRect = V('rect', {
+                width: graphFactory.paper.options.width,
+                height: graphFactory.paper.options.height,
+                x: 0,
+                y: 0,
+                opacity: 0
+            });
+            V(graphFactory.paper.svg).prepend(fakeRect);
+
+            var paperOffset = $(graphFactory.paper.svg).offset();
+
+            // Clean up the fake rectangle once we have the offset of the SVG document.
+            fakeRect.remove();
+
+            var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+            var scrollLeft = document.body.scrollLeft || document.documentElement.scrollLeft;
+
+            svgPoint.x += scrollLeft - paperOffset.left;
+            svgPoint.y += scrollTop - paperOffset.top;
+
+            // Transform point into the viewport coordinate system.
+            var pointTransformed = svgPoint.matrixTransform(graphFactory.paper.viewport.getCTM().inverse());
+
+            return pointTransformed;
+        }
+        
+        //Drag Graph
+        var dragStartPosition = null;
+        graphFactory.paper.on('blank:pointerdown',
+            function(event, x, y) {
+                var scale = V(graphFactory.paper.viewport).scale();
+                dragStartPosition = { x: x * scale.sx, y: y * scale.sy};
+                graphFactory.paper.$el.addClass('connecting');
+            }
+        );
+        
+        graphFactory.paper.on('cell:pointerup blank:pointerup', function(cellView, x, y) {
+            dragStartPosition = null;
+            graphFactory.paper.$el.removeClass('connecting');
+        });
+        
+        $(".paper").mousemove(function(event) {
+            if (dragStartPosition != null){
+                var x = event.offsetX - dragStartPosition.x;
+                var y = event.offsetY - dragStartPosition.y;
+                /*
+                if (x > 0 && y > 0){
+                    graphFactory.paper.setOrigin( x, y );
+                }    
+                */
+                graphFactory.paper.setOrigin( x, y);
+            }    
+        });
         
         // Cplane Nodes.
         joint.shapes.basic.Openstack_site = joint.shapes.basic.Generic.extend({
@@ -338,6 +431,7 @@ define(['app'], function (app) {
             });
             
             graphFactory.graph.addCells([node]);
+            //graphFactory.paper.scaleContentToFit();
             return node;
         };
         
