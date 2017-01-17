@@ -22,7 +22,7 @@
                 <nav class="navbar navbar-static-top pull-right">
                   <!-- Sidebar toggle button-->
                   <md-switch class="pull-left" ng-model="polling" aria-label="VM Polling" ng-change="vm_polling()">
-                    VM Polling: {{ polling }}
+                    VM Polling: {{ polling ? "ON" : "OFF"}}
                   </md-switch>
                   <button class="btn btn-block btn-default btn-xs pull-right" ng-click="resetALL()" type="button">RESET ALL</button>
                   <button class="btn btn-block btn-default btn-xs " ng-click="resetVMs()" type="button">RESET VMs</button>
