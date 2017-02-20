@@ -17,7 +17,22 @@ define(['app'], function (app) {
             height: $('.draw-canvas-box').height(),
             model: graphFactory.graph,
             restrictTranslate: true,
-            gridSize: 1
+            gridSize: 1,
+            linkPinning: false,
+            linkConnectionPoint: function(linkView, elementView, magnet, reference) {
+                var element = elementView.model;
+                var connection_point = null;
+                try{
+                    connection_point = element.getConnectionPoint(reference);
+                }
+                catch(e){
+                    //e
+                }
+                if (connection_point == null){
+                    connection_point = element.getBBox().center()
+                }    
+                return connection_point;
+            }
         });
         
         graphFactory.tooltip_content = function(id){
@@ -34,8 +49,25 @@ define(['app'], function (app) {
                     vm_details.floatIP = 'None';
                 }
                 //var content = '<span>Site: '+cellView.attributes.site_name+'<br/>VM: '+cellView.attributes.vm_name+'<br/>UUID: '+cellView.attributes.vm_uuid+'<br/>IP Address: '+vm_details.fixedIP+'<br/>Image: '+vm_details.imageRef+'<br/>Flavor: '+vm_details.flavorRef+'<br/>Floating IP: '+vm_details.floatIP+'<br/>srId: '+cellView.attributes.vm_srId+'</span>';   
-				var content = '<span>VM: '+cellView.attributes.vm_name+'<br/>UUID: '+cellView.attributes.vm_uuid+'<br/>IP Address: '+vm_details.fixedIP+'<br/>Image: '+vm_details.imageRef+'<br/>Flavor: '+vm_details.flavorRef+'<br/>Floating IP: '+vm_details.floatIP+'<br/>Floating IP Quota: None</span>';
-				return content;    
+				var content = '<span>VM: '+cellView.attributes.vm_name+'<br/>UUID: '+cellView.attributes.vm_uuid+'<br/>Image: '+vm_details.imageRef+'<br/>Flavor: '+vm_details.flavorRef;
+                
+                /* Update content of the tooltip for new subnets */
+                angular.forEach(vm_details.addresses, function(network, index) {
+                    if (network.subnet_type == "backbone"){
+                        content += '<br/>Backbone IP: '+network.fixedIP.ip;
+                    }
+                    else if (network.subnet_type == "internal_resources"){
+                        content += '<br/>Internal IP: '+network.fixedIP.ip;
+                    }    
+                    else if (network.subnet_type == "floatingip"){
+                        content += '<br/>GIA Fixed IP: '+network.fixedIP.ip;
+                        content += '<br/>GIA Floating IP: '+network.floatingIP.ip;
+                        content += '<br/>Floating IP Quota: '+(network.floatingIP.quota ? network.floatingIP.quota : 'None');
+                    }
+                });
+                
+                content += '</span>';
+                return content;    
             } 
             
             if (cplane_type === 'openstack_ogr'){
@@ -134,18 +166,23 @@ define(['app'], function (app) {
             graphFactory.paper.findViewByModel(cellView).options.interactive = false;
             switch (menuitemText) {
                 case "Start":
+                    $rootScope.notification = "Starting VM..."
                     $injector.get('MSMService')['StartVM']($rootScope, customer_name, site_name, vm_name, vm_uuid, vm_srId);
                     break;
                 case "Stop":
+                    $rootScope.notification = "Stopping VM..."
                     $injector.get('MSMService')['StopVM']($rootScope, customer_name, site_name, vm_name, vm_uuid, vm_srId);
                     break;
                 case "Reboot":
+                    $rootScope.notification = "Rebooting VM..."
                     $injector.get('MSMService')['RebootVM']($rootScope, customer_name, site_name, vm_name, vm_uuid, vm_srId);
                     break;
                 case "Delete":
+                    $rootScope.notification = "Deleting VM..."
                     $injector.get('MSMService')['DeleteVM']($rootScope, customer_name, site_name, vm_name, vm_uuid, vm_srId);
                     break;
                 case "Console":
+                    $rootScope.notification = "Opening VM Console..."
                     graphFactory.paper.findViewByModel(cellView).options.interactive = true;
                     $injector.get('MSMService')['getVMConsole']($rootScope, customer_name, site_name, vm_name, vm_uuid, vm_srId);
                     break;
@@ -155,7 +192,7 @@ define(['app'], function (app) {
         });
         
         //Scale Graph
-        graphFactory.zoomValue = 100;
+        graphFactory.zoomValue = AppConfig.default_zoom;
         graphFactory.paper.$el.on('mousewheel DOMMouseScroll', function (e) {
 
             e.preventDefault();
@@ -171,14 +208,17 @@ define(['app'], function (app) {
             var newScale = currentScale + delta / 100;
             
             graphFactory.zoomValue = Math.floor((currentScale * 100) + delta);
-            graphFactory.scaleGraph(offsetX, offsetX, newScale);
+            graphFactory.scaleGraph(offsetX, offsetY, newScale);
             $rootScope.$broadcast('mouseZoomEvent', graphFactory.zoomValue);
         });
         
         graphFactory.scaleGraph = function(offsetX, offsetY, newScale){
-            if (newScale > 0.1 && newScale < 1.5) {
-                graphFactory.paper.setOrigin(20, 20);
-                graphFactory.paper.scale(newScale, newScale, offsetX, offsetY);
+            if (newScale > (AppConfig.min_zoom / 100) && newScale < (AppConfig.max_zoom / 100)) {
+                graphFactory.paper.scale(newScale, newScale);
+                
+                /* Remove pointer location origin */
+                //graphFactory.paper.setOrigin(20, 20);
+                //graphFactory.paper.scale(newScale, newScale, offsetX, offsetY);
             }
         }
 
@@ -279,12 +319,67 @@ define(['app'], function (app) {
             defaults: joint.util.deepSupplement({
                 type: 'basic.Openstack_subnet',
                 size: { width: 100, height: 40 },
-                attrs: { ellipse: { stroke: 'red', 'stroke-width': 1.5 }, 
+                attrs: { ellipse: { stroke: '#f4b183', 'stroke-width': 1.5 }, 
                          //text: { fill: 'black', 'font-size': 12} },
-                         text: { fill: 'black', 'font-size': 12, 'ref-y': .55, ref: 'ellipse', 'y-alignment': 'middle'} },
+                         text: { fill: 'black', 'font-size': 11, 'ref-y': .55, ref: 'ellipse', 'y-alignment': 'middle'} },
                 cplane_type : 'openstack_subnet',
                 site_name : ''
             }, joint.shapes.basic.Ellipse.prototype.defaults)
+        });
+        
+        joint.shapes.basic.Openstack_internal_subnet = joint.shapes.basic.Ellipse.extend({
+            defaults: joint.util.deepSupplement({
+                type: 'basic.Openstack_internal_subnet',
+                size: { width: 100, height: 40 },
+                attrs: { ellipse: { stroke: '#7030a0', 'stroke-width': 1.5, 'stroke-dasharray': '2,1' }, 
+                         //text: { fill: 'black', 'font-size': 12} },
+                         text: { fill: 'black', 'font-size': 11, 'ref-y': .55, ref: 'ellipse', 'y-alignment': 'middle'} },
+                cplane_type : 'openstack_internal_subnet',
+                site_name : ''
+            }, joint.shapes.basic.Ellipse.prototype.defaults)
+        });
+        
+        joint.shapes.basic.Openstack_fip_subnet = joint.shapes.basic.Ellipse.extend({
+            defaults: joint.util.deepSupplement({
+                type: 'basic.Openstack_fip_subnet',
+                size: { width: 100, height: 40 },
+                attrs: { ellipse: { stroke: '#7f7f7f', 'stroke-width': 1.5, 'stroke-dasharray': '2,1' }, 
+                         //text: { fill: 'black', 'font-size': 12} },
+                         text: { fill: 'black', 'font-size': 11, 'ref-y': .55, ref: 'ellipse', 'y-alignment': 'middle'} },
+                cplane_type : 'openstack_fip_subnet',
+                site_name : ''
+            }, joint.shapes.basic.Ellipse.prototype.defaults)
+        });
+        
+        joint.shapes.basic.Openstack_internet_cloud = joint.shapes.basic.Generic.extend({
+            markup: '<g class="rotatable"><g class="scalable"><image/></g></g><text/>',
+            defaults: joint.util.deepSupplement({
+                type: 'basic.Openstack_internet_cloud',
+                size: {width: 100, height: 40},
+                attrs: {
+                    image: {
+                        'width': 100, 'height': 40,
+                        'xlink:href': AppConfig.SVGIconPath + 'Internet Cloud.svg'
+                    }
+                },
+                cplane_type : 'openstack_internet_cloud',
+                site_name : ''
+            }, joint.shapes.basic.Generic.prototype.defaults)
+        });
+        
+        joint.shapes.basic.Openstack_wan_cloud = joint.shapes.basic.Generic.extend({
+            markup: '<g class="rotatable"><g class="scalable"><image/></g></g><text/>',
+            defaults: joint.util.deepSupplement({
+                type: 'basic.Openstack_wan_cloud',
+                size: {width: 100, height: 40},
+                attrs: {
+                    image: {
+                        'width': 100, 'height': 40,
+                        'xlink:href': AppConfig.SVGIconPath + 'WAN Cloud.svg'
+                    }
+                },
+                cplane_type : 'openstack_wan_cloud'
+            }, joint.shapes.basic.Generic.prototype.defaults)
         });
         
         joint.shapes.basic.Openstack_ogr = joint.shapes.basic.Generic.extend({
@@ -335,7 +430,7 @@ define(['app'], function (app) {
                 size: { width: 110, height: 22 },
                 attrs: { ellipse: { stroke: '#1C75BC', 'stroke-width': 1 }, 
                          //text: { fill: 'black', 'font-size': 12} },
-                         text: { fill: 'black', 'font-size': 12, 'ref-y': .58, ref: 'ellipse', 'y-alignment': 'middle'} },
+                         text: { fill: 'black', 'font-size': 12, 'ref-y': .55, ref: 'ellipse', 'y-alignment': 'middle'} },
                 cplane_type : 'connect_site'
             }, joint.shapes.basic.Ellipse.prototype.defaults)
         });
@@ -356,16 +451,18 @@ define(['app'], function (app) {
         });
         
         
-        graphFactory.AddOpenStackSite = function(label, node_position) {
+        graphFactory.AddOpenStackSite = function(label, node_position, label_position) {
             //label : <string>
             //node_position : {x: <integer>, y: <integer>}
             var node = new joint.shapes.basic.Openstack_site({ 
                 position: node_position,
-                attrs: {text: {text : label} },
+                attrs: {text: {text : label, 'ref-y' : label_position == 'top' ? -1 : 110} },
                 site_name : label 
             });
             
             graphFactory.graph.addCells([node]);
+            //graphFactory.paper.scaleContentToFit();
+            //graphFactory.scaleGraph(0,0,.7);
             return node;
         };
         
@@ -374,13 +471,64 @@ define(['app'], function (app) {
             //node_position : {x: <integer>, y: <integer>}
             var node = new joint.shapes.basic.Openstack_subnet({ 
                 position: node_position,
-                attrs: {text: {text : label} },
+                attrs: {text: {text : label + "\n(Backbone)"} },
                 site_name : site 
             });
             
             graphFactory.graph.addCells([node]);
             return node;
         };
+        
+        graphFactory.AddOpenStackInternalSubnet = function(site, label, node_position) {
+            //label : <string>
+            //node_position : {x: <integer>, y: <integer>}
+            var node = new joint.shapes.basic.Openstack_internal_subnet({ 
+                position: node_position,
+                attrs: {text: {text : label + "\n(Internal)"} },
+                site_name : site 
+            });
+            
+            graphFactory.graph.addCells([node]);
+            return node;
+        };
+        
+        graphFactory.AddOpenStackFipSubnet = function(site, label, node_position) {
+            //label : <string>
+            //node_position : {x: <integer>, y: <integer>}
+            var node = new joint.shapes.basic.Openstack_fip_subnet({ 
+                position: node_position,
+                attrs: {text: {text : label+ "\n(Floating IP)"} },
+                site_name : site 
+            });
+            
+            graphFactory.graph.addCells([node]);
+            return node;
+        };
+        
+        graphFactory.AddOpenStackInternetCloud = function(site, node_position) {
+            //label : <string>
+            //node_position : {x: <integer>, y: <integer>}
+            var node = new joint.shapes.basic.Openstack_internet_cloud({ 
+                position: node_position,
+                site_name : site 
+            });
+            
+            graphFactory.graph.addCells([node]);
+            //graphFactory.paper.scaleContentToFit();
+            return node;
+        };
+        
+        graphFactory.AddOpenStackWanCloud = function(node_position) {
+            //label : <string>
+            //node_position : {x: <integer>, y: <integer>}
+            var node = new joint.shapes.basic.Openstack_wan_cloud({ 
+                position: node_position
+            });
+            
+            graphFactory.graph.addCells([node]);
+            return node;
+        };
+        
         
         graphFactory.AddOpenStackOgr = function(site, node_position) {
             //node_position : {x: <integer>, y: <integer>}
@@ -435,16 +583,25 @@ define(['app'], function (app) {
             return node;
         };
         
-        graphFactory.AddLink = function(source_node, target_node) {
+        graphFactory.AddLink = function(source_node, target_node, connection_type) {
+            
             //source_node : source_node_obj
             //target_node : target_node_obj
+            
+            var color_map = {"external_site" : "#0f75bc",
+                             "ogr" : "#7F7F7F",
+                             "backbone" : "#f4b183",
+                             "vm" : "#548235",
+                             "internal" : "#7030a0",
+                             "fip" : "#7f7f7f"}
             var link = new joint.dia.Link({
-                attrs : {'.connection' : {stroke : '#7F7F7F', 'stroke-width': 2}},
+                attrs : {'.connection' : {stroke : color_map[connection_type], 'stroke-width': 2, 'stroke-dasharray': connection_type == 'vm' ? '5 2' : ''}},
                 source: { id: source_node.id },
                 target: { id: target_node.id },
             });
             
             graphFactory.graph.addCells([link]);
+            link.toBack();
             return link;
         };
 

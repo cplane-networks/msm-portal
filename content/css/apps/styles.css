@@ -7,6 +7,20 @@ body{
     font-family: Arial, Helvetica, sans-serif;
     line-height: 0.8;
 }
+
+input[type="checkbox"],input[type="radio"] {
+    outline : 0 !important;
+}
+
+.no-select {
+    -webkit-touch-callout: none;
+      -webkit-user-select: none;
+       -khtml-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
+}
+
 #ng-view {
     position: relative;
     padding-top: 50px;
@@ -201,7 +215,8 @@ a:focus {
 .btn-gray{
     background-color: rgb(217,217,217);
 }
-.modal-lg {
+
+.modal-sm {
     width: 600px;
 }
 
@@ -333,6 +348,7 @@ label {
     color: rgb(127, 127, 127);
     font-weight: 100;
     margin: 7px 0;
+    line-height: 1;
 }
 .error-msg{
     margin: 0 0 0 4px; 
@@ -346,8 +362,8 @@ label {
     margin-bottom: 19px;
 }
 .addOsSitesForm .form-group{
-    height:24px;
-    margin-bottom: 19px;
+    height:47px;
+    margin-bottom: 5px;
 }
  .addExSitesForm  .form-group{
     height:24px;
@@ -367,7 +383,7 @@ label {
     background-color: rgb(217,217,217);
 }
 .modal-lg {
-    width: 600px;
+    width: 900px;
 }
 .sidebar-menu img{
     width:42px;
@@ -518,7 +534,7 @@ hr{
     width:118px;
 }
 .numLabel{
-    width:50px;
+    width:65px;
 }
 .imageLabel{
     width:118px;
@@ -540,24 +556,25 @@ hr{
     margin:0 11px 0px 0;
 }
 .addVmsForm .col-sm-2{
-    width:21%;
+    width:15%;
     padding:0px;
-    margin:0 11px 8px 0;
+    margin:0 10px 8px 0;
 }
 .addVmsFormLabel .col-sm-2{
-    width:17%;
+    width:16%;
     padding:0px;
-    margin:0 3px 0px 0;
+    margin:0 6px 0px 0;
 }
 .addVmsForm .col-sm-1{
     width:9%;
     padding:0px;
     margin:0 11px 8px 0;
+    text-align: center;
 }
 .addVmsFormLabel .col-sm-1{
-    width:9%;
+    width:10%;
     padding:0px;
-    margin:0 11px 0px 0;
+    _margin:0 11px 6px 0;
 }
 .addVmsForm .form-group{
     height:20px;  
@@ -577,10 +594,11 @@ hr{
 }
 .addVmsFormLabel .col-sm-3, .addVmsFormLabel .col-sm-2, .addVmsFormLabel .col-sm-1{
     padding:0;
+    text-align: center;
 }
 .siteNameForVms{
     font-size: 16px;
-    margin-left: 20px;
+    margin-left: 9px;
     width: 80px;
     color: rgb(127,127,127);
 }
@@ -589,6 +607,7 @@ hr{
     font-size:18pt;
     color:#e73827;
     cursor:pointer;
+    width: 4% !important;
 }
 .vm-error-msg{
     margin: 0 0 6px 235px ! important; 
@@ -734,3 +753,47 @@ div.vnc-error:p:nth-child(3){
     width:14px;
 }
 
+/* CSS changes in ADD CLOUD SITES */
+.site_block{
+    width:260px;
+    float:left;
+}
+.site_block .form-group .col-sm-3{
+    width:200px;
+}
+.site_block:first-of-type{
+    border-right: 1px dotted gray;
+    padding:0 25px 0 0;
+    margin:0 27px 0 0;
+}
+.site_block .form-group input, .site_block .form-group img{
+    float:left;
+    margin:5px 0 0 0;
+}
+.site_block .form-group .col-sm-3, .site_block .form-group .col-sm-5{
+    float:none;
+}
+.site_block .form-group #ser_lev{
+    width:200px;
+    margin:0 0 10px 0;
+}
+.site_block .form-group .col-sm-3{
+    padding-left:18px;
+}
+.site_block .form-group .col-sm-5{
+    margin:0 0 0 18px;
+    padding-left:14px;
+}
+.site_block .form-group label{
+    margin: 7px 0 4px 0;
+}
+.addVmsFormLabel .siteNameForVms{
+    display: block;
+    float: left;
+    height: 10px;
+    width: 75px;
+}
+
+.md-title {
+    color: red ! important;
+}

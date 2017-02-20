@@ -51,7 +51,8 @@
                                                          "dataIP" : "afw",
                                                          "dataVlan" : "fres",
                                                          "aggregationZone" : "ad3",
-                                                         "status" : "active"}]},
+                                                         "status" : "active",
+                                                         "default_subnet" : ""}]},
                                "Frankfurt" :  { "site_name" : "Frankfurt",
                                                 "cpe" : [{"id" : "10",
                                                          "peerIP" : "sd",
@@ -71,7 +72,50 @@
                                                          "dataIP" : "afw",
                                                          "dataVlan" : "fres",
                                                          "aggregationZone" : "ad3",
-                                                         "status" : "active"}]}},
+                                                         "status" : "active",
+                                                         "default_subnet" : ""}]}},
+    "list_customer_vsite_fip" : {"PaloAlto" :   { "site_name" : "PaloAlto",
+                                                  "fip":{"subnetworks":[{"allocationPools":[{"start":"10.41.0.3","end":"10.41.0.8"}],"gateway_ip":"10.41.0.1","cidr":"10.41.0.0/24"}]}},
+                                 "Frankfurt" :  { "site_name" : "Frankfurt",
+                                                  "fip":{"subnetworks":[{"allocationPools":[{"start":"10.45.0.3","end":"10.45.0.8"}],"gateway_ip":"10.45.0.1","cidr":"10.45.0.0/24"}]}}},
+    "list_customer_vsite_networks" : {"PaloAlto" :  { "site_name" : "PaloAlto",
+                                                      "networks" : [{ "type":"isolated",
+                                                                      "uuid":"d2626c8a-5c48-46a2-b364-99bef5b02fbc",
+                                                                      "subnets":[{ "uuid":"6fe46081-d284-4713-bbe0-4f0239ef42ce",
+                                                                                   "cidr":"11.10.11.0/24"}]
+                                                                    },
+                                                                    {
+                                                                      "type":"cpe",
+                                                                      "uuid":"090c3936-6158-433e-8025-a6d17bad9550",
+                                                                      "subnets":[{ "uuid":"56bc525e-285b-427d-956b-cf3d13df7549",
+                                                                                   "cidr":"11.1.2.0/24"}]
+                                                                    },
+                                                                    {
+                                                                      "type":"fip",
+                                                                      "uuid":"145c4586-5158-352e-8059-a6d55bad94590",
+                                                                      "subnets":[{ "uuid":"140d9bb1-0055-4ada-b004-b33c5ff56e7a",
+                                                                                   "cidr":"10.10.12.0/24"}]
+                                                                    }
+                                                                    ]},
+                                      "Frankfurt" :  { "site_name" : "Frankfurt",
+                                                       "networks" : [{ "type":"isolated",
+                                                                       "uuid":"d2626c8a-5c48-46a2-b364-99bef5b02fbc",
+                                                                       "subnets":[{ "uuid":"6fe46081-d284-4713-bbe0-4f0239ef42ce",
+                                                                                    "cidr":"11.10.11.0/24"}]
+                                                                     },
+                                                                     {
+                                                                       "type":"cpe",
+                                                                       "uuid":"090c3936-6158-433e-8025-a6d17bad9550",
+                                                                       "subnets":[{ "uuid":"56bc525e-285b-427d-956b-cf3d13df7549",
+                                                                                    "cidr":"11.1.2.0/24"}]
+                                                                    },
+                                                                    {
+                                                                       "type":"fip",
+                                                                       "uuid":"145c4586-5158-352e-8059-a6d55bad94590",
+                                                                       "subnets":[{ "uuid":"140d9bb1-0055-4ada-b004-b33c5ff56e7a",
+                                                                                    "cidr":"10.10.12.0/24"}]
+                                                                    }
+                                                                    ]}},                                                     
     "vm_images" : {"PaloAlto" : {"images":[{"name":"CirrOS 0.3.2"},{"name":"Centos 0.3.2"}]},
                    "Frankfurt" : {"images":[{"name":"CirrOS 0.3.2"},{"name":"Centos 0.3.2"},{"name":"Debian 0.3.2"}]}},
     "vm_flavors" : {"PaloAlto" : {"flavors":[{"ram":512,"disk":1,"name":"m1.tiny","swap":"","vcpu":1},

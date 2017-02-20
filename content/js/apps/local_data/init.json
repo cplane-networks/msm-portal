@@ -14,6 +14,12 @@
                                             "10.200.8.0/24",  
                                             "10.200.9.0/24",  
                                             "10.200.10.0/24"],
+                    "internal_resource_subnet":[ "172.16.1.0/24",  
+                                                 "172.16.2.0/24",  
+                                                 "172.16.3.0/24",  
+                                                 "172.16.4.0/24",  
+                                                 "172.16.5.0/24"],
+                    "fip_subnet":[ "192.168.236.0/24"],
                     "cpeName":["PA-OGR-01", 
                                "PA-OGR-02", 
                                "PA-OGR-03", 
@@ -26,7 +32,17 @@
                                "PA-OGR-10",                    
                                "PA-OGR-11",                    
                                "PA-OGR-12",                    
-                               "PA-OGR-13"]                    
+                               "PA-OGR-13"],
+                    "fipRange":["PA(3-8)", 
+                                "PA(9-14)",
+                                "PA(15-20)",
+                                "PA(21-26)",
+                                "PA(27-32)",
+                                "PA(33-38)",
+                                "PA(39-44)",
+                                "PA(45-50)",
+                                "PA(51-56)",
+                                "PA(57-62)"]   
                    },
                    {"site_name": "Frankfurt",
                     "default_subnet_site": ["10.100.1.0/24",  
@@ -39,6 +55,12 @@
                                             "10.100.8.0/24",  
                                             "10.100.9.0/24",  
                                             "10.100.10.0/24"],
+                    "internal_resource_subnet":[ "172.16.6.0/24",  
+                                                 "172.16.7.0/24",  
+                                                 "172.16.8.0/24",  
+                                                 "172.16.9.0/24",  
+                                                 "172.16.10.0/24"],
+                    "fip_subnet":[ "192.168.237.0/24"],
                     "cpeName":["FF-OGR-01", 
                                "FF-OGR-02", 
                                "FF-OGR-03",
@@ -51,7 +73,17 @@
                                "FF-OGR-10",                    
                                "FF-OGR-11",                    
                                "FF-OGR-12",                    
-                               "FF-OGR-13"]                    
+                               "FF-OGR-13"],
+                    "fipRange":["FF(3-8)", 
+                                "FF(9-14)",
+                                "FF(15-20)",
+                                "FF(21-26)",
+                                "FF(27-32)",
+                                "FF(33-38)",
+                                "FF(39-44)",
+                                "FF(45-50)",
+                                "FF(51-56)",
+                                "FF(57-62)"]           
                     }],
     "maxexternalsite": "3",   
     "cpe" : {"PaloAlto" : [{
@@ -84,7 +116,7 @@
                            },
                            {
                                 "cpeName":"PA-OGR-08",
-                               "cpeSegmentationType":"vlan", "cpeSegmentationId":"217", "cpeIpAddr":"10.11.0.30", "cpeMask":"255.255.255.252", "cpeASN":"65217", "peerIP":"10.11.0.29", "peerASN":"65001"
+                                "cpeSegmentationType":"vlan", "cpeSegmentationId":"217", "cpeIpAddr":"10.11.0.30", "cpeMask":"255.255.255.252", "cpeASN":"65217", "peerIP":"10.11.0.29", "peerASN":"65001"
                            },
                            {
                                 "cpeName":"PA-OGR-09",
@@ -158,5 +190,146 @@
                                 "cpeName":"FF-OGR-13",
                                 "cpeSegmentationType":"vlan", "cpeSegmentationId":"420", "cpeIpAddr":"10.13.0.42", "cpeMask":"255.255.255.252", "cpeASN":"65419", "peerIP":"10.13.0.41", "peerASN":"65001"
                             }]
-            }                
+            },
+    "fip" : {"PaloAlto" : [{
+                                "fipRange":"PA(3-8)",
+                                "subnetCidr":"",
+                                "subnetworks":[{ "gateway_ip" : "192.168.236.1", "cidr" : "192.168.236.0/24", 
+                                                 "allocationPools" : [{ "start" : "192.168.236.3", "end" : "192.168.236.8" }]
+                                              }]
+                           },
+                           {
+                                "fipRange":"PA(9-14)",
+                                "subnetCidr":"",
+                                "subnetworks":[{ "gateway_ip" : "192.168.236.1", "cidr" : "192.168.236.0/24", 
+                                                 "allocationPools" : [{ "start" : "192.168.236.9", "end" : "192.168.236.14" }]
+                                              }]
+                           },
+                           {
+                                "fipRange":"PA(15-20)",
+                                "subnetCidr":"",
+                                "subnetworks":[{ "gateway_ip" : "192.168.236.1", "cidr" : "192.168.236.0/24", 
+                                                 "allocationPools" : [{ "start" : "192.168.236.15", "end" : "192.168.236.20" }]
+                                              }]
+                           },
+                           {
+                                "fipRange":"PA(21-26)",
+                                "subnetCidr":"",
+                                "subnetworks":[{ "gateway_ip" : "192.168.236.1", "cidr" : "192.168.236.0/24", 
+                                                 "allocationPools" : [{ "start" : "192.168.236.21", "end" : "192.168.236.26" }]
+                                              }]
+                           },
+                           {
+                                "fipRange":"PA(27-32)",
+                                "subnetCidr":"",
+                                "subnetworks":[{ "gateway_ip" : "192.168.236.1", "cidr" : "192.168.236.0/24", 
+                                                 "allocationPools" : [{ "start" : "192.168.236.27", "end" : "192.168.236.32" }]
+                                              }]
+                           },
+                           {
+                                "fipRange":"PA(33-38)",
+                                "subnetCidr":"",
+                                "subnetworks":[{ "gateway_ip" : "192.168.236.1", "cidr" : "192.168.236.0/24", 
+                                                 "allocationPools" : [{ "start" : "192.168.236.33", "end" : "192.168.236.38" }]
+                                              }]
+                           },
+                           {
+                                "fipRange":"PA(39-44)",
+                                "subnetCidr":"",
+                                "subnetworks":[{ "gateway_ip" : "192.168.236.1", "cidr" : "192.168.236.0/24", 
+                                                 "allocationPools" : [{ "start" : "192.168.236.39", "end" : "192.168.236.44" }]
+                                              }]
+                           },
+                           {
+                                "fipRange":"PA(45-50)",
+                                "subnetCidr":"",
+                                "subnetworks":[{ "gateway_ip" : "192.168.236.1", "cidr" : "192.168.236.0/24", 
+                                                 "allocationPools" : [{ "start" : "192.168.236.45", "end" : "192.168.236.50" }]
+                                              }]
+                           },
+                           {
+                                "fipRange":"PA(51-56)",
+                                "subnetCidr":"",
+                                "subnetworks":[{ "gateway_ip" : "192.168.236.1", "cidr" : "192.168.236.0/24", 
+                                                 "allocationPools" : [{ "start" : "192.168.236.51", "end" : "192.168.236.56" }]
+                                              }]
+                           },
+                           {
+                                "fipRange":"PA(57-62)",
+                                "subnetCidr":"",
+                                "subnetworks":[{ "gateway_ip" : "192.168.236.1", "cidr" : "192.168.236.0/24", 
+                                                 "allocationPools" : [{ "start" : "192.168.236.57", "end" : "192.168.236.62" }]
+                                              }]
+                           }],
+            "Frankfurt" :  [{
+                                "fipRange":"FF(3-8)",
+                                "subnetCidr":"",
+                                "subnetworks":[{ "gateway_ip" : "192.168.237.1", "cidr" : "192.168.237.0/24", 
+                                                 "allocationPools" : [{ "start" : "192.168.237.3", "end" : "192.168.237.8" }]
+                                              }]
+                           },
+                           {
+                                "fipRange":"FF(9-14)",
+                                "subnetCidr":"",
+                                "subnetworks":[{ "gateway_ip" : "192.168.237.1", "cidr" : "192.168.237.0/24", 
+                                                 "allocationPools" : [{ "start" : "192.168.237.9", "end" : "192.168.237.14" }]
+                                              }]
+                           },
+                           {
+                                "fipRange":"FF(15-20)",
+                                "subnetCidr":"",
+                                "subnetworks":[{ "gateway_ip" : "192.168.237.1", "cidr" : "192.168.237.0/24", 
+                                                 "allocationPools" : [{ "start" : "192.168.237.15", "end" : "192.168.237.20" }]
+                                              }]
+                           },
+                           {
+                                "fipRange":"FF(21-26)",
+                                "subnetCidr":"",
+                                "subnetworks":[{ "gateway_ip" : "192.168.237.1", "cidr" : "192.168.237.0/24", 
+                                                 "allocationPools" : [{ "start" : "192.168.237.21", "end" : "192.168.237.26" }]
+                                              }]
+                           },
+                           {
+                                "fipRange":"FF(27-32)",
+                                "subnetCidr":"",
+                                "subnetworks":[{ "gateway_ip" : "192.168.237.1", "cidr" : "192.168.237.0/24", 
+                                                 "allocationPools" : [{ "start" : "192.168.237.27", "end" : "192.168.237.32" }]
+                                              }]
+                           },
+                           {
+                                "fipRange":"FF(33-38)",
+                                "subnetCidr":"",
+                                "subnetworks":[{ "gateway_ip" : "192.168.237.1", "cidr" : "192.168.237.0/24", 
+                                                 "allocationPools" : [{ "start" : "192.168.237.33", "end" : "192.168.237.38" }]
+                                              }]
+                           },
+                           {
+                                "fipRange":"FF(39-44)",
+                                "subnetCidr":"",
+                                "subnetworks":[{ "gateway_ip" : "192.168.237.1", "cidr" : "192.168.237.0/24", 
+                                                 "allocationPools" : [{ "start" : "192.168.237.39", "end" : "192.168.237.44" }]
+                                              }]
+                           },
+                           {
+                                "fipRange":"FF(45-50)",
+                                "subnetCidr":"",
+                                "subnetworks":[{ "gateway_ip" : "192.168.237.1", "cidr" : "192.168.237.0/24", 
+                                                 "allocationPools" : [{ "start" : "192.168.237.45", "end" : "192.168.237.50" }]
+                                              }]
+                           },
+                           {
+                                "fipRange":"FF(51-56)",
+                                "subnetCidr":"",
+                                "subnetworks":[{ "gateway_ip" : "192.168.237.1", "cidr" : "192.168.237.0/24", 
+                                                 "allocationPools" : [{ "start" : "192.168.237.51", "end" : "192.168.237.56" }]
+                                              }]
+                           },
+                           {
+                                "fipRange":"FF(57-62)",
+                                "subnetCidr":"",
+                                "subnetworks":[{ "gateway_ip" : "192.168.237.1", "cidr" : "192.168.237.0/24", 
+                                                 "allocationPools" : [{ "start" : "192.168.237.57", "end" : "192.168.237.62" }]
+                                              }]
+                           }]
+            }            
 }

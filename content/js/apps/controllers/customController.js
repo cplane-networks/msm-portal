@@ -1,8 +1,8 @@
 'use strict';
 
 define(['app'], function (app){
-    var injectParams = ['$scope','$state','$rootScope', '$timeout', '$interval', 'AppConfig', '$uibModalInstance','dialogs','InitService', 'StorageService', 'MSMService', 'GraphService'];
-    var customDialogController = function ($scope, $state, $rootScope, $timeout, $interval, AppConfig, $uibModalInstance, dialogs, InitService, StorageService, MSMService, GraphService){
+    var injectParams = ['$scope','$state','$rootScope', '$timeout', '$interval', 'AppConfig', '$uibModalInstance', 'dialogs', '$mdDialog', 'InitService', 'StorageService', 'MSMService', 'GraphService', 'QueueService'];
+    var customDialogController = function ($scope, $state, $rootScope, $timeout, $interval, AppConfig, $uibModalInstance, dialogs, $mdDialog, InitService, StorageService, MSMService, GraphService, QueueService){
         var _dialog_path  = "content/js/apps/templates/";
         
         $scope.customerName = /^[a-zA-Z0-9]*$/; 
@@ -10,9 +10,14 @@ define(['app'], function (app){
         
         $scope.ExSiteNamePattern = /^[a-zA-Z0-9]*$/;
         $scope.ExAsNumPattern = /^[0-9]{1,6}$/;
+        //$scope.FloatingIpQuotaPattern = /^[1-9]$/;
+        $scope.FloatingIpQuotaPattern = /^\d{1,6}$/;
         
-        $scope.ExIpRange = /^([1-2][0-5][0-5]|[1-2][0-4][0-9]|[1-1][0-9][0-9]|[1-9][0-9]|[1-9])\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/([1-9]|[12]\d|3[0-2])$/;
-        $scope.ExGateway = /^([1-2][0-5][0-5]|[1-2][0-4][0-9]|[1-1][0-9][0-9]|[1-9][0-9]|[1-9])\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+//        $scope.ExIpRange = /^([1-2][0-5][0-5]|[1-2][0-4][0-9]|[1-1][0-9][0-9]|[1-9][0-9]|[1-9])\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/([1-9]|[12]\d|3[0-2])$/;
+        $scope.ExIpRange = /^([1-2][0-5][0-5]|[1-2][0-4][0-9]|[1-1][0-9][0-9]|[1-9][0-9]|[1-9])\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/(1[6-9]|2[0-4])$/;
+//        $scope.ExGateway = /^([1-2][0-5][0-5]|[1-2][0-4][0-9]|[1-1][0-9][0-9]|[1-9][0-9]|[1-9])\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+        //$scope.ExGateway = /^([1-2][0-5][0-5]|[1-2][0-4][0-9]|[1-1][0-9][0-9]|[1-9][0-9]|[1-9])\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.([1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])$/;
+        $scope.ExGateway = /^([1-2][0-5][0-5]|[1-2][0-4][0-9]|[1-1][0-9][0-9]|[1-9][0-9]|[1-9])\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.([1-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])$/;
         
         $rootScope.openstack_site = "";
         $rootScope.external_site = "";
@@ -41,6 +46,27 @@ define(['app'], function (app){
         $scope.external_sites_details = [];
         $scope.VMs = {};
         
+        $scope.IsSubnet_editable = AppConfig.subnet_mandatory;
+        $scope.IR_mandatory = AppConfig.internal_resource_mandatory;
+        
+        
+        //console.log("46", $scope.IsSubnet_editable);
+        
+//        $scope.bbSubnet1Checked = true;
+//        $scope.inteResSubnet1Checked = true;
+//        $scope.floatInterSubnet1Checked = true;
+//        $scope.bbSubnet2Checked = true;
+//        $scope.inteResSubnet2Checked = true;
+//        $scope.floatInterSubnet2Checked = true;
+        
+        //$rootScope.subnetStatus = {site1:{bbSubnetChecked:true,inteResSubnetChecked:true,floatInterSubnetChecked:true},
+                              // site2:{bbSubnetChecked:true,inteResSubnetChecked:true,floatInterSubnetChecked:true}}
+        
+//        $scope.inputClick = function(){
+//            console.log("56", $scope.bbSubnet1Checked); 
+//            $scope.bbSubnet1Checked = $scope.bbSubnet1Checked;
+//        }
+        
         
         function disableMouseEvents(){
             $("body").css("pointer-events", "none");
@@ -59,29 +85,32 @@ define(['app'], function (app){
                     $scope.external_sites_details.push(site);
                 }
                 else{
+                    
                     $scope.openstack_details.push(site);
                     $scope.VMs[site.site_name] = [];
+                    $scope.bbSubnetVal = "";
+                    
                     if(site.VM){
                         angular.forEach(site.VM, function(vm, vm_index){
                             $scope.VMs[site.site_name].push({'site_name' : site.site_name,
                                                              'index': vm_index + 1,
                                                              'name' : vm.name,
                                                              'imageRefList' : $rootScope.images[site.site_name],
-                                                             'subnetList' : [site.defaultSubnet],
                                                              'number' : '1',
                                                              'flavorRefList': $rootScope.flavors[site.site_name],
-                                                             'floatingIP': 0,
+                                                             'networks' : $rootScope.networks_map[site.site_name], /* Need to work on this */
+                                                             'addresses': vm.addresses,
                                                              'srId': vm.srId,
                                                              'excessVm':false})
                         });
-                        $scope.VMs[site.site_name].push({'site_name' : site.site_name,
+                            $scope.VMs[site.site_name].push({'site_name' : site.site_name,
                                                        'index': site.VM.length + 1,
                                                        'name' : '',
                                                        'imageRefList' : $rootScope.images[site.site_name],
-                                                       'subnetList' : [site.defaultSubnet],
                                                        'number' : '1',
                                                        'flavorRefList': $rootScope.flavors[site.site_name],
-                                                       'floatingIP': 0,
+                                                       'networks' : $rootScope.networks_map[site.site_name], /* Need to work on this */
+                                                       'addresses': [],
                                                        'srId': ''});
                     }                                   
                     else{
@@ -89,16 +118,25 @@ define(['app'], function (app){
                                                        'index': 1,
                                                        'name' : '',
                                                        'imageRefList' : $rootScope.images[site.site_name],
-                                                       'subnetList' : [site.defaultSubnet],
                                                        'number' : '1',
                                                        'flavorRefList': $rootScope.flavors[site.site_name],
-                                                       'floatingIP': 0,
-                                                       'srId': ''});
+                                                       'networks' : $rootScope.networks_map[site.site_name],
+                                                       'addresses': [],
+                                                       'srId': '',
+                                                       'subnets': $rootScope.subnetStatus});
                     } 
                 }
             });
         }
         
+        /// temp function for testing
+        $scope.test = function()
+        {
+            var index1 = 1;
+            var index2 = 2;
+//            console.log("bbSubnetChecked1", $scope.subnetStatus['site'+index1].bbSubnetChecked);
+//            console.log("bbSubnetChecked2", $scope.subnetStatus['site'+index2].bbSubnetChecked);
+        }
         if($scope.external_sites_details != []){
             for(var i=0;i<$scope.external_sites_details.length;i++)
             {
@@ -215,35 +253,86 @@ define(['app'], function (app){
             $scope.gatewayList_PaloAlto = [];
             $scope.gatewayList_Frankfurt = [];
             
-            $scope.$on("OnListVsiteOGREvent", function (event, result) {
+            $scope.$on("OnListVsiteOGREvent", function (event, result, error) {
+                if (result == null && error == null){
+                    if (AppConfig.environment !== 'development'){
+                        $uibModalInstance.close();
+                        $mdDialog.show(
+                            $mdDialog.alert()
+                            .parent(angular.element(document.body))
+                            .clickOutsideToClose(false)
+                            .title('Connection Error!')
+                            .textContent("Could not connect to the MSM Server.")
+                            .ariaLabel('Error Dialog')
+                            .ok('ok')
+                        );
+                    } 
+                }
+                else {
+                    if (result.site_name == "PaloAlto"){
+                        $scope.gatewayList_PaloAlto = [];
+                    }
+                    else if(result.site_name == "Frankfurt"){
+                        $scope.gatewayList_Frankfurt = [];
+                    }
+                    
+                    var gatewayData = $scope.getway_data[result.site_name];
+                    var site_ogr = result.cpe;
+                    
+                    for(var m=0; m < gatewayData.length; m++){
+                        var used = false;
+                        for(var l=0; l < site_ogr.length; l++){
+                            if (site_ogr[l].cpeIpAddr == gatewayData[m].cpeIpAddr || site_ogr[l].cpeSegmentationId == gatewayData[m].cpeSegmentationId){
+                                used = true;
+                                break;
+                            }    
+                        }  
+                        if (!used){
+                            if (result.site_name == "PaloAlto"){
+                                $scope.gatewayList_PaloAlto.push(gatewayData[m].cpeName);
+                            }
+                            else if(result.site_name == "Frankfurt"){
+                                $scope.gatewayList_Frankfurt.push(gatewayData[m].cpeName);
+                            }
+                        }
+                    }
+                }    
+            });
+            
+            $scope.fip_data  = result.fip;
+            $scope.fipList_PaloAlto = [];
+            $scope.fipList_Frankfurt = [];
+            
+            $scope.$on("OnListVsiteFIPEvent", function (event, result) {
                 if (result.site_name == "PaloAlto"){
-                    $scope.gatewayList_PaloAlto = [];
+                    $scope.fipList_PaloAlto = [];
                 }
                 else if(result.site_name == "Frankfurt"){
-                    $scope.gatewayList_Frankfurt = [];
+                    $scope.fipList_Frankfurt = [];
                 }
                 
-                var gatewayData = $scope.getway_data[result.site_name];
-                var site_ogr = result.cpe;
+                var fipData = $scope.fip_data[result.site_name];
+                var site_fip = result.fip.subnetworks;
                 
-                for(var m=0; m < gatewayData.length; m++){
+                for(var m=0; m < fipData.length; m++){
                     var used = false;
-                    for(var l=0; l < site_ogr.length; l++){
-                        if (site_ogr[l].cpeIpAddr == gatewayData[m].cpeIpAddr || site_ogr[l].cpeSegmentationId == gatewayData[m].cpeSegmentationId){
+                    for(var l=0; l < site_fip.length; l++){
+                        if (site_fip[l].allocationPools[0].start == fipData[m].subnetworks[0].allocationPools[0].start || site_fip[l].allocationPools[0].end == fipData[m].subnetworks[0].allocationPools[0].end){
                             used = true;
                             break;
                         }    
                     }  
                     if (!used){
                         if (result.site_name == "PaloAlto"){
-                            $scope.gatewayList_PaloAlto.push(gatewayData[m].cpeName);
+                            $scope.fipList_PaloAlto.push(fipData[m].fipRange);
                         }
                         else if(result.site_name == "Frankfurt"){
-                            $scope.gatewayList_Frankfurt.push(gatewayData[m].cpeName);
+                            $scope.fipList_Frankfurt.push(fipData[m].fipRange);
                         }
                     }
                 }
             });
+            
             
             var getOGRData = function(site_name){
                 MSMService.ListVsiteOGR($scope, site_name);
@@ -255,48 +344,114 @@ define(['app'], function (app){
                 $scope.subnetDataList2 = [];
                 $scope.gatewayDataList1 = [];
                 $scope.gatewayDataList2 = [];
+                $scope.subnetInternal1 = [];
+                $scope.subnetInternal2 = [];
+                $scope.subnetFIP1 = [];
+                $scope.subnetFIP2 = [];
+                $scope.fipDataList1 = [];
+                $scope.fipDataList2 = [];
+                
                 if($scope.siteField1 == "PaloAlto"){
                     $scope.siteField1 = "PaloAlto";
                     var openstack_data_List = result.openstack;
                     for(var i = 0; i < openstack_data_List.length; i++){
                         if(openstack_data_List[i].site_name == $scope.siteField1){
-                            for(var j=0; j<openstack_data_List[i].default_subnet_site.length; j++){
-                                $scope.subnetDataList1.push(openstack_data_List[i].default_subnet_site[j]);
-                            }
+                            $scope.subnetDataList1 = openstack_data_List[i].default_subnet_site;
+                            $scope.subnetInternal1 = openstack_data_List[i].internal_resource_subnet;
+                            $scope.subnetFIP1 = openstack_data_List[i].fip_subnet;
+                            //for(var j=0; j<openstack_data_List[i].default_subnet_site.length; j++){
+                            //    $scope.subnetDataList1.push(openstack_data_List[i].default_subnet_site[j]);
+                            //}
                             if (AppConfig.environment === 'production' || AppConfig.environment === 'redirection'){
                                 MSMService.ListVsiteOGR($scope, $scope.siteField1);
                                 $timeout(function() { 
-                                    $scope.gatewayValList1 = $scope.gatewayList_PaloAlto;
+                                    if ($scope.gatewayList_PaloAlto.length == 0){
+                                        $uibModalInstance.close();
+                                        $mdDialog.show(
+                                            $mdDialog.alert()
+                                            .parent(angular.element(document.body))
+                                            .clickOutsideToClose(false)
+                                            .title('Connection Error!')
+                                            .textContent("One of OpenStack Site's Gateway(OGR) is used up completely.\nCouldn't add any more OpenStack Site(s).")
+                                            .ariaLabel('Error Dialog')
+                                            .ok('ok')
+                                        );
+                                    }
+                                    else {
+                                        $scope.gatewayValList1 = $scope.gatewayList_PaloAlto;
+                                        MSMService.ListVsiteFIP($scope, $scope.siteField1);
+                                    }    
                                 }, 1000);
+                                
+                                $timeout(function() { 
+                                    $scope.fipRangeList1 = $scope.fipList_PaloAlto;
+                                }, 2000);
+                                
                             }    
                             else {
                                 for(var m=0; m<openstack_data_List[i].cpeName.length; m++){
                                     $scope.gatewayDataList1.push(openstack_data_List[i].cpeName[m]);
                                 }
                                 $scope.gatewayValList1 = $scope.gatewayDataList1;
+                                
+                                for(var n=0; n<openstack_data_List[i].fipRange.length; n++){
+                                    $scope.fipDataList1.push(openstack_data_List[i].fipRange[n]);
+                                }
+                                $scope.fipRangeList1 = $scope.fipDataList1;
                             }
                         }
                         $scope.subnetValList1 = $scope.subnetDataList1;
+                        $scope.subnetInternalList1 = $scope.subnetInternal1;
+                        $scope.subnetFIPList1 = $scope.subnetFIP1;
                         
                         $scope.siteField2 = "Frankfurt";
                         if(openstack_data_List[i].site_name == $scope.siteField2){
-                            for(var k=0; k<openstack_data_List[i].default_subnet_site.length; k++){
-                                $scope.subnetDataList2.push(openstack_data_List[i].default_subnet_site[k]);                      
-                            }
+                            $scope.subnetDataList2 = openstack_data_List[i].default_subnet_site;
+                            $scope.subnetInternal2 = openstack_data_List[i].internal_resource_subnet;
+                            $scope.subnetFIP2 = openstack_data_List[i].fip_subnet;
+                            //for(var k=0; k<openstack_data_List[i].default_subnet_site.length; k++){
+                            //    $scope.subnetDataList2.push(openstack_data_List[i].default_subnet_site[k]);                      
+                            //}
                             if (AppConfig.environment === 'production' || AppConfig.environment === 'redirection'){
                                 MSMService.ListVsiteOGR($scope, $scope.siteField2);
-                                $timeout(function() { 
-                                    $scope.gatewayValList2 = $scope.gatewayList_Frankfurt;
+                                $timeout(function() {
+                                    if ($scope.gatewayList_Frankfurt.length == 0){
+                                        $uibModalInstance.close();
+                                        $mdDialog.show(
+                                            $mdDialog.alert()
+                                            .parent(angular.element(document.body))
+                                            .clickOutsideToClose(false)
+                                            .title('Connection Error!')
+                                            .textContent("One of OpenStack Site's Gateway(OGR) is used up completely.\nCouldn't add any more OpenStack Site(s).")
+                                            .ariaLabel('Error Dialog')
+                                            .ok('ok')
+                                        );
+                                    }
+                                    else {    
+                                        $scope.gatewayValList2 = $scope.gatewayList_Frankfurt;
+                                        MSMService.ListVsiteFIP($scope, $scope.siteField2);
+                                    }    
                                 }, 1000);
+                                
+                                $timeout(function() { 
+                                    $scope.fipRangeList2 = $scope.fipList_Frankfurt;
+                                }, 2000);
                             }    
                             else {
-                                for(var n=0; n<openstack_data_List[i].cpeName.length; n++){
-                                    $scope.gatewayDataList2.push(openstack_data_List[i].cpeName[n]);
+                                for(var m=0; m<openstack_data_List[i].cpeName.length; m++){
+                                    $scope.gatewayDataList2.push(openstack_data_List[i].cpeName[m]);
                                 }
                                 $scope.gatewayValList2 = $scope.gatewayDataList2;
+                                
+                                for(var n=0; n<openstack_data_List[i].fipRange.length; n++){
+                                    $scope.fipDataList2.push(openstack_data_List[i].fipRange[n]);
+                                }
+                                $scope.fipRangeList2 = $scope.fipDataList2;
                             }    
                         }
                         $scope.subnetValList2 = $scope.subnetDataList2;
+                        $scope.subnetInternalList2 = $scope.subnetInternal2;
+                        $scope.subnetFIPList2 = $scope.subnetFIP2;
                     }
                 }
                 else if($scope.siteField1 == "Frankfurt"){
@@ -304,46 +459,104 @@ define(['app'], function (app){
                     var openstack_data_List = result.openstack;
                     for(var i = 0; i < openstack_data_List.length; i++){
                         if(openstack_data_List[i].site_name == $scope.siteField1){
-                            for(var j=0; j<openstack_data_List[i].default_subnet_site.length; j++){
-                                $scope.subnetDataList1.push(openstack_data_List[i].default_subnet_site[j]);
-                            }
+                            $scope.subnetDataList1 = openstack_data_List[i].default_subnet_site;
+                            $scope.subnetInternal1 = openstack_data_List[i].internal_resource_subnet;
+                            $scope.subnetFIP1 = openstack_data_List[i].fip_subnet;
+                            //for(var j=0; j<openstack_data_List[i].default_subnet_site.length; j++){
+                            //    $scope.subnetDataList1.push(openstack_data_List[i].default_subnet_site[j]);
+                            ///}
                             if (AppConfig.environment === 'production' || AppConfig.environment === 'redirection'){
                                 MSMService.ListVsiteOGR($scope, $scope.siteField2);
                                 $timeout(function() { 
-                                    $scope.gatewayValList1 = $scope.gatewayList_Frankfurt;
+                                    if ($scope.gatewayList_Frankfurt.length == 0){
+                                        $uibModalInstance.close();
+                                        $mdDialog.show(
+                                            $mdDialog.alert()
+                                            .parent(angular.element(document.body))
+                                            .clickOutsideToClose(false)
+                                            .title('Connection Error!')
+                                            .textContent("One of OpenStack Site's Gateway(OGR) is used up completely.\nCouldn't add any more OpenStack Site(s).")
+                                            .ariaLabel('Error Dialog')
+                                            .ok('ok')
+                                        );
+                                    }
+                                    else { 
+                                        $scope.gatewayValList1 = $scope.gatewayList_Frankfurt;
+                                        MSMService.ListVsiteFIP($scope, $scope.siteField2);
+                                    }    
                                 }, 1000);
+                                
+                                $timeout(function() { 
+                                    $scope.fipRangeList1 = $scope.fipList_Frankfurt;
+                                }, 2000);
                             }    
                             else {
-                                for(var n=0; n<openstack_data_List[i].cpeName.length; n++){
-                                    $scope.gatewayDataList1.push(openstack_data_List[i].cpeName[n]);
+                                for(var m=0; m<openstack_data_List[i].cpeName.length; m++){
+                                    $scope.gatewayDataList1.push(openstack_data_List[i].cpeName[m]);
                                 }
                                 $scope.gatewayValList1 = $scope.gatewayDataList1;
+                                
+                                for(var n=0; n<openstack_data_List[i].fipRange.length; n++){
+                                    $scope.fipDataList1.push(openstack_data_List[i].fipRange[n]);
+                                }
+                                $scope.fipRangeList1 = $scope.fipDataList1;
                             }    
                         }
-                        $scope.subnetValList1 = $scope.subnetDataList1;;
+                        $scope.subnetValList1 = $scope.subnetDataList1;
+                        $scope.subnetInternalList1 = $scope.subnetInternal1;
+                        $scope.subnetFIPList1 = $scope.subnetFIP1;
                         
                         $scope.siteField2 = "PaloAlto";
                         if(openstack_data_List[i].site_name == $scope.siteField2){
-                            for(var k=0; k<openstack_data_List[i].default_subnet_site.length; k++){
-                                $scope.subnetDataList2.push(openstack_data_List[i].default_subnet_site[k]);
-                            }
+                            $scope.subnetDataList2 = openstack_data_List[i].default_subnet_site;
+                            $scope.subnetInternal2 = openstack_data_List[i].internal_resource_subnet;
+                            $scope.subnetFIP2 = openstack_data_List[i].fip_subnet;
+                            //for(var k=0; k<openstack_data_List[i].default_subnet_site.length; k++){
+                            //    $scope.subnetDataList2.push(openstack_data_List[i].default_subnet_site[k]);
+                            //}
                             if (AppConfig.environment === 'production' || AppConfig.environment === 'redirection'){
                                 MSMService.ListVsiteOGR($scope, $scope.siteField1);
                                 $timeout(function() { 
-                                    $scope.gatewayValList2 = $scope.gatewayList_PaloAlto;
+                                    if ($scope.gatewayList_PaloAlto.length == 0){
+                                        $uibModalInstance.close();
+                                        $mdDialog.show(
+                                            $mdDialog.alert()
+                                            .parent(angular.element(document.body))
+                                            .clickOutsideToClose(false)
+                                            .title('Connection Error!')
+                                            .textContent("One of OpenStack Site's Gateway(OGR) is used up completely.\nCouldn't add any more OpenStack Site(s).")
+                                            .ariaLabel('Error Dialog')
+                                            .ok('ok')
+                                        );
+                                    }
+                                    else { 
+                                        $scope.gatewayValList2 = $scope.gatewayList_PaloAlto;
+                                        MSMService.ListVsiteFIP($scope, $scope.siteField1);
+                                    }    
                                 }, 1000);
+                                
+                                $timeout(function() { 
+                                    $scope.fipRangeList2 = $scope.fipList_PaloAlto;
+                                }, 2000);
                             }    
                             else {
                                 for(var m=0; m<openstack_data_List[i].cpeName.length; m++){
                                     $scope.gatewayDataList2.push(openstack_data_List[i].cpeName[m]);
                                 }
                                 $scope.gatewayValList2 = $scope.gatewayDataList2;
+                                
+                                for(var n=0; n<openstack_data_List[i].fipRange.length; n++){
+                                    $scope.fipDataList2.push(openstack_data_List[i].fipRange[n]);
+                                }
+                                $scope.fipRangeList2 = $scope.fipDataList2;
                             }    
                         }
                         $scope.subnetValList2 = $scope.subnetDataList2;
+                        $scope.subnetInternalList2 = $scope.subnetInternal2;
+                        $scope.subnetFIPList2 = $scope.subnetFIP2;
                     }
                 }
-            }            
+            }
         
             $rootScope.maxExSites = result.maxexternalsite;
             $scope.externalSiteNameList = $scope.siteNameArr;
@@ -486,10 +699,10 @@ define(['app'], function (app){
                                  'index' : $scope.VMs[site_name].length + 1,
                                  'name' : '',
                                  'imageRefList' : $rootScope.images[site_name],
-                                 'subnetList' : [subnet],
                                  'number' : '1',
                                  'flavorRefList': $rootScope.flavors[site_name],
-                                 'floatingIP': 0,
+                                 'networks' : $rootScope.networks_map[site_name],
+                                 'addresses': [],
                                  'srId': '',
                                  'excessVm':false};
                     $scope.VMs[site_name].push(angular.copy(vmobj));  
@@ -514,7 +727,9 @@ define(['app'], function (app){
                     if (isNaN($scope.VMs[site][i].number) || $scope.VMs[site][i].number.trim() == ""){
                         continue;
                     }
-                    number += parseInt($scope.VMs[site][i].number, 10);
+                    if ($scope.VMs[site][i].name || $scope.VMs[site][i].imageRef || $scope.VMs[site][i].flavorRef || $scope.VMs[site][i].backboneRef || $scope.VMs[site][i].floatingipRef || $scope.VMs[site][i].internal_resourcesRef){
+                        number += parseInt($scope.VMs[site][i].number, 10);
+                    }
                 }
                 
                 var MaxSites = max_sites_vms;
@@ -538,6 +753,7 @@ define(['app'], function (app){
             
             // Delete VM Row
             $scope.deleteVMrow = function(site_name, index){
+                
                 index = index - 1;
                 $scope.VMs[site_name].splice(index, 1);
                 angular.forEach($scope.VMs[site_name], function(value, i){
@@ -557,6 +773,11 @@ define(['app'], function (app){
             GraphService.graph.clear();
             StorageService.RemoveAll();
             
+            $rootScope.zoomValue = AppConfig.default_zoom;
+            GraphService.zoomValue = AppConfig.default_zoom;
+            GraphService.scaleGraph(0, 0, AppConfig.default_zoom/100);
+            
+            
             $rootScope.action = "";
             $rootScope.notification = "";
             $rootScope.apiCalls = [];
@@ -567,6 +788,8 @@ define(['app'], function (app){
             $rootScope.action = "";
             $rootScope.CPE = {};
             $rootScope.vmsVal = {};
+            delete $rootScope.external_data;
+            QueueService.removeAll()
             
             if ($scope.userForm.$valid) {
                 var isError = false;            
@@ -630,23 +853,39 @@ define(['app'], function (app){
         $scope.submitOsForm = function(param){
             if ($scope.cloudForm.$valid) {
                 $rootScope.notification = "Adding OpenStack Site..."
+                $scope.backboneSubnetVal1 = $scope.subnetField1;
+                $scope.backboneSubnetVal2 = $scope.subnetField2;
+                if($rootScope.subnetStatus.site1.bbSubnetChecked == false){
+                    $scope.backboneSubnetVal1 = '';
+                }
+                else{
+                    $scope.backboneSubnetVal1 = $scope.subnetField1;
+                }
+                if($rootScope.subnetStatus.site2.bbSubnetChecked == false){
+                    $scope.backboneSubnetVal2 = '';
+                }
+                else{
+                    $scope.backboneSubnetVal2 = $scope.subnetField2;
+                }
                 if (StorageService.GetCustomer()){
                     var data = [{'site_name': $scope.siteField1,
                                  'type': 'openstack_site',
                                  'status': 'inactive',
-                                 'defaultSubnet': $scope.subnetField1, 
-                                 'cpe':[]},
+                                 'defaultSubnet': $scope.internalSubnetField1 ? $scope.internalSubnetField1 : '', 
+                                 'cpe':[],
+                                 'fip':{}},
                                 {'site_name': $scope.siteField2,
                                  'type': 'openstack_site',
                                  'status': 'inactive',
-                                 'defaultSubnet': $scope.subnetField2, 
-                                 'cpe':[]}]
+                                 'defaultSubnet': $scope.internalSubnetField2 ? $scope.internalSubnetField2 : '', 
+                                 'cpe':[],
+                                 'fip':{}}]
                     
                     $scope.cloudsCreated = [{'site_name': $scope.siteField1,
-                                 'defaultSubnet': $scope.subnetField1,},
-                                 {'site_name': $scope.siteField2,
-                                 'defaultSubnet': $scope.subnetField2, 
-                                 }]
+                                             'defaultSubnet':$scope.backboneSubnetVal1},
+                                            {'site_name': $scope.siteField2,
+                                             'defaultSubnet': $scope.backboneSubnetVal2}]
+                    
                     $rootScope.cloudsCreated = $scope.cloudsCreated;
                     var cpe_data = $scope.getway_data;
                     var customer_name = StorageService.GetCustomer().customer_name;
@@ -656,14 +895,34 @@ define(['app'], function (app){
                     
                     for (var i = 0; i < cpe_data_1.length; i++){
                         if ($scope.gatewayField1 == cpe_data_1[i].cpeName){
+                            cpe_data_1[i]['subnetCidr'] = $scope.backboneSubnetVal1;
                             data[0]['cpe'] = [cpe_data_1[i]];
                         }
                     }    
                     for (var j = 0; j < cpe_data_2.length; j++){    
                         if ($scope.gatewayField2 == cpe_data_2[j].cpeName){
+                            cpe_data_2[j]['subnetCidr'] = $scope.backboneSubnetVal2;
                             data[1]['cpe'] = [cpe_data_2[j]];
                         }
-                    } 
+                    }
+
+                    var fip_data = $scope.fip_data;
+                    var fip_data_1 = $scope.fip_data[$scope.siteField1];
+                    var fip_data_2 = $scope.fip_data[$scope.siteField2];
+                    
+                    for (var m = 0; m < fip_data_1.length; m++){
+                        if ($scope.fipRangeField1 == fip_data_1[m].fipRange){
+                            fip_data_1[m]['subnetCidr'] = $scope.fipSubnetField1 ? $scope.fipSubnetField1 : '';
+                            data[0]['fip'] = fip_data_1[m];
+                        }
+                    }    
+                    for (var n = 0; n < fip_data_2.length; n++){
+                        if ($scope.fipRangeField2 == fip_data_2[n].fipRange){
+                            fip_data_2[n]['subnetCidr'] = $scope.fipSubnetField2 ? $scope.fipSubnetField2 : '';
+                            data[1]['fip'] = fip_data_2[n];
+                        }
+                    }    
+                    
                     angular.forEach(data, function(value, index){
                         if (!StorageService.GetSite(value.site_name)){
                             $timeout(function() { 
@@ -771,7 +1030,6 @@ define(['app'], function (app){
         }    
         
         $scope.submitAddVMsForm = function(param){
-            //console.log("excessVm", $scope.VMs);
             var excessVm = false;
             angular.forEach($scope.VMs, function(value, site_name) {
                 if (value){
@@ -809,11 +1067,42 @@ define(['app'], function (app){
                     var middle_name = (site_name == 'PaloAlto') ? '_PA_VM_' : '_FF_VM_';
                     if (value){
                         angular.forEach(value, function(vm, index){
+                            var address = [];
+                            if (vm.backboneRef){
+                                var dict = {"fixedIP": {"subnetUuid": vm.backboneRef,
+                                                        "autoGenerate": true}};
+                                if (AppConfig.environment === 'development'){
+                                    dict.fixedIP["ip"]  =  "11.1.2.6";
+                                }
+                                address.push(dict);            
+                            }
+                            
+                            if (vm.floatingipRef){
+                                var dict = {"fixedIP": {"subnetUuid": vm.floatingipRef,
+                                                        "autoGenerate": true},
+                                            "floatingIP": {"autoGenerate": true,
+                                                           "quota": vm.floatingipQuotaRef ? parseInt(vm.floatingipQuotaRef, 10) : 0}};
+                                if (AppConfig.environment === 'development'){
+                                    dict.fixedIP["ip"]  =  "11.1.2.10";
+                                    dict.floatingIP["ip"]  =  "10.10.12.20";
+                                }
+                                address.push(dict);
+                            }
+                            
+                            if (vm.internal_resourcesRef || $scope.IR_mandatory){
+                                var dict = {"fixedIP": {"subnetUuid": vm.internal_resourcesRef ? vm.internal_resourcesRef : vm.networks.internal_resources,
+                                                         "autoGenerate": true}};
+                                if (AppConfig.environment === 'development'){
+                                    dict.fixedIP["ip"]  =  "11.10.11.10";
+                                }
+                                address.push(dict);
+                            }
+                            
                             for (var i=0; i < vm.number.trim(); i++) {
                                 var obj = {'name': customer_name + middle_name + (total_vmData[site_name] + i + 1),
                                            'imageRef': vm.imageRef,
                                            'flavorRef': vm.flavorRef,
-                                           'floatingIP': 0,
+                                           'addresses' : address,
                                            'srId': (vm.srId != '') ? vm.srId : ''};
                                 VMs.push(angular.copy(obj));
                             }
@@ -835,6 +1124,7 @@ define(['app'], function (app){
                         if (!value.srId){
                             disableMouseEvents();
                             $rootScope.notification = "Creating VMs..."
+                            /*
                             if (value.name.includes('PA_VM')){
                                 MSMService.CreateVM($scope, customer_name, "PaloAlto", angular.copy(value));
                                 $rootScope.vm = angular.copy(value);
@@ -843,7 +1133,7 @@ define(['app'], function (app){
                                 MSMService.CreateVM($scope, customer_name, "Frankfurt", angular.copy(value));
                                 $rootScope.vm = angular.copy(value);
                             }
-                            /*
+                            */
                             $timeout(function() {
                                 if (value.name.includes('PA_VM')){
                                     MSMService.CreateVM($scope, customer_name, "PaloAlto", angular.copy(value));
@@ -853,8 +1143,8 @@ define(['app'], function (app){
                                     MSMService.CreateVM($scope, customer_name, "Frankfurt", angular.copy(value));
                                     $rootScope.vm = angular.copy(value);
                                 }
-                            }, AppConfig.environment === 'development' ? 2000 : 3000);
-                            */
+                            }, AppConfig.environment === 'development' ? index * 500 : index * 500);
+                            
                             //}, AppConfig.environment === 'development' ? index * 2000 : index == 0 ? index * 15000 : 15000);
                         }    
                     });
