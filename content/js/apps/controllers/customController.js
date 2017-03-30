@@ -912,13 +912,15 @@ define(['app'], function (app){
                     
                     for (var m = 0; m < fip_data_1.length; m++){
                         if ($scope.fipRangeField1 == fip_data_1[m].fipRange){
-                            fip_data_1[m]['subnetCidr'] = $scope.fipSubnetField1 ? $scope.fipSubnetField1 : '';
+                      //      fip_data_1[m]['subnetCidr'] = $scope.fipSubnetField1 ? $scope.fipSubnetField1 : '';
+                            fip_data_1[m]['subnetCidr'] = '10.10.1.0/24';
                             data[0]['fip'] = fip_data_1[m];
                         }
                     }    
                     for (var n = 0; n < fip_data_2.length; n++){
                         if ($scope.fipRangeField2 == fip_data_2[n].fipRange){
-                            fip_data_2[n]['subnetCidr'] = $scope.fipSubnetField2 ? $scope.fipSubnetField2 : '';
+                   //         fip_data_2[n]['subnetCidr'] = $scope.fipSubnetField2 ? $scope.fipSubnetField2 : '';  
+		            fip_data_2[n]['subnetCidr'] = '10.10.1.0/24';
                             data[1]['fip'] = fip_data_2[n];
                         }
                     }    
