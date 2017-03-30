@@ -1087,7 +1087,7 @@ define(['app'], function (app) {
         
         $rootScope.$on("OnDeleteCustomerEvent", function (event, result, error_msg) {
             if('message' in result && result.message.toLowerCase() == "customer site exist"){
-                if ($rootScope.customer_del_retry_count == 5)
+                if ($rootScope.customer_del_retry_count == 20)
                 {
                     $mdDialog.show(
                         $mdDialog.alert()
