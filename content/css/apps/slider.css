@@ -54,8 +54,8 @@ md-slider-container {
 md-slider {
     margin-top: -46px !important;
     height:0 !important;
-    margin-left: 6px !important;
-    margin-right: 16px !important;
+    margin-left: 34px !important;
+    margin-right: 40px !important;
 }
 
 md-switch.md-default-theme .md-bar, md-switch .md-bar {

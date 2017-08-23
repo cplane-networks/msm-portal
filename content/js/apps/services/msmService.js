@@ -395,18 +395,146 @@ define(['app'], function (app) {
             $rootScope.$broadcast('OnListVsiteOGREvent', response, error);
         };
         
+        // V2 - New API
+        msmFactory.ListVsiteFIP = function (parent_scope, site_name) {
+            // site_name = <string>
+            
+            if (AppConfig.environment === 'production'){
+                return $http.get(AppConfig.serviceUrl + 'vSite/' + site_name + '/fip').success(
+                    function (results) {
+                        $rootScope.apiCalls.push({'method': 'GET', 'api': 'msm/v1.0/' + 'vSite/' + site_name + '/fip', 'result': results, isCollapsed: true});
+                        results['site_name'] = site_name;
+                        //console.log(results);
+                        listVsiteFIPEvent(parent_scope, results, null);
+                    }).error(
+                    function (error, status) {
+                        if (error != null)
+                            listVsiteFIPEvent(parent_scope, null, status + " : " + error.Message);
+                        else
+                            listVsiteFIPEvent(parent_scope, null, null);
+                    });
+            }
+            else if (AppConfig.environment === 'redirection'){
+                var redirect_data = {
+                                     'ajaxReqURL' : AppConfig.serviceUrl + 'vSite/' + site_name + '/fip',
+                                     'requestData': '',
+                                     'method'     : 'GET'
+                                    }
+                return $http.post(AppConfig.redirectUrl, redirect_data).success(
+                    function (results) {
+                        $rootScope.apiCalls.push({'method': 'GET', 'api': 'msm/v1.0/' + 'vSite/' + site_name + '/fip', 'result': results, isCollapsed: true});
+                        results['site_name'] = site_name;
+                        //console.log(results);
+                        listVsiteFIPEvent(parent_scope, results, null);
+                    }).error(
+                    function (error, status) {
+                        if (error != null)
+                            listVsiteFIPEvent(parent_scope, null, status + " : " + error.Message);
+                        else
+                            listVsiteFIPEvent(parent_scope, null, null);
+                    });
+            }
+            else {
+                return $http.get(AppConfig.localUrl + 'init.json').success(
+                    function (results) {
+                        results = {"fip" : results["fip"], 'site_name' : site_name};
+                        $rootScope.apiCalls.push({'method': 'GET', 'api': AppConfig.localUrl + 'stub_data.json', 'result': results, isCollapsed: true});
+                        listVsiteFIPEvent(parent_scope, results, null);
+                    }).error(
+                    function (error, status) {
+                        if (error != null)
+                            listVsiteFIPEvent(parent_scope, null, status + " : " + error.Message);
+                        else
+                            listVsiteFIPEvent(parent_scope, null, null);
+                    });
+            }
+        };
+
+        function listVsiteFIPEvent(parent_scope, response, error) {
+            $rootScope.$broadcast('OnListVsiteFIPEvent', response, error);
+        };
+        
+        // V2 - New API
+        msmFactory.ListCustomerVsiteFIP = function (parent_scope, customer_name, site_name) {
+            // customer_name = <string>
+            // site_name = <string>
+            
+            if (AppConfig.environment === 'production'){
+                return $http.get(AppConfig.serviceUrl + 'customer/' + customer_name + '/vSite/' + site_name + '/fip').success(
+                    function (results) {
+                        $rootScope.apiCalls.push({'method': 'GET', 'api': 'msm/v1.0/' + 'customer/' + customer_name + '/vSite/' + site_name + '/fip', 'result': results, isCollapsed: true});
+                        results['site_name'] = site_name;
+                        //console.log(results);
+                        listCustomerVsiteFIPEvent(parent_scope, results, null);
+                    }).error(
+                    function (error, status) {
+                        if (error != null)
+                            listCustomerVsiteFIPEvent(parent_scope, null, status + " : " + error.Message);
+                        else
+                            listCustomerVsiteFIPEvent(parent_scope, null, null);
+                    });
+            }
+            else if (AppConfig.environment === 'redirection'){
+                var redirect_data = {
+                                     'ajaxReqURL' : AppConfig.serviceUrl + 'customer/' + customer_name + '/vSite/' + site_name + '/fip',
+                                     'requestData': '',
+                                     'method'     : 'GET'
+                                    }
+                return $http.post(AppConfig.redirectUrl, redirect_data).success(
+                    function (results) {
+                        $rootScope.apiCalls.push({'method': 'GET', 'api': 'msm/v1.0/' + 'customer/' + customer_name + '/vSite/' + site_name + '/fip', 'result': results, isCollapsed: true});
+                        results['site_name'] = site_name;
+                        //console.log(results);
+                        listCustomerVsiteFIPEvent(parent_scope, results, null);
+                    }).error(
+                    function (error, status) {
+                        if (error != null)
+                            listCustomerVsiteFIPEvent(parent_scope, null, status + " : " + error.Message);
+                        else
+                            listCustomerVsiteFIPEvent(parent_scope, null, null);
+                    });
+            }
+            else {
+                return $http.get(AppConfig.localUrl + 'stub_data.json').success(
+                    function (results) {
+                        $rootScope.apiCalls.push({'method': 'GET', 'api': AppConfig.localUrl + 'stub_data.json', 'result': results["list_customer_vsite_fip"][site_name], isCollapsed: true});
+                        listCustomerVsiteFIPEvent(parent_scope, results["list_customer_vsite_fip"][site_name], null);
+                    }).error(
+                    function (error, status) {
+                        if (error != null)
+                            listCustomerVsiteFIPEvent(parent_scope, null, status + " : " + error.Message);
+                        else
+                            listCustomerVsiteFIPEvent(parent_scope, null, null);
+                    });
+            }
+        };
+
+        function listCustomerVsiteFIPEvent(parent_scope, response, error) {
+            $rootScope.$broadcast('OnListCustomerVsiteFIPEvent', response, error);
+        };
+        
+        //V2 - Changed API
         msmFactory.InitCustomerVsite = function (parent_scope, customer_name, site_data) {
             // customer_name = <string>
             /* site_data = {'site_name': <string>,
                             'defaultSubnet': <string>,
                             'type': 'openstack_site',
                             'cpe': [{"cpeSegmentationType" : <string>,
-                                    "cpeSegmentationId" : <string>,
-                                    "cpeIpAddr" : <string>,
-                                    "cpeMask" : <string>,
-                                    "cpeASN" : <string>,
-                                    "peerIP" : <string>,
-                                    "peerASN" : <string>}]}
+                                     "cpeSegmentationId" : <string>,
+                                     "cpeIpAddr" : <string>,
+                                     "cpeMask" : <string>,
+                                     "cpeASN" : <string>,
+                                     "peerIP" : <string>,
+                                     "subnetCidr" : <string>,
+                                     "peerASN" : <string>}],
+                            'fip' : {"subnetCidr" : <string>,
+                                     "subnetworks" : [{"gateway_ip" : <string>,
+                                                       "cidr" : <string>,
+                                                       "allocationPools" : [{"start" : <string>,
+                                                                              "end" : <string>}]
+                                                     }]
+                                    }
+                           }
             */
             var site_name = site_data.site_name;
             site_data["password"] = "DEMO123";
@@ -414,6 +542,7 @@ define(['app'], function (app) {
             delete site_data.type;
             delete site_data.status;
             delete site_data.cpe[0].cpeName;
+            delete site_data.fip.fipRange;
             if (AppConfig.environment === 'production'){
                 return $http.post(AppConfig.serviceUrl + 'customer/' + customer_name + '/vSite/' + site_name, site_data).success(
                     function (results) {
@@ -1072,6 +1201,65 @@ define(['app'], function (app) {
             $rootScope.$broadcast('OnGetFlavorsEvent', response, error);
         };
         
+        // V2 - New API
+        msmFactory.ListCustomerVsiteNetworks = function (parent_scope, customer_name, site_name) {
+            // customer_name = <string>
+            // site_name = <string>
+            
+            if (AppConfig.environment === 'production'){
+                return $http.get(AppConfig.serviceUrl + 'customer/' + customer_name + '/vSite/' + site_name + '/networks').success(
+                    function (results) {
+                        $rootScope.apiCalls.push({'method': 'GET', 'api': 'msm/v1.0/' + 'customer/' + customer_name + '/vSite/' + site_name + '/networks', 'result': results, isCollapsed: true});
+                        results['site_name'] = site_name;
+                        //console.log(results);
+                        listCustomerVsiteNetworksEvent(parent_scope, results, null);
+                    }).error(
+                    function (error, status) {
+                        if (error != null)
+                            listCustomerVsiteNetworksEvent(parent_scope, null, status + " : " + error.Message);
+                        else
+                            listCustomerVsiteNetworksEvent(parent_scope, null, null);
+                    });
+            }
+            else if (AppConfig.environment === 'redirection'){
+                var redirect_data = {
+                                     'ajaxReqURL' : AppConfig.serviceUrl + 'customer/' + customer_name + '/vSite/' + site_name + '/networks',
+                                     'requestData': '',
+                                     'method'     : 'GET'
+                                    }
+                return $http.post(AppConfig.redirectUrl, redirect_data).success(
+                    function (results) {
+                        $rootScope.apiCalls.push({'method': 'GET', 'api': 'msm/v1.0/' + 'customer/' + customer_name + '/vSite/' + site_name + '/networks', 'result': results, isCollapsed: true});
+                        results['site_name'] = site_name;
+                        //console.log(results);
+                        listCustomerVsiteNetworksEvent(parent_scope, results, null);
+                    }).error(
+                    function (error, status) {
+                        if (error != null)
+                            listCustomerVsiteNetworksEvent(parent_scope, null, status + " : " + error.Message);
+                        else
+                            listCustomerVsiteNetworksEvent(parent_scope, null, null);
+                    });
+            }
+            else {
+                return $http.get(AppConfig.localUrl + 'stub_data.json').success(
+                    function (results) {
+                        $rootScope.apiCalls.push({'method': 'GET', 'api': AppConfig.localUrl + 'stub_data.json', 'result': results["list_customer_vsite_networks"][site_name], isCollapsed: true});
+                        listCustomerVsiteNetworksEvent(parent_scope, results["list_customer_vsite_networks"][site_name], null);
+                    }).error(
+                    function (error, status) {
+                        if (error != null)
+                            listCustomerVsiteNetworksEvent(parent_scope, null, status + " : " + error.Message);
+                        else
+                            listCustomerVsiteNetworksEvent(parent_scope, null, null);
+                    });
+            }
+        };
+
+        function listCustomerVsiteNetworksEvent(parent_scope, response, error) {
+            $rootScope.$broadcast('OnListCustomerVsiteNetworksEvent', response, error);
+        };
+        
         msmFactory.CreateVM = function (parent_scope, customer_name, site_name, vm_data) {
             /*
             // customer_name = <string>
@@ -1084,6 +1272,7 @@ define(['app'], function (app) {
                            "srId": <string> }
             */
             vm_data['srId'] = Math.floor(100000 + Math.random() * 900000).toString();
+            
             if (AppConfig.environment === 'production'){
                 return $http.put(AppConfig.serviceUrl + 'customer/' + customer_name + '/createVM/' + site_name, vm_data).success(
                     function (results) {
@@ -1148,8 +1337,8 @@ define(['app'], function (app) {
                 return $http.post(AppConfig.serviceUrl + 'customer/' + customer_name + '/getVM/' + vm_uuid + '/vSite/' + site_name, {}).success(
                     function (results) {
                         results["site_name"] = site_name;
-                        results["name"] = vm_name;
-                        if (AppConfig.vm_polling !== "on"){
+                        results["name"] = results["name"] ? results["name"] : vm_name ? vm_name : '';
+                        if (!$rootScope.polling){
                             $rootScope.apiCalls.push({'method': 'POST', 'api': 'msm/v1.0/' + 'customer/' + customer_name + '/getVM/' + vm_uuid + '/vSite/' + site_name, 'result': results, isCollapsed: true});
                         }
                         //console.log(results);
@@ -1177,8 +1366,8 @@ define(['app'], function (app) {
                 return $http.post(AppConfig.redirectUrl, redirect_data).success(
                     function (results) {
                         results["site_name"] = site_name;
-                        results["name"] = vm_name;
-                        if (AppConfig.vm_polling !== "on"){
+                        results["name"] = results["name"] ? results["name"] : vm_name ? vm_name : '';
+                        if (!$rootScope.polling){
                             $rootScope.apiCalls.push({'method': 'POST', 'api': 'msm/v1.0/' + 'customer/' + customer_name + '/getVM/' + vm_uuid + '/vSite/' + site_name, 'result': results, isCollapsed: true});
                         }
                         //console.log(results);
@@ -1200,7 +1389,11 @@ define(['app'], function (app) {
             else {
                 return $http.get(AppConfig.localUrl + 'stub_data.json').success(
                     function (results) {
-                        results = {'uuid':"a0f8ded9-93c6-4ee6-bf75-8154b50e7014", 'name':vm_name, 'site_name':site_name, 'state':'on', 'srId' : vm_srId};
+                        results = {'uuid':"a0f8ded9-93c6-4ee6-bf75-8154b50e7014", 'name':vm_name, 'site_name':site_name, 'state':'on', 'srId' : vm_srId, "addresses": [{ "fixedIP": { "subnetUuid": "6fe46081-d284-4713-bbe0-4f0239ef42ce", "ip": "11.10.11.10" }}, 
+                                      { "fixedIP": { "subnetUuid": "56bc525e-285b-427d-956b-cf3d13df7549", "ip": "11.1.2.6" }},
+                                      { "fixedIP": { "subnetUuid": "140d9bb1-0055-4ada-b004-b33c5ff56e7a", "ip": "11.1.2.10" },
+                                                     "floatingIP": { "ip": "10.10.12.20" }}]
+                                   };
                         $rootScope.apiCalls.push({'method': 'GET', 'api': AppConfig.localUrl + 'stub_data.json', 'result': results, isCollapsed: true});
                         getVMEvent(parent_scope, results, null);
                     }).error(

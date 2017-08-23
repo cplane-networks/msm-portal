@@ -12,7 +12,8 @@
             margin:100px 30px 30px 30px;
         }
         .connecting {
-           cursor: move !important;
+           cursor: -webkit-grabbing !important;
+           cursor: -moz-grabbing !important;
         }
     </style>
     <body>
@@ -86,11 +87,11 @@
                                   
                                   <div id="slider">
                                     <md-slider-container>
-                                        <img class="pull-right" style="cursor:pointer;" title="Zoom Out" ng-click="zoom('-1')" src="content/images/svg_image/zoom-out.svg" alt="Zoom Out" width="20" height="20" />
-                                        <md-slider flex min="10" step="1" max="150" ng-model="zoomValue" aria-label="zoom" id="zoom-slider" ng-change="zoom()"></md-slider>
-                                        <img class="pull-right" style="cursor:pointer;" title="Zoom In" ng-click="zoom('1')" src="content/images/svg_image/zoom-in.svg" alt="Zoom In" width="20" height="20" />
+                                        <img class="pull-right no-select" style="cursor:pointer;" title="Zoom Out" ng-click="zoom('-1')" src="content/images/svg_image/zoom-out.svg" alt="Zoom Out" width="20" height="20" />
+                                        <md-slider flex min="{{minZoomValue}}" step="{{zoomStep}}" max="{{maxZoomValue}}" ng-model="zoomValue" aria-label="zoom" id="zoom-slider" ng-change="zoom()"></md-slider>
+                                        <img class="pull-right no-select" style="cursor:pointer;" title="Zoom In" ng-click="zoom('1')" src="content/images/svg_image/zoom-in.svg" alt="Zoom In" width="20" height="20" />
                                         <div class="headerDivider"></div>
-                                        <output style="font-size:10pt;margin-top:-6px;width:33px;text-align:center;">{{zoomValue}}%</output> &#160;
+                                        <output class="no-select" style="font-size:10pt;margin-top:-6px;width:33px;text-align:center;">{{zoomValue}}%</output> &#160;
                                     </md-slider-container>
                                   </div>
                                   

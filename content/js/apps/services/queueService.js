@@ -73,8 +73,9 @@ define(['app'], function (app) {
         
         queueFactory.removeAll = function()
         {
-            console.log("all queue items removed.")
             queue = [];
+            queueConfig = {"default":{"timeout":0}};
+            console.log("all queue items removed.")
         }
         
         return queueFactory;

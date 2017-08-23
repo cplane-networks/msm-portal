@@ -2,45 +2,72 @@
     <div class="modal-header">Add VMs</div>
     <div class="modal-body clearfix">
         <div class="addVmsFormLabel clearfix">
-            <div class="col-sm-2 siteNameForVms">
+            <div class="siteNameForVms">
                 <label class="control-label" for="cust" ng-hide="true">Subnet</label>
             </div>
-            <div class="col-sm-3">
+            <!--<div class="col-sm-3">
                 <label class="control-label" for="cust">Subnet</label>
-            </div>
+            </div>-->
             <div class="col-sm-1">
                 <label class="control-label " for="cust">Number</label>
             </div>
-            <div class="form-group col-sm-3">
+            <div class="col-sm-2">
                 <label class="control-label" for="cust">Image</label>
             </div>
-            <div class="form-group col-sm-2">
+            <div class="col-sm-2">
                 <label class="control-label " for="cust">Flavor</label>
+            </div>
+            <div class="col-sm-1">
+                <label class="control-label " for="cust">Internal Resources</label>
+            </div>
+            <div class="col-sm-1">
+                <label class="control-label " for="cust">Backbone</label>
+            </div>
+            <div class="col-sm-1">
+                <label class="control-label " for="cust">Floating IP</label>
+            </div>
+            <div class="col-sm-1">
+                <label class="control-label " for="cust">Floating IP Quota (Kb/S)</label>
             </div>
         </div>
         <form class="addVmsForm clearfix" name="addVMsForm" novalidate>
-            <div class="clearfix" ng-repeat="(site, vmData) in VMs">
+            <div class="clearfix" ng-repeat="(site, vmData) in VMs" ng-init="parentIndex = $index">
                 <div>
                     <span class="siteNameForVms pull-left">{{site}}</span>
                     <div ng-if="vm.srId == ''" class="clearfix" ng-repeat="vm in vmData">
                         <!--<input ng-if="(vmData.length - vm.index) > 0 | vm.index > 1" class="siteNameForVms pull-left" value="{{vm.index}}"></input>-->
                         <span ng-if="(vm.index - vmsVal[site]) > 1" style="visibility:hidden" class="siteNameForVms pull-left">{{site}}</span>
-                        <div class="form-group col-sm-3">
+                        <!--<div class="form-group col-sm-3">
                             <select class="subnetLabel" name="subnet{{vm.index}}" ng-model="VMs[site][vm.index-1].subnet" ng-options="subnet for subnet in vm.subnetList" ng-change="vmNumUpdate(vm.index-1,site)" required>
                             </select>
-                        </div>
-                        <div class="form-group col-sm-1">
+                        </div>-->
+                        <div class="col-sm-1">
                             <input class="numLabel" name="number{{vm.index}}" ng-model="VMs[site][vm.index-1].number" ng-change="vmNumUpdate(vm.index-1,site)" value="vm.number" />
                         </div>
-                        <div class="form-group col-sm-3">
+                        <div class="col-sm-2">
                             <select class="imageLabel" name="imageRef{{vm.index}}" ng-model="VMs[site][vm.index-1].imageRef" ng-options="image for image in vm.imageRefList" ng-change="vmNumUpdate(vm.index-1,site)" required>
                             </select>
                         </div>
-                        <div class="form-group col-sm-3">
+                        <div class="col-sm-2">
                             <select class="flavorLabel" name="flavorRef{{vm.index}}" ng-model="VMs[site][vm.index-1].flavorRef" ng-options="flavor for flavor in vm.flavorRefList" ng-change="vmNumUpdate(vm.index-1,site)" required>
                             </select>
                         </div>
-                        <div class="deleteRow" title="Remove row" ng-click="deleteVMrow(site, vm.index)">
+                        <div class="col-sm-1">
+                            <input type="checkbox" class="numLabel" name="internal_resourcesRef{{vm.index}}" ng-model="VMs[site][vm.index-1].internal_resourcesRef" ng-true-value="'{{VMs[site][vm.index-1].networks.internal_resources}}'" ng-false-value="''" ng-disabled="IR_mandatory" ng-checked="IR_mandatory" />
+                        </div>
+                        
+                        <div class="col-sm-1">
+                            <input type="checkbox" class="numLabel" name="backboneRef{{vm.index}}" ng-model="VMs[site][vm.index-1].backboneRef" ng-true-value="'{{VMs[site][vm.index-1].networks.backbone}}'" ng-false-value="''" ng-disabled="{{!subnetStatus['site'+(parentIndex+1)].bbSubnetChecked}}" />
+                        </div>
+                        
+                        <div class="col-sm-1">
+                            <input type="checkbox" class="numLabel" name="floatingipRef{{vm.index}}" ng-model="VMs[site][vm.index-1].floatingipRef" ng-true-value="'{{VMs[site][vm.index-1].networks.floatingip}}'" ng-false-value="''" ng-disabled="{{!subnetStatus['site'+(parentIndex+1)].floatInterSubnetChecked}}" />
+                        </div>
+                        <div class="col-sm-1">
+                           <input class="numLabel" name="floatingipQuotaRef{{vm.index}}" ng-pattern="FloatingIpQuotaPattern" ng-model="VMs[site][vm.index-1].floatingipQuotaRef" value="" ng-disabled="{{!subnetStatus['site'+(parentIndex+1)].floatInterSubnetChecked}}" />
+                        </div>
+                        <div class="col-sm-1 deleteRow" title="Remove row" ng-click="deleteVMrow(site, vm.index)">
+                           
                             <!--<b>-</b>-->
                             <span><img src="content/images/svg_image/X sign.svg" /></span>
                         </div>

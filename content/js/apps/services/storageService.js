@@ -75,16 +75,24 @@ define(['app'], function (app) {
         
         storageFactory.AddSite = function (data) {
             /* data = {'site_name': <string>,
-                       'defaultSubnet': <string>,
-                       'type': 'openstack_site',
-                       'status' : 'inactive',
-                       'cpe': [{"cpeSegmentationType" : <string>,
-                                "cpeSegmentationId" : <string>,
-                                "cpeIpAddr" : <string>,
-                                "cpeMask" : <string>,
-                                "cpeASN" : <string>,
-                                "peerIP" : <string>,
-                                "peerASN" : <string>}]}
+                        'defaultSubnet': <string>,
+                        'type': 'openstack_site',
+                        'cpe': [{"cpeSegmentationType" : <string>,
+                                 "cpeSegmentationId" : <string>,
+                                 "cpeIpAddr" : <string>,
+                                 "cpeMask" : <string>,
+                                 "cpeASN" : <string>,
+                                 "peerIP" : <string>,
+                                 "subnetCidr" : <string>,
+                                 "peerASN" : <string>}],
+                        'fip' : {"subnetCidr" : <string>,
+                                 "subnetworks" : [{"gateway_ip" : <string>,
+                                                   "cidr" : <string>,
+                                                   "allocationPools" : [{"start" : <string>,
+                                                                          "end" : <string>}]
+                                                 }]
+                                }
+                       }
             */
             storageFactory.Init();
             var site_details = storage.get("node_details");
